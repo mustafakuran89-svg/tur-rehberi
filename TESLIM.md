@@ -93,7 +93,7 @@ Madde 4 için: Ayarlar › Geliştirici ayarları › "Örnek geziyi bulunduğum
 
 - **Yayın (Aşama 0 madde 5 ve Aşama 4 madde 1, 4).** GitHub giriş kodu onaylanmadan süresi doldu. Tamamlamak için: Claude Code'a "devam et" deyin, verilen kodu onaylayın. Depo oluşturma, Pages ayarı ve yayın komutları hazırdır (`.github/workflows/pages.yml`).
 - **Yayımlanmış adrese karşı uçtan uca test** yayın olmadığı için koşmadı (`npm run e2e:live` hazır).
-- **Windows bildirimi** gönderilmedi (yayın bitmeden "bitti" bildirimi yanıltıcı olurdu).
+- Windows bildirimi "yayın için GitHub onayı bekleniyor" metniyle gönderildi; "yayımlandı" bildirimi yayından sonra gönderilecek.
 
 ## 7. Şema değişiklikleri
 
