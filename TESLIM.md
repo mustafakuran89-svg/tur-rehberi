@@ -4,13 +4,9 @@ Tarih: 11.11.2026 · Sürüm 0.1.0
 
 ## 1. Bağlantı
 
-**Yayın: BEKLİYOR.** GitHub oturumu açılamadığı için site henüz yayımlanmadı (giriş kodu üç kez onaylanmadan süresi doldu). Uygulama, testler ve teslim klasörü hazır; yayımlamak için tek adım kaldı:
+**https://mustafakuran89-svg.github.io/tur-rehberi/**
 
-1. Claude Code'a "devam et" deyin.
-2. Verilen kodu https://github.com/login/device adresine girip "Authorize" deyin.
-3. Gerisini Claude Code yapar: herkese açık `tur-rehberi` deposu, GitHub Pages, yayın kontrolü.
-
-Yayımlandığında adres şu biçimde olur: `https://<GitHub kullanıcı adınız>.github.io/tur-rehberi/`
+Depo (herkese açık): https://github.com/mustafakuran89-svg/tur-rehberi — `main` dalına her gönderimde site kendiliğinden derlenir, test edilir ve yayımlanır.
 
 iPhone'da: adresi **Safari**'de açın, **Paylaş › Ana Ekrana Ekle** deyin. Bundan sonra uygulamayı Ana Ekran'daki simgeden açın; tam ekran açılır ve verileriniz daha güvenli saklanır (bkz. bölüm 8).
 
@@ -49,7 +45,7 @@ Teslim klasörü: `C:\Projeler\tur-rehberi\teslim` (kopyası: `Masaüstü\Projel
 | Ayarlarda hata günlüğü (iPhone'da oluşan hataları ekranda gösterir) | otomatik testle doğrulandı (ekran açılıyor) |
 | Her durak ve mekanda "Haritalarda aç" (Apple Haritalar) | bağlantı otomatik testle doğrulandı; **açılışı gerçek iPhone'da** |
 
-Testler: 32 birim testi, 15 uçtan uca test × 2 tarayıcı (iPhone 13 ekran boyutu, Chromium ve WebKit) — hepsi geçti.
+Testler: 32 birim testi, 15 uçtan uca test × 2 tarayıcı (iPhone 13 ekran boyutu, Chromium ve WebKit) — hepsi geçti. Yayımlanmış adrese karşı duman testi (açılış, örnek gezi, gün haritası, durak, manifest, service worker) Chromium ve WebKit'te 4/4 geçti. GitHub'daki yayın iş akışı da her gönderimde tip kontrolü ve birim testlerini koşar.
 
 ## 3. iPhone kontrol listesi
 
@@ -86,14 +82,14 @@ Madde 4 için: Ayarlar › Geliştirici ayarları › "Örnek geziyi bulunduğum
 - Örnek gezinin koordinatları gerçek mekan göstermez; bir merkez noktanın çevresine yapay yerleştirildi. Haritada altta gerçek sokaklar görünür ama işaretler "ÖRNEK" mekanlardır.
 - Örnek gezinin ifade listesi İtalyanca (yaygın, doğrulanması kolay ifadeler); hedef dilde seslendirmeyi göstermek için.
 - Kahvaltı/öğle/akşam işaretlerine dokunmak yemek ekranında ilgili karta götürür; tur haritasında işaretler bağlantı değildir (simülasyon dokunuşu için).
-- Commit yazar bilgisi `Tur Rehberi <tur-rehberi@localhost>`; kişisel e-posta depoya yazılmadı.
+- İlk commit'ler `Tur Rehberi <tur-rehberi@localhost>`, sonrakiler GitHub'ın gizli (noreply) adresiyle atıldı; kişisel e-posta depoya yazılmadı. Depo herkese açık olmadan önce geçmiş kişisel veri için tarandı.
+- GitHub Pages "GitHub Actions ile yayın" modunda açıldı (ücretsiz plan, herkese açık depo; resmi kaynak: docs.github.com, GitHub planları).
+- GitHub girişinde birkaç cihaz kodunun süresi doldu; giriş dördüncü kodla tamamlandı.
 - Ayarlar (`localStorage`) ve planlar (IndexedDB) ayrı tutulur; yedek dosyası yalnız gerçek gezileri içerir, örnek geziyi içermez.
 
 ## 6. Yapılamayanlar
 
-- **Yayın (Aşama 0 madde 5 ve Aşama 4 madde 1, 4).** GitHub giriş kodu onaylanmadan süresi doldu. Tamamlamak için: Claude Code'a "devam et" deyin, verilen kodu onaylayın. Depo oluşturma, Pages ayarı ve yayın komutları hazırdır (`.github/workflows/pages.yml`).
-- **Yayımlanmış adrese karşı uçtan uca test** yayın olmadığı için koşmadı (`npm run e2e:live` hazır).
-- Windows bildirimi "yayın için GitHub onayı bekleniyor" metniyle gönderildi; "yayımlandı" bildirimi yayından sonra gönderilecek.
+- Gerçek iPhone gerektiren doğrulamalar (bölüm 2'de "yalnızca gerçek iPhone'da" yazanlar) bilgisayardan yapılamaz; bölüm 3'teki listeyle sizin denemeniz gerekir.
 
 ## 7. Şema değişiklikleri
 
