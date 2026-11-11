@@ -4,10 +4,12 @@ import { fillLegDurations } from './normalize';
 import { checkPlan, type RuleWarning } from './rules';
 import type { Trip } from './types';
 import { isBackup } from '../lib/store';
+import { isShare } from '../lib/share';
+import type { UserState } from '../lib/userState';
 
 export type ImportResult =
   | { kind: 'error'; message: string; problems: SchemaProblem[] }
-  | { kind: 'trips'; items: { trip: Trip; warnings: RuleWarning[]; filled: number }[]; fromBackup: boolean };
+  | { kind: 'trips'; items: { trip: Trip; warnings: RuleWarning[]; filled: number }[]; fromBackup: boolean; sharedUser?: Partial<UserState> };
 
 export function processImportText(text: string): ImportResult {
   const parsed = parsePlanText(text);
@@ -17,7 +19,8 @@ export function processImportText(text: string): ImportResult {
 
 export function processImportData(data: unknown): ImportResult {
   const fromBackup = isBackup(data);
-  const candidates: unknown[] = fromBackup ? (data as { trips: unknown[] }).trips : [data];
+  const shared = isShare(data) ? data : null;
+  const candidates: unknown[] = fromBackup ? (data as { trips: unknown[] }).trips : shared ? [shared.trip] : [data];
   const items: { trip: Trip; warnings: RuleWarning[]; filled: number }[] = [];
   for (let i = 0; i < candidates.length; i++) {
     const v = validatePlan(candidates[i]);
@@ -28,5 +31,5 @@ export function processImportData(data: unknown): ImportResult {
     const { trip, filled } = fillLegDurations(v.trip);
     items.push({ trip, warnings: checkPlan(trip), filled });
   }
-  return { kind: 'trips', items, fromBackup };
+  return { kind: 'trips', items, fromBackup, sharedUser: shared?.user };
 }

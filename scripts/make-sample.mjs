@@ -1,4 +1,7 @@
-// Örnek gezi üreticisi. Çıktı: src/sample/ornek-plan.json
+// Örnek gezi üreticisi (şema sürüm 2). Çıktı: src/sample/ornek-plan.json
+// Sürüm 2 alanlarında da uydurma bilgi gerçek gibi sunulmaz: Michelin derecesi, etkinlik, uçuş,
+// otel ve rezervasyon bağlantısı ÖRNEK etiketlidir ve example.com adreslerine gider. Görseller
+// Wikimedia Commons'tan alınmış gerçek, özgür lisanslı genel fotoğraflardır (eser sahibi ve lisans).
 // Bütün mekanlar uydurmadır ve "ÖRNEK" etiketi taşır. Koordinatlar gerçek bir mekanı
 // göstermez; bir merkez noktanın çevresine metre cinsinden kaydırılarak yerleştirilir.
 import { writeFileSync, mkdirSync } from 'node:fs';
@@ -13,6 +16,21 @@ const src = (slug) => [
   { title: 'ÖRNEK kaynak B', url: `https://example.org/ornek/${slug}` },
 ];
 const V = '2026-11-11';
+const IMG_TOWER = {
+  url: 'https://thumb.wikimedia.org/wikipedia/commons/thumb/3/3f/Krakow_2024_068_Old_Town_Hall_Tower.jpg/960px-Krakow_2024_068_Old_Town_Hall_Tower.jpg',
+  credit: 'Scotch Mist',
+  license: 'CC BY-SA 4.0',
+  sourceUrl: 'https://commons.wikimedia.org/wiki/File:Krakow_2024_068_Old_Town_Hall_Tower.jpg',
+};
+const IMG_TERRACE = {
+  url: 'https://thumb.wikimedia.org/wikipedia/commons/thumb/c/c0/Table_set_on_terrace_over_water%2C_Venice.jpg/960px-Table_set_on_terrace_over_water%2C_Venice.jpg',
+  credit: 'Gerda Arendt',
+  license: 'CC0',
+  sourceUrl: 'https://commons.wikimedia.org/wiki/File:Table_set_on_terrace_over_water,_Venice.jpg',
+};
+const every = (iv) => ({ mon: [iv], tue: [iv], wed: [iv], thu: [iv], fri: [iv], sat: [iv], sun: [iv] });
+const notMon = (iv) => ({ tue: [iv], wed: [iv], thu: [iv], fri: [iv], sat: [iv], sun: [iv] });
+const FAKE_PHONE = '+00 000 000 0000';
 
 const stop = (order, name, kind, pos, extra) => ({
   order,
@@ -74,9 +92,9 @@ const N = {
 };
 
 const day1Stops = [
-  stop(1, 'Pazar Meydanı', 'main', at(0, 0), { narration: N.meydan, practicalLine: 'En iyi sabah dokuzdan önce; çeşmenin suyu içilebilir.', legToNext: { mode: 'walk', minutes: 6, approx: false } }),
-  stop(2, 'Saat Kulesi', 'main', at(320, 180), { narration: N.kule, practicalLine: 'Merdiven dar; 20 dakika ayırın, çantayı aşağıda bırakın.', legToNext: { mode: 'walk', minutes: null, approx: false } }),
-  stop(3, 'Kent Müzesi', 'main', at(560, -120), { narration: N.muze, practicalLine: 'Bilet girişte alınır; müze pazartesi kapalı.', legToNext: { mode: 'walk', minutes: null, approx: false } }),
+  stop(1, 'Pazar Meydanı', 'main', at(0, 0), { closedDays: null, closedWeekdays: [], fee: 'Ücretsiz', openHours: 'Her saat açık', narrationShort: 'Bu meydan uydurma bir kentin uydurma kalbidir. Kent, iki dere arasındaki düzlükte kurulan haftalık pazarla doğdu; ortadaki taş çeşmenin pazarın ilk günlerinden kaldığı anlatılır. Kemerli revaklara, yerdeki koyu taşlara ve saat kulesinin altındaki küçük kapıya bakın. Sonraki durağa o kapının önünden geçeceğiz. Bu anlatım örnektir.', lookFor: ['Ortadaki taş çeşme', 'Yerdeki koyu renkli taşlar: eski tezgahların yeri', 'Saat kulesinin altındaki küçük kapı'], videoQuery: 'tarihi pazar meydanı belgesel', narration: N.meydan, practicalLine: 'En iyi sabah dokuzdan önce; çeşmenin suyu içilebilir.', legToNext: { mode: 'walk', minutes: 6, approx: false } }),
+  stop(2, 'Saat Kulesi', 'main', at(320, 180), { hours: notMon(['09:00', '18:00']), ticketUrl: 'https://example.com/ornek/kule-bileti', website: 'https://example.com/ornek/saat-kulesi', ticketOrBooking: 'Saatli bilet; ÖRNEK bilet sayfasından alınır.', narrationShort: 'Saat kulesi, rivayete göre uzak limanlardan dönen bir tüccarın kente armağanıdır. Önce ahşaptan yapılmış, yangından sonra taşla yeniden kurulmuş. Kadranda rakam yerine on iki ayın işini anlatan kabartmalar vardır. Merdiven dar; tırabzana tutunun. Bu anlatım örnektir.', lookFor: ['Kadrandaki on iki kabartma', 'Tepeden kırmızı kiremitli çatılar', 'Çatılar arasında iki derenin izi'], videoQuery: 'saat kulesi tarihi belgesel', wikipediaTr: 'Saat kulesi', images: [IMG_TOWER], narration: N.kule, practicalLine: 'Merdiven dar; 20 dakika ayırın, çantayı aşağıda bırakın.', legToNext: { mode: 'walk', minutes: null, approx: false } }),
+  stop(3, 'Kent Müzesi', 'main', at(560, -120), { hours: notMon(['10:00', '17:30']), website: 'https://example.com/ornek/kent-muzesi', phone: FAKE_PHONE, lookFor: ['İlk salondaki ölçü kapları', 'Büyük haritadaki imza ve balık resmi'], narration: N.muze, practicalLine: 'Bilet girişte alınır; müze pazartesi kapalı.', legToNext: { mode: 'walk', minutes: null, approx: false } }),
   stop(4, 'Çeşme Sokağı', 'minor', at(800, 60), { narration: 'Bu dar sokak, adını sokağın başındaki küçük çeşmeden alır. Örnek bir duraktır. Çeşmenin üstündeki aslan başına dikkat edin, ağzından değil kulağından su akar.', practicalLine: 'Fotoğraf için öğleden önce gelin.', visitMinutes: 15, closedDays: null, closedWeekdays: [], fee: null, legToNext: { mode: 'walk', minutes: null, approx: false } }),
   stop(5, 'Manastır Bahçesi', 'main', at(1050, 320), { narration: N.bahce, practicalLine: 'Gölgelik az; şapka ve su alın.', legToNext: null }),
 ];
@@ -90,14 +108,14 @@ const day2Stops = [
 ];
 
 const breakfasts = (base) => [
-  venue('K1', 'Fırın Kahvaltısı', at(base[0] - 80, base[1] - 60), { whatToEat: ['ÖRNEK sıcak çörek', 'ÖRNEK kaymaklı tost'], priceLevel: 1, suitsWhom: 'Hızlı ve ekonomik başlamak isteyenlere.' }),
+  venue('K1', 'Fırın Kahvaltısı', at(base[0] - 80, base[1] - 60), { hours: every(['07:00', '11:30']), whatToEat: ['ÖRNEK sıcak çörek', 'ÖRNEK kaymaklı tost'], priceLevel: 1, suitsWhom: 'Hızlı ve ekonomik başlamak isteyenlere.' }),
   venue('K2', 'Avlu Kahvesi', at(base[0] + 60, base[1] - 140), { whatToEat: ['ÖRNEK yumurtalı tava', 'ÖRNEK reçel tabağı'], priceLevel: 2, suitsWhom: 'Sakin, oturarak kahvaltı isteyenlere.' }),
   venue('K3', 'Pazar Tezgahı', at(base[0] - 150, base[1] + 90), { whatToEat: ['ÖRNEK peynirli ekmek', 'ÖRNEK taze sıkma meyve suyu'], priceLevel: 1, queueNote: 'Sabah 9 civarı kuyruk olur.', suitsWhom: 'Yerlilerin arasında ayakta kahvaltı edenlere.' }),
 ];
 const dinners = (base) => [
-  venue('A1', 'Usta Lokantası', at(base[0] + 100, base[1] + 120), { whatToEat: ['ÖRNEK yöre makarnası', 'ÖRNEK fırın sebze'], priceLevel: 2, reservation: 'recommended', reservationNote: 'Hafta sonu bir gün önceden arayın.', suitsWhom: 'Yörenin klasik yemeklerini tatmak isteyenlere.' }),
-  venue('A2', 'Teras Lokantası', at(base[0] + 240, base[1] - 80), { whatToEat: ['ÖRNEK ızgara balık', 'ÖRNEK limonlu tatlı'], priceLevel: 3, reservation: 'required', suitsWhom: 'Manzaralı ve sakin bir akşam isteyenlere.' }),
-  venue('A3', 'Köşe Dürümcüsü', at(base[0] - 60, base[1] + 200), { whatToEat: ['ÖRNEK sıcak dürüm', 'ÖRNEK ayran'], priceLevel: 1, suitsWhom: 'Yorgun, hızlı ve ekonomik yemek isteyenlere.' }),
+  venue('A1', 'Usta Lokantası', at(base[0] + 100, base[1] + 120), { hours: every(['18:30', '23:30']), phone: FAKE_PHONE, michelin: { distinction: 'bib-gourmand', greenStar: false, year: 2026, url: 'https://example.com/ornek/michelin-usta' }, whatToEat: ['ÖRNEK yöre makarnası', 'ÖRNEK fırın sebze'], priceLevel: 2, reservation: 'recommended', reservationNote: 'Hafta sonu bir gün önceden arayın.', suitsWhom: 'Yörenin klasik yemeklerini tatmak isteyenlere.' }),
+  venue('A2', 'Teras Lokantası', at(base[0] + 240, base[1] - 80), { hours: every(['19:00', '23:00']), bookingUrl: 'https://example.com/ornek/rezervasyon', website: 'https://example.com/ornek/teras', images: [IMG_TERRACE], michelin: { distinction: '1-star', greenStar: true, year: 2026, url: 'https://example.com/ornek/michelin-teras' }, whatToEat: ['ÖRNEK ızgara balık', 'ÖRNEK limonlu tatlı'], priceLevel: 3, reservation: 'required', suitsWhom: 'Manzaralı ve sakin bir akşam isteyenlere.' }),
+  venue('A3', 'Köşe Dürümcüsü', at(base[0] - 60, base[1] + 200), { hours: every(['17:00', '26:00']), whatToEat: ['ÖRNEK sıcak dürüm', 'ÖRNEK ayran'], priceLevel: 1, suitsWhom: 'Yorgun, hızlı ve ekonomik yemek isteyenlere; gece 02:00’ye kadar açık.' }),
 ];
 
 const day1 = {
@@ -132,6 +150,12 @@ const day1 = {
     ifRain: 'Bahçe yerine müzede daha uzun kalın.',
   },
   notes: null,
+  fromLodging: { mode: 'walk', minutes: 6, instruction: 'ÖRNEK: otelden çıkıp sola dönün, revakların altından meydana yürüyün.' },
+  toLodging: { mode: 'walk', minutes: 15, instruction: 'ÖRNEK: bahçe kapısından çıkıp dere boyunca güneye yürüyün; köprüyü geçince otel sağda.' },
+  eveningEvents: [
+    { title: 'ÖRNEK Avlu Konseri', kind: 'concert', venueName: 'ÖRNEK Müze Avlusu', address: 'ÖRNEK Müze Sokağı, ÖRNEK Kent', ...at(580, -100), coordSource: 'other', date: '2027-05-14', startTime: '21:00', endTime: '22:30', priceText: 'ÖRNEK 15 Avro', bookingUrl: 'https://example.com/ornek/konser', website: null, note: 'Bu etkinlik örnektir; gerçek değildir.', suitsWhom: 'Akşam yemeğinden sonra sakin bir müzik isteyenlere.', sources: src('etkinlik-konser'), verifiedAt: V },
+    { title: 'ÖRNEK Fener Yürüyüşü', kind: 'tour', venueName: 'ÖRNEK Saat Kulesi önü', address: null, ...at(330, 190), coordSource: 'other', date: '2027-05-14', startTime: '22:00', endTime: null, priceText: 'Ücretsiz', bookingUrl: null, website: 'https://example.com/ornek/fener', note: 'Bu etkinlik örnektir; gerçek değildir.', suitsWhom: 'Gece yürümeyi sevenlere.', sources: src('etkinlik-fener'), verifiedAt: V },
+  ],
 };
 
 const day2 = {
@@ -165,6 +189,11 @@ const day2 = {
     ifRain: 'Kapalı Pazar’da daha uzun kalın; teras yerine pazar kahvecisinde oturun.',
   },
   notes: null,
+  fromLodging: { mode: 'walk', minutes: 8, instruction: 'ÖRNEK: otelin önünden dere boyunca kuzeye yürüyün; köprü karşınıza çıkar.' },
+  toLodging: { mode: 'drive', minutes: 12, instruction: 'ÖRNEK: terastan taksiyle otele dönün.' },
+  eveningEvents: [
+    { title: 'ÖRNEK Gece Pazarı', kind: 'market', venueName: 'ÖRNEK Kapalı Pazar', address: 'ÖRNEK Pazar Caddesi, ÖRNEK Kent', ...at(-520, 30), coordSource: 'other', date: '2027-05-15', startTime: '21:30', endTime: '23:30', priceText: 'Ücretsiz', bookingUrl: null, website: null, note: 'Bu etkinlik örnektir; gerçek değildir.', suitsWhom: 'Gece atıştırmak isteyenlere.', sources: src('etkinlik-pazar'), verifiedAt: V },
+  ],
 };
 
 const phrases = [
@@ -185,10 +214,11 @@ const phrases = [
   ['Acqua naturale', 'Akkua naturale', 'Sade su', 'Su isterken'],
   ['Dov’è il bagno?', 'Dove il banyo?', 'Tuvalet nerede?', null],
   ['Parla inglese?', 'Parla inglese?', 'İngilizce konuşuyor musunuz?', null],
+  ['Senza carne di maiale, per favore', 'Senza karne di mayale, per favore', 'Domuz eti olmasın, lütfen', 'Sipariş verirken; yeme içme kısıtı'],
 ].map(([original, pronunciationTr, meaning, context]) => ({ original, script: null, pronunciationTr, meaning, context }));
 
 const plan = {
-  schemaVersion: 1,
+  schemaVersion: 2,
   id: 'ornek-gezi',
   title: 'ÖRNEK Gezi: İki Günde ÖRNEK Kent',
   destinations: ['ÖRNEK Kent'],
@@ -199,6 +229,8 @@ const plan = {
     'Bu gezi örnektir: bütün mekan ve durak adları uydurmadır, gerçek bir yeri göstermez.',
     'Koordinatlar bir merkez noktanın çevresine yapay olarak yerleştirildi.',
     'Yürüyerek gezilir; ikinci gün tepeye araçla çıkılır.',
+    'ÖRNEK yeme içme kısıtı: domuz eti yenmiyor.',
+    'Uçuş, otel, Michelin derecesi ve etkinlikler örnektir; bağlantılar example.com adresine gider.',
   ],
   weatherNote: 'ÖRNEK: mayıs ortası ılık; gündüz 22 °C civarı. Gün doğumu 05:40, gün batımı 20:30 civarı.',
   reservations: [
@@ -227,6 +259,62 @@ const plan = {
   ],
   verifiedAt: V,
   notes: 'ÖRNEK veri. Gerçek mekan değildir.',
+  lodging: {
+    name: 'ÖRNEK Dere Oteli',
+    address: 'ÖRNEK Dere Caddesi No: 7, ÖRNEK Kent',
+    ...at(-150, 250),
+    coordSource: 'other',
+    phone: FAKE_PHONE,
+    website: 'https://example.com/ornek/otel',
+    checkIn: '14:00',
+    checkOut: '11:00',
+    note: 'ÖRNEK konaklama; gerçek bir otel değildir.',
+  },
+  arrival: {
+    title: 'ÖRNEK Havalimanından otele',
+    date: '2027-05-14',
+    flight: 'ÖRNEK uçuş XX 0000',
+    flightTime: '06:40',
+    hubName: 'ÖRNEK Havalimanı, gelen yolcu çıkışı',
+    hubLat: at(-6000, -4000).lat,
+    hubLng: at(-6000, -4000).lng,
+    leaveBy: null,
+    steps: [
+      { mode: 'walk', instruction: 'Bagajı alıp “Tren” tabelasını izleyin; istasyon terminalin altında.', from: 'Gelen yolcu çıkışı', to: 'Havalimanı istasyonu', line: null, direction: null, stopsCount: null, durationMinutes: 5, ticket: null, costText: null, ...at(-6000, -4000) },
+      { mode: 'train', instruction: 'ÖRNEK hafif raylıya binin, “Merkez” yönünde gidin; “Dere Köprüsü” durağında inin.', from: 'Havalimanı istasyonu', to: 'Dere Köprüsü', line: 'ÖRNEK H1', direction: 'Merkez', stopsCount: 6, durationMinutes: 22, ticket: 'Tek yön bilet, istasyondaki makineden; kartla ödenir.', costText: 'ÖRNEK 4 Avro', lat: null, lng: null },
+      { mode: 'walk', instruction: 'Duraktan çıkınca köprüyü geçin; otel dere caddesinin sağ tarafında.', from: 'Dere Köprüsü', to: 'ÖRNEK Dere Oteli', line: null, direction: null, stopsCount: null, durationMinutes: 6, ticket: null, costText: null, ...at(-300, -250) },
+    ],
+    totalMinutes: 33,
+    costText: 'ÖRNEK 4 Avro',
+    alternatives: [
+      { title: 'Taksi', summary: 'ÖRNEK: çıkıştaki resmi taksi durağından.', minutes: 20, costText: 'ÖRNEK 35 Avro' },
+      { title: 'Servis otobüsü', summary: 'ÖRNEK: yarım saatte bir, merkez garına.', minutes: 35, costText: 'ÖRNEK 6 Avro' },
+    ],
+    note: 'Bu yol tarifi örnektir.',
+    sources: src('varis'),
+    verifiedAt: V,
+  },
+  departure: {
+    title: 'ÖRNEK Otelden havalimanına',
+    date: '2027-05-15',
+    flight: 'ÖRNEK uçuş XX 0001',
+    flightTime: '23:59',
+    hubName: 'ÖRNEK Havalimanı, giden yolcu',
+    hubLat: at(-6000, -4000).lat,
+    hubLng: at(-6000, -4000).lng,
+    leaveBy: '21:00',
+    steps: [
+      { mode: 'walk', instruction: 'Otelden çıkıp köprüyü geçin; “Dere Köprüsü” durağına yürüyün.', from: 'ÖRNEK Dere Oteli', to: 'Dere Köprüsü', line: null, direction: null, stopsCount: null, durationMinutes: 6, ticket: null, costText: null, lat: null, lng: null },
+      { mode: 'train', instruction: 'ÖRNEK hafif raylıya “Havalimanı” yönünde binin; son durakta inin.', from: 'Dere Köprüsü', to: 'Havalimanı istasyonu', line: 'ÖRNEK H1', direction: 'Havalimanı', stopsCount: 6, durationMinutes: 22, ticket: 'Tek yön bilet, makineden.', costText: 'ÖRNEK 4 Avro', lat: null, lng: null },
+      { mode: 'walk', instruction: 'İstasyondan yürüyen merdivenle giden yolcu katına çıkın.', from: 'Havalimanı istasyonu', to: 'Giden yolcu', line: null, direction: null, stopsCount: null, durationMinutes: 5, ticket: null, costText: null, lat: null, lng: null },
+    ],
+    totalMinutes: 33,
+    costText: 'ÖRNEK 4 Avro',
+    alternatives: [{ title: 'Taksi', summary: 'ÖRNEK: otel resepsiyonundan çağrılır.', minutes: 20, costText: 'ÖRNEK 35 Avro' }],
+    note: 'Bu yol tarifi örnektir.',
+    sources: src('donus'),
+    verifiedAt: V,
+  },
 };
 
 mkdirSync('src/sample', { recursive: true });

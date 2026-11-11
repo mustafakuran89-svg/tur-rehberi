@@ -2,40 +2,102 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://tur-rehberi.local/plan.schema.json",
   "title": "Tur Rehberi gezi planı",
-  "description": "Uygulamanın içe aktardığı gezi planı dosyasının sözleşmesi. Planı Claude'daki uzman-tur-rehberi skill'i üretir, uygulama okur. Şema yapıyı denetler; içerik kalitesini (durak sayısı, alternatif sayısı, kaynak sayısı) uygulamadaki kural denetimi uyarı olarak bildirir.",
+  "description": "Uygulamanın içe aktardığı gezi planı dosyasının sözleşmesi. Sürüm 2, sürüm 1'e yalnızca isteğe bağlı alanlar ekler; sürüm 1 dosyaları değişmeden geçerlidir. Şema yapıyı denetler; içerik kalitesini uygulamadaki kural denetimi uyarı olarak bildirir.",
   "type": "object",
   "additionalProperties": false,
   "required": [
-    "schemaVersion", "id", "title", "destinations", "startDate", "endDate",
-    "summary", "assumptions", "weatherNote", "reservations", "cuisine",
-    "days", "phrases", "practical", "sources", "verifiedAt"
+    "schemaVersion",
+    "id",
+    "title",
+    "destinations",
+    "startDate",
+    "endDate",
+    "summary",
+    "assumptions",
+    "weatherNote",
+    "reservations",
+    "cuisine",
+    "days",
+    "phrases",
+    "practical",
+    "sources",
+    "verifiedAt"
   ],
   "properties": {
-    "schemaVersion": { "const": 1 },
+    "schemaVersion": {
+      "enum": [
+        1,
+        2
+      ],
+      "description": "1: ilk sürüm. 2: video, fotoğraf galerisi, yapılandırılmış saat, iletişim, hızlı bakış, rezervasyon bağlantısı, Michelin, akşam etkinliği, konaklama ve havalimanı yol tarifi alanlarını içerebilir."
+    },
     "id": {
       "type": "string",
       "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$",
       "description": "Kalıcı kimlik, küçük harf ve tire. Örnek: kapadokya-2027-05. Aynı kimlikle yeniden içe aktarılan plan eskisinin yerini alır."
     },
-    "title": { "type": "string", "minLength": 1 },
-    "destinations": { "type": "array", "minItems": 1, "items": { "type": "string", "minLength": 1 } },
-    "startDate": { "$ref": "#/$defs/date" },
-    "endDate": { "$ref": "#/$defs/date" },
-    "summary": { "type": "string", "description": "Gezinin tek cümlelik özeti." },
-    "assumptions": { "type": "array", "items": { "type": "string" }, "description": "Plan kurulurken yapılan varsayımlar." },
-    "weatherNote": { "type": "string", "description": "Hava ve mevsim notu; gün doğumu ve gün batımı saatleri." },
+    "title": {
+      "type": "string",
+      "minLength": 1
+    },
+    "destinations": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "startDate": {
+      "$ref": "#/$defs/date"
+    },
+    "endDate": {
+      "$ref": "#/$defs/date"
+    },
+    "summary": {
+      "type": "string",
+      "description": "Gezinin tek cümlelik özeti."
+    },
+    "assumptions": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Plan kurulurken yapılan varsayımlar."
+    },
+    "weatherNote": {
+      "type": "string",
+      "description": "Hava ve mevsim notu; gün doğumu ve gün batımı saatleri."
+    },
     "reservations": {
       "type": "array",
       "description": "Rezervasyon veya önceden bilet gerektirenler.",
       "items": {
         "type": "object",
         "additionalProperties": false,
-        "required": ["what", "note"],
+        "required": [
+          "what",
+          "note"
+        ],
         "properties": {
-          "what": { "type": "string" },
-          "when": { "type": ["string", "null"] },
-          "note": { "type": "string" },
-          "url": { "type": ["string", "null"] }
+          "what": {
+            "type": "string"
+          },
+          "when": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "note": {
+            "type": "string"
+          },
+          "url": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
         }
       }
     },
@@ -45,29 +107,77 @@
       "items": {
         "type": "object",
         "additionalProperties": false,
-        "required": ["name", "description", "where"],
+        "required": [
+          "name",
+          "description",
+          "where"
+        ],
         "properties": {
-          "name": { "type": "string" },
-          "description": { "type": "string", "description": "Yemeğin ne olduğu." },
-          "where": { "type": "string", "description": "En iyi nerede yenir: ilçe, semt veya plandaki mekan kodu." }
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string",
+            "description": "Yemeğin ne olduğu."
+          },
+          "where": {
+            "type": "string",
+            "description": "En iyi nerede yenir: ilçe, semt veya plandaki mekan kodu."
+          }
         }
       }
     },
-    "days": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/day" } },
+    "days": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/day"
+      }
+    },
     "intercity": {
       "type": "array",
       "description": "Çok şehirli gezide şehirler arası yol notları.",
       "items": {
         "type": "object",
         "additionalProperties": false,
-        "required": ["from", "to", "mode", "note"],
+        "required": [
+          "from",
+          "to",
+          "mode",
+          "note"
+        ],
         "properties": {
-          "from": { "type": "string" },
-          "to": { "type": "string" },
-          "mode": { "enum": ["drive", "transit", "flight", "ferry", "other"] },
-          "durationText": { "type": ["string", "null"] },
-          "note": { "type": "string" },
-          "roadStops": { "type": "array", "items": { "type": "string" }, "description": "Yol üstü lezzet ve mola durakları." }
+          "from": {
+            "type": "string"
+          },
+          "to": {
+            "type": "string"
+          },
+          "mode": {
+            "enum": [
+              "drive",
+              "transit",
+              "flight",
+              "ferry",
+              "other"
+            ]
+          },
+          "durationText": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "note": {
+            "type": "string"
+          },
+          "roadStops": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Yol üstü lezzet ve mola durakları."
+          }
         }
       }
     },
@@ -77,193 +187,1458 @@
       "items": {
         "type": "object",
         "additionalProperties": false,
-        "required": ["language", "langCode", "items"],
+        "required": [
+          "language",
+          "langCode",
+          "items"
+        ],
         "properties": {
-          "language": { "type": "string", "description": "Dilin veya yöre ağzının adı. Örnek: İtalyanca, Karadeniz ağzı." },
-          "langCode": { "type": "string", "description": "Seslendirme için BCP-47 kodu. Örnek: it-IT, el-GR, tr-TR." },
-          "items": { "type": "array", "items": { "$ref": "#/$defs/phrase" } }
+          "language": {
+            "type": "string",
+            "description": "Dilin veya yöre ağzının adı. Örnek: İtalyanca, Karadeniz ağzı."
+          },
+          "langCode": {
+            "type": "string",
+            "description": "Seslendirme için BCP-47 kodu. Örnek: it-IT, el-GR, tr-TR."
+          },
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/$defs/phrase"
+            }
+          }
         }
       }
     },
     "practical": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["transport", "moneyAndTipping", "closedDays", "emergency"],
+      "required": [
+        "transport",
+        "moneyAndTipping",
+        "closedDays",
+        "emergency"
+      ],
       "properties": {
-        "transport": { "type": "string" },
-        "moneyAndTipping": { "type": "string" },
-        "closedDays": { "type": "string" },
+        "transport": {
+          "type": "string"
+        },
+        "moneyAndTipping": {
+          "type": "string"
+        },
+        "closedDays": {
+          "type": "string"
+        },
         "emergency": {
           "type": "array",
           "items": {
             "type": "object",
             "additionalProperties": false,
-            "required": ["label", "number"],
-            "properties": { "label": { "type": "string" }, "number": { "type": "string" } }
+            "required": [
+              "label",
+              "number"
+            ],
+            "properties": {
+              "label": {
+                "type": "string"
+              },
+              "number": {
+                "type": "string"
+              }
+            }
           }
         },
-        "notes": { "type": "array", "items": { "type": "string" } }
+        "notes": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
       }
     },
-    "sources": { "type": "array", "items": { "$ref": "#/$defs/source" } },
-    "verifiedAt": { "$ref": "#/$defs/date", "description": "Saat ve fiyatların kontrol edildiği tarih." },
-    "notes": { "type": ["string", "null"] }
+    "sources": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/source"
+      }
+    },
+    "verifiedAt": {
+      "$ref": "#/$defs/date",
+      "description": "Saat ve fiyatların kontrol edildiği tarih."
+    },
+    "notes": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "lodging": {
+      "oneOf": [
+        {
+          "type": "null"
+        },
+        {
+          "$ref": "#/$defs/lodging"
+        }
+      ]
+    },
+    "arrival": {
+      "oneOf": [
+        {
+          "type": "null"
+        },
+        {
+          "$ref": "#/$defs/transfer"
+        }
+      ]
+    },
+    "departure": {
+      "oneOf": [
+        {
+          "type": "null"
+        },
+        {
+          "$ref": "#/$defs/transfer"
+        }
+      ]
+    }
   },
   "$defs": {
-    "date": { "type": "string", "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$", "description": "YYYY-AA-GG. Ekranda GG.AA.YYYY gösterilir." },
+    "date": {
+      "type": "string",
+      "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$",
+      "description": "YYYY-AA-GG. Ekranda GG.AA.YYYY gösterilir."
+    },
     "source": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["title", "url"],
-      "properties": { "title": { "type": "string" }, "url": { "type": "string", "pattern": "^https?://" } }
+      "required": [
+        "title",
+        "url"
+      ],
+      "properties": {
+        "title": {
+          "type": "string"
+        },
+        "url": {
+          "type": "string",
+          "pattern": "^https?://"
+        }
+      }
     },
-    "coord": { "type": ["number", "null"] },
+    "coord": {
+      "type": [
+        "number",
+        "null"
+      ]
+    },
     "coordSource": {
-      "enum": ["places", "manual", "other", null],
+      "enum": [
+        "places",
+        "manual",
+        "other",
+        null
+      ],
       "description": "places: yer arama aracı. manual: kullanıcı iğneyi elle düzeltti. other: başka güvenilir kaynak. Koordinat yoksa null."
     },
     "day": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["date", "title", "theme", "area", "timeline", "stops", "breakfast", "lunch", "dinner", "snacks", "flex"],
+      "required": [
+        "date",
+        "title",
+        "theme",
+        "area",
+        "timeline",
+        "stops",
+        "breakfast",
+        "lunch",
+        "dinner",
+        "snacks",
+        "flex"
+      ],
       "properties": {
-        "date": { "$ref": "#/$defs/date" },
-        "title": { "type": "string" },
-        "theme": { "type": "string" },
-        "area": { "type": "string" },
-        "timeline": { "type": "array", "items": { "$ref": "#/$defs/timelineItem" } },
-        "stops": { "type": "array", "items": { "$ref": "#/$defs/stop" }, "description": "Ziyaret sırasıyla. Günde 4-6 ana durak beklenir; ilk ve son gün hafif olabilir." },
-        "breakfast": { "type": "array", "items": { "$ref": "#/$defs/venue" }, "description": "K1, K2, K3. En az 3 beklenir." },
+        "date": {
+          "$ref": "#/$defs/date"
+        },
+        "title": {
+          "type": "string"
+        },
+        "theme": {
+          "type": "string"
+        },
+        "area": {
+          "type": "string"
+        },
+        "timeline": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/timelineItem"
+          }
+        },
+        "stops": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/stop"
+          },
+          "description": "Ziyaret sırasıyla. Günde 4-6 ana durak beklenir; ilk ve son gün hafif olabilir."
+        },
+        "breakfast": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/venue"
+          },
+          "description": "K1, K2, K3. En az 3 beklenir."
+        },
         "lunch": {
           "oneOf": [
-            { "type": "null" },
+            {
+              "type": "null"
+            },
             {
               "type": "object",
               "additionalProperties": false,
-              "required": ["main", "backup"],
+              "required": [
+                "main",
+                "backup"
+              ],
               "properties": {
-                "main": { "$ref": "#/$defs/venue" },
-                "backup": { "oneOf": [{ "type": "null" }, { "$ref": "#/$defs/venue" }] }
+                "main": {
+                  "$ref": "#/$defs/venue"
+                },
+                "backup": {
+                  "oneOf": [
+                    {
+                      "type": "null"
+                    },
+                    {
+                      "$ref": "#/$defs/venue"
+                    }
+                  ]
+                }
               }
             }
           ],
           "description": "O1 ana öneri, O2 yedek."
         },
-        "dinner": { "type": "array", "items": { "$ref": "#/$defs/venue" }, "description": "A1, A2, A3. En az 3 beklenir." },
-        "snacks": { "type": "array", "items": { "$ref": "#/$defs/venue" }, "description": "S1, S2: kahve, tatlı, sokak lezzeti." },
+        "dinner": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/venue"
+          },
+          "description": "A1, A2, A3. En az 3 beklenir."
+        },
+        "snacks": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/venue"
+          },
+          "description": "S1, S2: kahve, tatlı, sokak lezzeti."
+        },
         "flex": {
           "type": "object",
           "additionalProperties": false,
-          "required": ["swappable", "skipIfTired", "ifExtraTime", "ifRain"],
+          "required": [
+            "swappable",
+            "skipIfTired",
+            "ifExtraTime",
+            "ifRain"
+          ],
           "description": "Esneme payı notu.",
           "properties": {
-            "swappable": { "type": "string" },
-            "skipIfTired": { "type": "string" },
-            "ifExtraTime": { "type": "string" },
-            "ifRain": { "type": "string" }
+            "swappable": {
+              "type": "string"
+            },
+            "skipIfTired": {
+              "type": "string"
+            },
+            "ifExtraTime": {
+              "type": "string"
+            },
+            "ifRain": {
+              "type": "string"
+            }
           }
         },
-        "notes": { "type": ["string", "null"] }
+        "notes": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "eveningEvents": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/event"
+          },
+          "description": "Akşam için 1-3 etkinlik önerisi."
+        },
+        "fromLodging": {
+          "oneOf": [
+            {
+              "type": "null"
+            },
+            {
+              "$ref": "#/$defs/dayLeg"
+            }
+          ]
+        },
+        "toLodging": {
+          "oneOf": [
+            {
+              "type": "null"
+            },
+            {
+              "$ref": "#/$defs/dayLeg"
+            }
+          ]
+        }
       }
     },
     "timelineItem": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["time", "title", "kind", "fixed"],
+      "required": [
+        "time",
+        "title",
+        "kind",
+        "fixed"
+      ],
       "properties": {
-        "time": { "type": "string", "description": "Serbest metin: '08:30 civarı', '10:00–11:30', '18:45'." },
-        "title": { "type": "string" },
-        "kind": { "enum": ["stop", "breakfast", "lunch", "dinner", "snack", "travel", "free"] },
-        "stopOrder": { "type": ["integer", "null"], "minimum": 1, "description": "kind 'stop' ise ilgili durağın order değeri." },
-        "venueCodes": { "type": "array", "items": { "type": "string" }, "description": "Öğün satırında ilgili mekan kodları: K1, K2, K3." },
-        "fixed": { "type": "boolean", "description": "Yalnızca gerçekten saate bağlı satırlarda true: rezervasyon, biletli giriş, gün batımı, son vapur." },
-        "note": { "type": ["string", "null"] }
+        "time": {
+          "type": "string",
+          "description": "Serbest metin: '08:30 civarı', '10:00–11:30', '18:45'."
+        },
+        "title": {
+          "type": "string"
+        },
+        "kind": {
+          "enum": [
+            "stop",
+            "breakfast",
+            "lunch",
+            "dinner",
+            "snack",
+            "travel",
+            "free"
+          ]
+        },
+        "stopOrder": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "minimum": 1,
+          "description": "kind 'stop' ise ilgili durağın order değeri."
+        },
+        "venueCodes": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Öğün satırında ilgili mekan kodları: K1, K2, K3."
+        },
+        "fixed": {
+          "type": "boolean",
+          "description": "Yalnızca gerçekten saate bağlı satırlarda true: rezervasyon, biletli giriş, gün batımı, son vapur."
+        },
+        "note": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
       }
     },
     "stop": {
       "type": "object",
       "additionalProperties": false,
       "required": [
-        "order", "name", "kind", "lat", "lng", "coordSource", "address",
-        "visitMinutes", "narration", "practicalLine", "legToNext", "sources", "verifiedAt"
+        "order",
+        "name",
+        "kind",
+        "lat",
+        "lng",
+        "coordSource",
+        "address",
+        "visitMinutes",
+        "narration",
+        "practicalLine",
+        "legToNext",
+        "sources",
+        "verifiedAt"
       ],
       "properties": {
-        "order": { "type": "integer", "minimum": 1, "description": "Gün içindeki ziyaret sırası. Numaranın tek kaynağı." },
-        "name": { "type": "string", "minLength": 1 },
-        "kind": { "enum": ["main", "minor"] },
-        "lat": { "$ref": "#/$defs/coord" },
-        "lng": { "$ref": "#/$defs/coord" },
-        "coordSource": { "$ref": "#/$defs/coordSource" },
-        "address": { "type": "string" },
-        "visitMinutes": { "type": ["integer", "null"], "minimum": 0 },
-        "openHours": { "type": ["string", "null"] },
-        "closedDays": { "type": ["string", "null"] },
+        "order": {
+          "type": "integer",
+          "minimum": 1,
+          "description": "Gün içindeki ziyaret sırası. Numaranın tek kaynağı."
+        },
+        "name": {
+          "type": "string",
+          "minLength": 1
+        },
+        "kind": {
+          "enum": [
+            "main",
+            "minor"
+          ]
+        },
+        "lat": {
+          "$ref": "#/$defs/coord"
+        },
+        "lng": {
+          "$ref": "#/$defs/coord"
+        },
+        "coordSource": {
+          "$ref": "#/$defs/coordSource"
+        },
+        "address": {
+          "type": "string"
+        },
+        "visitMinutes": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "minimum": 0
+        },
+        "openHours": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "closedDays": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
         "closedWeekdays": {
           "type": "array",
-          "items": { "enum": ["mon", "tue", "wed", "thu", "fri", "sat", "sun"] },
+          "items": {
+            "enum": [
+              "mon",
+              "tue",
+              "wed",
+              "thu",
+              "fri",
+              "sat",
+              "sun"
+            ]
+          },
           "description": "Her hafta kapalı olunan günler; kural denetimi günün tarihiyle karşılaştırır."
         },
-        "fee": { "type": ["string", "null"] },
-        "ticketOrBooking": { "type": ["string", "null"] },
-        "bestTime": { "type": ["string", "null"] },
-        "narration": { "type": "string", "description": "Sesli okunacak anlatım. Ana durakta 120-200 kelime, küçük durakta birkaç cümle. Parantez, kısaltma ve liste içermez." },
-        "practicalLine": { "type": "string", "description": "Tek satır pratik bilgi." },
+        "fee": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "ticketOrBooking": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "bestTime": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "narration": {
+          "type": "string",
+          "description": "Sesli okunacak anlatım. Ana durakta 120-200 kelime, küçük durakta birkaç cümle. Parantez, kısaltma ve liste içermez."
+        },
+        "practicalLine": {
+          "type": "string",
+          "description": "Tek satır pratik bilgi."
+        },
         "legToNext": {
           "oneOf": [
-            { "type": "null" },
+            {
+              "type": "null"
+            },
             {
               "type": "object",
               "additionalProperties": false,
-              "required": ["mode", "minutes", "approx"],
+              "required": [
+                "mode",
+                "minutes",
+                "approx"
+              ],
               "properties": {
-                "mode": { "enum": ["walk", "drive", "transit"] },
-                "minutes": { "type": ["integer", "null"], "minimum": 0, "description": "Bilinmiyorsa null; uygulama hesaplar." },
-                "approx": { "type": "boolean" }
+                "mode": {
+                  "enum": [
+                    "walk",
+                    "drive",
+                    "transit"
+                  ]
+                },
+                "minutes": {
+                  "type": [
+                    "integer",
+                    "null"
+                  ],
+                  "minimum": 0,
+                  "description": "Bilinmiyorsa null; uygulama hesaplar."
+                },
+                "approx": {
+                  "type": "boolean"
+                }
               }
             }
           ],
           "description": "Sonraki durağa etap. Günün son durağında null."
         },
-        "sources": { "type": "array", "items": { "$ref": "#/$defs/source" } },
-        "verifiedAt": { "oneOf": [{ "type": "null" }, { "$ref": "#/$defs/date" }] }
+        "sources": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/source"
+          }
+        },
+        "verifiedAt": {
+          "oneOf": [
+            {
+              "type": "null"
+            },
+            {
+              "$ref": "#/$defs/date"
+            }
+          ]
+        },
+        "phone": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "Uluslararası biçimde: +43 1 5335288."
+        },
+        "website": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "pattern": "^https?://"
+        },
+        "hours": {
+          "oneOf": [
+            {
+              "type": "null"
+            },
+            {
+              "$ref": "#/$defs/weeklyHours"
+            }
+          ]
+        },
+        "ticketUrl": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "pattern": "^https?://",
+          "description": "Resmi bilet ya da rezervasyon sayfası."
+        },
+        "lookFor": {
+          "type": "array",
+          "maxItems": 5,
+          "items": {
+            "type": "string"
+          },
+          "description": "Yerinde hızlı bakış: 'şuna bak' maddeleri, en çok 5, her biri tek cümle."
+        },
+        "narrationShort": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "Yaklaşık 30 saniyelik kısa anlatım, 50-70 kelime."
+        },
+        "videoQuery": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "Türkçe video araması için hazır sorgu. Örnek: 'Schönbrunn Sarayı Viyana'."
+        },
+        "videos": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/video"
+          }
+        },
+        "wikipediaTr": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "Türkçe Vikipedi madde başlığı; fotoğraf ve 'devamını oku' için."
+        },
+        "images": {
+          "type": "array",
+          "maxItems": 8,
+          "items": {
+            "$ref": "#/$defs/image"
+          },
+          "description": "Planla gelen görseller. Yalnızca özgür lisanslı, eser sahibi ve lisansı yazılı. Boşsa uygulama kendisi arar."
+        }
       }
     },
     "venue": {
       "type": "object",
       "additionalProperties": false,
       "required": [
-        "code", "name", "lat", "lng", "coordSource", "address", "whatToEat",
-        "priceLevel", "reservation", "suitsWhom", "sources", "verifiedAt"
+        "code",
+        "name",
+        "lat",
+        "lng",
+        "coordSource",
+        "address",
+        "whatToEat",
+        "priceLevel",
+        "reservation",
+        "suitsWhom",
+        "sources",
+        "verifiedAt"
       ],
       "properties": {
-        "code": { "type": "string", "pattern": "^[KOAS][1-9]$", "description": "K kahvaltı, O öğle, A akşam, S ara durak. Gün içinde benzersiz." },
-        "name": { "type": "string", "minLength": 1 },
-        "lat": { "$ref": "#/$defs/coord" },
-        "lng": { "$ref": "#/$defs/coord" },
-        "coordSource": { "$ref": "#/$defs/coordSource" },
-        "address": { "type": "string" },
-        "whatToEat": { "type": "array", "items": { "type": "string" }, "description": "2-3 özgül öneri." },
-        "priceLevel": { "enum": [1, 2, 3, 4, null], "description": "1 ekonomik, 4 pahalı." },
-        "reservation": { "enum": ["required", "recommended", "none", null] },
-        "reservationNote": { "type": ["string", "null"] },
-        "closedDays": { "type": ["string", "null"] },
-        "closedWeekdays": { "type": "array", "items": { "enum": ["mon", "tue", "wed", "thu", "fri", "sat", "sun"] } },
-        "queueNote": { "type": ["string", "null"], "description": "Kuyruk veya erken tükenme." },
-        "suitsWhom": { "type": "string", "description": "Kime uygun, bir cümle." },
-        "sources": { "type": "array", "items": { "$ref": "#/$defs/source" }, "description": "En az 2 bağımsız kaynak beklenir." },
-        "verifiedAt": { "oneOf": [{ "type": "null" }, { "$ref": "#/$defs/date" }] }
+        "code": {
+          "type": "string",
+          "pattern": "^[KOAS][1-9]$",
+          "description": "K kahvaltı, O öğle, A akşam, S ara durak. Gün içinde benzersiz."
+        },
+        "name": {
+          "type": "string",
+          "minLength": 1
+        },
+        "lat": {
+          "$ref": "#/$defs/coord"
+        },
+        "lng": {
+          "$ref": "#/$defs/coord"
+        },
+        "coordSource": {
+          "$ref": "#/$defs/coordSource"
+        },
+        "address": {
+          "type": "string"
+        },
+        "whatToEat": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "2-3 özgül öneri."
+        },
+        "priceLevel": {
+          "enum": [
+            1,
+            2,
+            3,
+            4,
+            null
+          ],
+          "description": "1 ekonomik, 4 pahalı."
+        },
+        "reservation": {
+          "enum": [
+            "required",
+            "recommended",
+            "none",
+            null
+          ]
+        },
+        "reservationNote": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "closedDays": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "closedWeekdays": {
+          "type": "array",
+          "items": {
+            "enum": [
+              "mon",
+              "tue",
+              "wed",
+              "thu",
+              "fri",
+              "sat",
+              "sun"
+            ]
+          }
+        },
+        "queueNote": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "Kuyruk veya erken tükenme."
+        },
+        "suitsWhom": {
+          "type": "string",
+          "description": "Kime uygun, bir cümle."
+        },
+        "sources": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/source"
+          },
+          "description": "En az 2 bağımsız kaynak beklenir."
+        },
+        "verifiedAt": {
+          "oneOf": [
+            {
+              "type": "null"
+            },
+            {
+              "$ref": "#/$defs/date"
+            }
+          ]
+        },
+        "phone": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "Uluslararası biçimde: +43 1 5335288."
+        },
+        "website": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "pattern": "^https?://"
+        },
+        "hours": {
+          "oneOf": [
+            {
+              "type": "null"
+            },
+            {
+              "$ref": "#/$defs/weeklyHours"
+            }
+          ]
+        },
+        "menuUrl": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "pattern": "^https?://"
+        },
+        "images": {
+          "type": "array",
+          "maxItems": 8,
+          "items": {
+            "$ref": "#/$defs/image"
+          },
+          "description": "Planla gelen görseller. Yalnızca özgür lisanslı, eser sahibi ve lisansı yazılı. Mekanlar için uygulama kendisi görsel aramaz."
+        },
+        "bookingUrl": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "pattern": "^https?://",
+          "description": "Çevrimiçi rezervasyon sayfası. Yoksa null; uygulama telefonu gösterir."
+        },
+        "michelin": {
+          "oneOf": [
+            {
+              "type": "null"
+            },
+            {
+              "$ref": "#/$defs/michelin"
+            }
+          ]
+        }
       }
     },
     "phrase": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["original", "pronunciationTr", "meaning"],
+      "required": [
+        "original",
+        "pronunciationTr",
+        "meaning"
+      ],
       "properties": {
-        "original": { "type": "string", "description": "Latin harfli yazılış ya da yöre deyişi." },
-        "script": { "type": ["string", "null"], "description": "Latin alfabesi dışındaki dillerde özgün yazı." },
-        "pronunciationTr": { "type": "string", "description": "Türkçe okunuş." },
-        "meaning": { "type": "string" },
-        "context": { "type": ["string", "null"], "description": "Hangi durumda söylenir." }
+        "original": {
+          "type": "string",
+          "description": "Latin harfli yazılış ya da yöre deyişi."
+        },
+        "script": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "Latin alfabesi dışındaki dillerde özgün yazı."
+        },
+        "pronunciationTr": {
+          "type": "string",
+          "description": "Türkçe okunuş."
+        },
+        "meaning": {
+          "type": "string"
+        },
+        "context": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "Hangi durumda söylenir."
+        }
+      }
+    },
+    "hhmm": {
+      "type": "string",
+      "pattern": "^([01][0-9]|2[0-9]):[0-5][0-9]$",
+      "description": "SS:DD. Gece yarısından sonraki kapanış 24:00-29:59 olarak yazılır; 01:00'de kapanan yer için 25:00."
+    },
+    "interval": {
+      "type": "array",
+      "prefixItems": [
+        {
+          "$ref": "#/$defs/hhmm"
+        },
+        {
+          "$ref": "#/$defs/hhmm"
+        }
+      ],
+      "items": false,
+      "minItems": 2,
+      "maxItems": 2
+    },
+    "weeklyHours": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Haftalık çalışma saatleri. Gün yoksa ya da dizi boşsa o gün kapalıdır. Alanın kendisi null ise saat bilinmiyor demektir ve açık-kapalı rozeti gösterilmez.",
+      "properties": {
+        "mon": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/interval"
+          }
+        },
+        "tue": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/interval"
+          }
+        },
+        "wed": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/interval"
+          }
+        },
+        "thu": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/interval"
+          }
+        },
+        "fri": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/interval"
+          }
+        },
+        "sat": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/interval"
+          }
+        },
+        "sun": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/interval"
+          }
+        }
+      }
+    },
+    "video": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "youtubeId",
+        "title",
+        "source"
+      ],
+      "description": "Durak için tanıtıcı video. Plan dosyasında gelebilir, uygulama kendisi bulabilir ya da kullanıcı elle ekleyebilir.",
+      "properties": {
+        "youtubeId": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9_-]{11}$"
+        },
+        "title": {
+          "type": "string"
+        },
+        "channel": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "language": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "BCP-47; Türkçe için tr."
+        },
+        "durationSeconds": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "minimum": 0
+        },
+        "likeCount": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "minimum": 0
+        },
+        "viewCount": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "minimum": 0
+        },
+        "checkedAt": {
+          "oneOf": [
+            {
+              "type": "null"
+            },
+            {
+              "$ref": "#/$defs/date"
+            }
+          ],
+          "description": "Sayıların okunduğu tarih."
+        },
+        "source": {
+          "enum": [
+            "plan",
+            "auto",
+            "manual"
+          ],
+          "description": "plan: plan dosyasıyla geldi. auto: uygulama buldu. manual: kullanıcı ekledi."
+        },
+        "pinned": {
+          "type": "boolean",
+          "description": "Kullanıcı bu videoyu sabitledi; otomatik arama değiştirmez."
+        }
+      }
+    },
+    "image": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "url",
+        "credit",
+        "license"
+      ],
+      "properties": {
+        "url": {
+          "type": "string",
+          "pattern": "^https://"
+        },
+        "credit": {
+          "type": "string"
+        },
+        "license": {
+          "type": "string"
+        },
+        "sourceUrl": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      }
+    },
+    "clock": {
+      "type": "string",
+      "pattern": "^([01][0-9]|2[0-3]):[0-5][0-9]$",
+      "description": "SS:DD, yerel saat."
+    },
+    "michelin": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "distinction",
+        "year"
+      ],
+      "description": "Michelin Rehberi'ndeki yeri. Yalnızca rehberin kendi sayfasından doğrulanan mekanlar için doldurulur.",
+      "properties": {
+        "distinction": {
+          "enum": [
+            "3-stars",
+            "2-stars",
+            "1-star",
+            "bib-gourmand",
+            "selected"
+          ],
+          "description": "selected: yıldızsız ama rehberde önerilen."
+        },
+        "greenStar": {
+          "type": "boolean"
+        },
+        "year": {
+          "type": "integer",
+          "minimum": 2020
+        },
+        "url": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "pattern": "^https?://"
+        }
+      }
+    },
+    "transferStep": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "mode",
+        "instruction"
+      ],
+      "properties": {
+        "mode": {
+          "enum": [
+            "walk",
+            "train",
+            "metro",
+            "tram",
+            "bus",
+            "shuttle",
+            "taxi",
+            "other"
+          ]
+        },
+        "instruction": {
+          "type": "string",
+          "description": "Türkçe, tek adım, ne yapılacağını söyleyen bir iki cümle. Tabelada yazan özgün adlar aynen geçer."
+        },
+        "from": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "to": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "line": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "direction": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "stopsCount": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "minimum": 0
+        },
+        "durationMinutes": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "minimum": 0
+        },
+        "ticket": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "Hangi bilet, nereden alınır."
+        },
+        "costText": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "lat": {
+          "$ref": "#/$defs/coord"
+        },
+        "lng": {
+          "$ref": "#/$defs/coord"
+        }
+      }
+    },
+    "transfer": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "title",
+        "hubName",
+        "steps",
+        "sources",
+        "verifiedAt"
+      ],
+      "description": "Havalimanı ile konaklama arasındaki kapıdan kapıya yol tarifi.",
+      "properties": {
+        "title": {
+          "type": "string"
+        },
+        "date": {
+          "oneOf": [
+            {
+              "type": "null"
+            },
+            {
+              "$ref": "#/$defs/date"
+            }
+          ]
+        },
+        "flight": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "Uçuş kodu ve saati, kullanıcı verdiyse."
+        },
+        "flightTime": {
+          "oneOf": [
+            {
+              "type": "null"
+            },
+            {
+              "$ref": "#/$defs/clock"
+            }
+          ],
+          "description": "Varışta iniş, dönüşte kalkış saati."
+        },
+        "hubName": {
+          "type": "string",
+          "description": "Örnek: Viyana Havalimanı, Terminal 3 varış çıkışı."
+        },
+        "hubLat": {
+          "$ref": "#/$defs/coord"
+        },
+        "hubLng": {
+          "$ref": "#/$defs/coord"
+        },
+        "leaveBy": {
+          "oneOf": [
+            {
+              "type": "null"
+            },
+            {
+              "$ref": "#/$defs/clock"
+            }
+          ],
+          "description": "Dönüşte konaklamadan en geç çıkış saati."
+        },
+        "steps": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/transferStep"
+          }
+        },
+        "totalMinutes": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "minimum": 0
+        },
+        "costText": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "alternatives": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "title",
+              "summary"
+            ],
+            "properties": {
+              "title": {
+                "type": "string"
+              },
+              "summary": {
+                "type": "string"
+              },
+              "minutes": {
+                "type": [
+                  "integer",
+                  "null"
+                ]
+              },
+              "costText": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              }
+            }
+          }
+        },
+        "note": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "sources": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/source"
+          }
+        },
+        "verifiedAt": {
+          "oneOf": [
+            {
+              "type": "null"
+            },
+            {
+              "$ref": "#/$defs/date"
+            }
+          ]
+        }
+      }
+    },
+    "lodging": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "name",
+        "address",
+        "lat",
+        "lng"
+      ],
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "address": {
+          "type": "string"
+        },
+        "lat": {
+          "$ref": "#/$defs/coord"
+        },
+        "lng": {
+          "$ref": "#/$defs/coord"
+        },
+        "coordSource": {
+          "$ref": "#/$defs/coordSource"
+        },
+        "phone": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "website": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "pattern": "^https?://"
+        },
+        "checkIn": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "checkOut": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "note": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      }
+    },
+    "dayLeg": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "mode",
+        "instruction"
+      ],
+      "description": "Konaklamadan günün ilk durağına ya da son duraktan konaklamaya.",
+      "properties": {
+        "mode": {
+          "enum": [
+            "walk",
+            "drive",
+            "transit"
+          ]
+        },
+        "minutes": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "minimum": 0
+        },
+        "instruction": {
+          "type": "string"
+        }
+      }
+    },
+    "event": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "title",
+        "kind",
+        "venueName",
+        "lat",
+        "lng",
+        "date",
+        "sources",
+        "verifiedAt"
+      ],
+      "description": "O akşama özgü etkinlik önerisi: konser, opera, tiyatro, pazar, gece gezisi.",
+      "properties": {
+        "title": {
+          "type": "string"
+        },
+        "kind": {
+          "enum": [
+            "concert",
+            "opera",
+            "theatre",
+            "dance",
+            "market",
+            "tour",
+            "sport",
+            "nightlife",
+            "other"
+          ]
+        },
+        "venueName": {
+          "type": "string"
+        },
+        "address": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "lat": {
+          "$ref": "#/$defs/coord"
+        },
+        "lng": {
+          "$ref": "#/$defs/coord"
+        },
+        "coordSource": {
+          "$ref": "#/$defs/coordSource"
+        },
+        "date": {
+          "$ref": "#/$defs/date"
+        },
+        "startTime": {
+          "oneOf": [
+            {
+              "type": "null"
+            },
+            {
+              "$ref": "#/$defs/clock"
+            }
+          ]
+        },
+        "endTime": {
+          "oneOf": [
+            {
+              "type": "null"
+            },
+            {
+              "$ref": "#/$defs/clock"
+            }
+          ]
+        },
+        "priceText": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "bookingUrl": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "pattern": "^https?://"
+        },
+        "website": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "pattern": "^https?://"
+        },
+        "note": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "Neden önerildi, kıyafet, biletin tükenme durumu."
+        },
+        "suitsWhom": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "sources": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/source"
+          }
+        },
+        "verifiedAt": {
+          "oneOf": [
+            {
+              "type": "null"
+            },
+            {
+              "$ref": "#/$defs/date"
+            }
+          ]
+        }
       }
     }
   }

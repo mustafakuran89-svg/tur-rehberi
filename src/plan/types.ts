@@ -99,6 +99,125 @@ export interface Stop {
   legToNext: Leg | null;
   sources: Source[];
   verifiedAt: ISODate | null;
+  // sürüm 2
+  phone?: string | null;
+  website?: string | null;
+  hours?: WeeklyHours | null;
+  ticketUrl?: string | null;
+  lookFor?: string[];
+  narrationShort?: string | null;
+  videoQuery?: string | null;
+  videos?: Video[];
+  wikipediaTr?: string | null;
+  images?: PlanImage[];
+}
+
+/** SS:DD; gece yarısından sonraki kapanış 24:00-29:59. */
+export type Hhmm = string;
+export type Interval = Hhmm[]; // [açılış, kapanış]; şema iki öge şartını denetler
+export type WeeklyHours = Partial<Record<Weekday, Interval[]>>;
+
+export interface Video {
+  youtubeId: string;
+  title: string;
+  channel?: string | null;
+  language?: string | null;
+  durationSeconds?: number | null;
+  likeCount?: number | null;
+  viewCount?: number | null;
+  checkedAt?: ISODate | null;
+  source: 'plan' | 'auto' | 'manual';
+  pinned?: boolean;
+}
+
+export interface PlanImage {
+  url: string;
+  credit: string;
+  license: string;
+  sourceUrl?: string | null;
+}
+
+export interface Michelin {
+  distinction: '3-stars' | '2-stars' | '1-star' | 'bib-gourmand' | 'selected';
+  greenStar?: boolean;
+  year: number;
+  url?: string | null;
+}
+
+export type TransferMode = 'walk' | 'train' | 'metro' | 'tram' | 'bus' | 'shuttle' | 'taxi' | 'other';
+
+export interface TransferStep {
+  mode: TransferMode;
+  instruction: string;
+  from?: string | null;
+  to?: string | null;
+  line?: string | null;
+  direction?: string | null;
+  stopsCount?: number | null;
+  durationMinutes?: number | null;
+  ticket?: string | null;
+  costText?: string | null;
+  lat?: number | null;
+  lng?: number | null;
+}
+
+export interface Transfer {
+  title: string;
+  date?: ISODate | null;
+  flight?: string | null;
+  flightTime?: string | null;
+  hubName: string;
+  hubLat?: number | null;
+  hubLng?: number | null;
+  leaveBy?: string | null;
+  steps: TransferStep[];
+  totalMinutes?: number | null;
+  costText?: string | null;
+  alternatives?: { title: string; summary: string; minutes?: number | null; costText?: string | null }[];
+  note?: string | null;
+  sources: Source[];
+  verifiedAt: ISODate | null;
+}
+
+export interface Lodging {
+  name: string;
+  address: string;
+  lat: number | null;
+  lng: number | null;
+  coordSource?: CoordSource;
+  phone?: string | null;
+  website?: string | null;
+  checkIn?: string | null;
+  checkOut?: string | null;
+  note?: string | null;
+}
+
+export interface DayLeg {
+  mode: LegMode;
+  minutes?: number | null;
+  instruction: string;
+}
+
+export type EventKind = 'concert' | 'opera' | 'theatre' | 'dance' | 'market' | 'tour' | 'sport' | 'nightlife' | 'other';
+
+export interface EveningEvent {
+  title: string;
+  kind: EventKind;
+  venueName: string;
+  address?: string | null;
+  lat: number | null;
+  lng: number | null;
+  coordSource?: CoordSource;
+  date: ISODate;
+  startTime?: string | null;
+  endTime?: string | null;
+  priceText?: string | null;
+  bookingUrl?: string | null;
+  website?: string | null;
+  note?: string | null;
+  suitsWhom?: string | null;
+  sources: Source[];
+  verifiedAt: ISODate | null;
 }
 
 export interface Venue {
@@ -118,6 +237,14 @@ export interface Venue {
   suitsWhom: string;
   sources: Source[];
   verifiedAt: ISODate | null;
+  // sürüm 2
+  phone?: string | null;
+  website?: string | null;
+  hours?: WeeklyHours | null;
+  menuUrl?: string | null;
+  images?: PlanImage[];
+  bookingUrl?: string | null;
+  michelin?: Michelin | null;
 }
 
 export interface Lunch {
@@ -145,10 +272,13 @@ export interface Day {
   snacks: Venue[];
   flex: Flex;
   notes?: string | null;
+  eveningEvents?: EveningEvent[];
+  fromLodging?: DayLeg | null;
+  toLodging?: DayLeg | null;
 }
 
 export interface Trip {
-  schemaVersion: 1;
+  schemaVersion: 1 | 2;
   id: string;
   title: string;
   destinations: string[];
@@ -166,4 +296,7 @@ export interface Trip {
   sources: Source[];
   verifiedAt: ISODate;
   notes?: string | null;
+  lodging?: Lodging | null;
+  arrival?: Transfer | null;
+  departure?: Transfer | null;
 }

@@ -3,7 +3,7 @@ import type { Day, Trip, Venue } from './types';
 import { stopsInOrder, weekdayOf } from './normalize';
 import { distanceM, estimateLegMinutes, hasCoord, median, type LatLng } from '../lib/geo';
 import { tr } from '../i18n/tr';
-import { formatKm, formatMinutes } from '../lib/format';
+import { formatDate, formatKm, formatMinutes } from '../lib/format';
 
 export type RuleId =
   | 'day-stop-count'
@@ -18,7 +18,13 @@ export type RuleId =
   | 'stop-order'
   | 'timeline-ref'
   | 'venue-code'
-  | 'coord-outlier';
+  | 'coord-outlier'
+  | 'booking-contact'
+  | 'image-credit'
+  | 'michelin-url'
+  | 'event-date'
+  | 'departure-time'
+  | 'lodging-transfer';
 
 export interface RuleWarning {
   rule: RuleId;
@@ -44,7 +50,21 @@ export const LIMITS = {
   outlierMinKm: 3, // ortancaya bu kadardan yakın nokta asla işaretlenmez
   outlierFactor: 4, // ortanca uzaklığın bu katından uzak nokta işaretlenir
   outlierAbsKm: 40, // bu mesafeden uzak nokta her durumda işaretlenir
+  airportBufferMin: 120, // dönüşte havalimanına uçuştan en az bu kadar önce varılmalı
 };
+
+/** "SS:DD" → gece yarısından dakika. Okunamazsa null. */
+export function clockMinutes(t: string | null | undefined): number | null {
+  const m = t?.match(/^(\d{1,2}):(\d{2})$/);
+  return m ? Number(m[1]) * 60 + Number(m[2]) : null;
+}
+
+/** Dönüş yolunun süresi: totalMinutes, yoksa adım sürelerinin toplamı (biri eksikse null). */
+export function transferMinutes(t: { totalMinutes?: number | null; steps: { durationMinutes?: number | null }[] }): number | null {
+  if (t.totalMinutes != null) return t.totalMinutes;
+  if (t.steps.length === 0 || t.steps.some((s) => s.durationMinutes == null)) return null;
+  return t.steps.reduce((a, s) => a + (s.durationMinutes ?? 0), 0);
+}
 
 const W = tr.rules;
 
@@ -197,6 +217,46 @@ export function checkPlan(trip: Trip): RuleWarning[] {
       });
     }
   });
+
+  // Sürüm 2 uyarıları
+  trip.days.forEach((day, d) => {
+    const dayNo = d + 1;
+    allVenues(day).forEach(({ venue }) => {
+      if (venue.reservation === 'required' && !venue.bookingUrl && !venue.phone) {
+        out.push({ rule: 'booking-contact', day: d, venueCode: venue.code, message: W.bookingContact(dayNo, venue.code, venue.name) });
+      }
+      if (venue.michelin && !venue.michelin.url) {
+        out.push({ rule: 'michelin-url', day: d, venueCode: venue.code, message: W.michelinUrl(dayNo, venue.code, venue.name) });
+      }
+      (venue.images ?? []).forEach((img, i) => {
+        if (!img.credit.trim() || !img.license.trim()) out.push({ rule: 'image-credit', day: d, venueCode: venue.code, message: W.imageCredit(dayNo, `${venue.code} ${venue.name}`, i + 1) });
+      });
+    });
+    day.stops.forEach((s) => {
+      (s.images ?? []).forEach((img, i) => {
+        if (!img.credit.trim() || !img.license.trim()) out.push({ rule: 'image-credit', day: d, stopOrder: s.order, message: W.imageCredit(dayNo, W.stopLabel(s.order, s.name), i + 1) });
+      });
+    });
+    (day.eveningEvents ?? []).forEach((e) => {
+      if (e.date !== day.date) out.push({ rule: 'event-date', day: d, message: W.eventDate(dayNo, e.title, formatDate(e.date), formatDate(day.date)) });
+    });
+  });
+  const dep = trip.departure;
+  if (dep) {
+    const leave = clockMinutes(dep.leaveBy);
+    let flight = clockMinutes(dep.flightTime);
+    const travel = transferMinutes(dep);
+    if (leave !== null && flight !== null && travel !== null) {
+      if (flight < leave) flight += 24 * 60; // uçuş ertesi gün
+      const arrive = leave + travel;
+      if (flight - arrive < LIMITS.airportBufferMin) {
+        out.push({ rule: 'departure-time', message: W.departureTime(dep.leaveBy!, formatMinutes(travel), dep.flightTime!, formatMinutes(Math.max(0, flight - arrive))) });
+      }
+    }
+  }
+  if (trip.lodging && (!trip.arrival || !trip.departure)) {
+    out.push({ rule: 'lodging-transfer', message: W.lodgingTransfer(!trip.arrival, !trip.departure) });
+  }
 
   // İfadeler
   trip.phrases.forEach((list, i) => {

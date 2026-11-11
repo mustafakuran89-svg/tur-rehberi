@@ -1,4 +1,5 @@
-import { useEffect, useState, useSyncExternalStore, type ReactNode } from 'react';
+import { useEffect, useMemo, useState, useSyncExternalStore, type ReactNode } from 'react';
+import { applyPins, useUserState, type UserState } from '../lib/userState';
 import { tr } from '../i18n/tr';
 import { getTrip, subscribeTrips, type TripRecord } from '../lib/store';
 import type { RuleWarning } from '../plan/rules';
@@ -106,18 +107,23 @@ const bump = () => {
 };
 subscribeTrips(bump);
 
-/** Bir geziyi yerel veritabanından okur; veritabanı değişince yeniden okur. */
-export function useTrip(key: string): { rec: TripRecord | null | undefined } {
+/**
+ * Bir geziyi yerel veritabanından okur; veritabanı değişince yeniden okur. Kullanıcının iğne
+ * düzeltmeleri plana uygulanmış olarak döner (plan kaydı değişmez).
+ */
+export function useTrip(key: string): { rec: TripRecord | null | undefined; us: UserState | undefined; raw: TripRecord | null | undefined } {
   const v = useSyncExternalStore(subscribeTrips, () => version);
-  const [rec, setRec] = useState<TripRecord | null | undefined>(undefined);
+  const [raw, setRaw] = useState<TripRecord | null | undefined>(undefined);
+  const { us } = useUserState(key);
   useEffect(() => {
     let alive = true;
-    getTrip(key).then((r) => alive && setRec(r ?? null));
+    getTrip(key).then((r) => alive && setRaw(r ?? null));
     return () => {
       alive = false;
     };
   }, [key, v]);
-  return { rec };
+  const rec = useMemo(() => (raw && us ? { ...raw, trip: applyPins(raw.trip, us) } : raw && us === undefined ? undefined : raw), [raw, us]);
+  return { rec, us, raw };
 }
 
 export function useTripsVersion(): number {

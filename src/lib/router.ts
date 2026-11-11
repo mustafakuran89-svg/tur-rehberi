@@ -25,6 +25,9 @@ export function href(path: string): string {
   return '#' + path;
 }
 
+export type PinKind = 'stop' | 'venue' | 'event' | 'lodging';
+const PIN_KINDS: PinKind[] = ['stop', 'venue', 'event', 'lodging'];
+
 export type Route =
   | { name: 'trips' }
   | { name: 'import' }
@@ -36,7 +39,7 @@ export type Route =
   | { name: 'food'; key: string; day: number }
   | { name: 'tour'; key: string; day: number }
   | { name: 'stop'; key: string; day: number; order: number }
-  | { name: 'pin'; key: string; day: number; kind: 'stop' | 'venue'; ref: string }
+  | { name: 'pin'; key: string; day: number; kind: PinKind; ref: string }
   | { name: 'notFound' };
 
 export function parseRoute(path: string): Route {
@@ -55,7 +58,7 @@ export function parseRoute(path: string): Route {
       if (p[4] === 'food' && p.length === 5) return { name: 'food', key, day };
       if (p[4] === 'tour' && p.length === 5) return { name: 'tour', key, day };
       if (p[4] === 'stop' && /^\d+$/.test(p[5] ?? '') && p.length === 6) return { name: 'stop', key, day, order: Number(p[5]) };
-      if (p[4] === 'pin' && (p[5] === 'stop' || p[5] === 'venue') && p[6] && p.length === 7) return { name: 'pin', key, day, kind: p[5], ref: p[6] };
+      if (p[4] === 'pin' && PIN_KINDS.includes(p[5] as PinKind) && p[6] && p.length === 7) return { name: 'pin', key, day, kind: p[5] as PinKind, ref: p[6] };
     }
   }
   return { name: 'notFound' };
@@ -73,5 +76,5 @@ export const paths = {
   food: (key: string, d: number) => `/trip/${k(key)}/day/${d}/food`,
   tour: (key: string, d: number) => `/trip/${k(key)}/day/${d}/tour`,
   stop: (key: string, d: number, o: number) => `/trip/${k(key)}/day/${d}/stop/${o}`,
-  pin: (key: string, d: number, kind: 'stop' | 'venue', ref: string | number) => `/trip/${k(key)}/day/${d}/pin/${kind}/${ref}`,
+  pin: (key: string, d: number, kind: PinKind, ref: string | number) => `/trip/${k(key)}/day/${d}/pin/${kind}/${ref}`,
 };

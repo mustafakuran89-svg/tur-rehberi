@@ -15,11 +15,14 @@ export interface TripRecord {
 const DB_NAME = 'tur-rehberi';
 let dbp: Promise<IDBPDatabase> | null = null;
 
-function db(): Promise<IDBPDatabase> {
+// Sürüm 2: 'user' (kullanıcı durumu, planla ayrı) ve 'cache' (video, galeri, hava, görsel önbelleği).
+export function db(): Promise<IDBPDatabase> {
   if (!dbp) {
-    dbp = openDB(DB_NAME, 1, {
+    dbp = openDB(DB_NAME, 2, {
       upgrade(d) {
         if (!d.objectStoreNames.contains('trips')) d.createObjectStore('trips', { keyPath: 'key' });
+        if (!d.objectStoreNames.contains('user')) d.createObjectStore('user', { keyPath: 'tripId' });
+        if (!d.objectStoreNames.contains('cache')) d.createObjectStore('cache', { keyPath: 'key' });
       },
     });
   }
@@ -76,12 +79,15 @@ export async function saveImported(trip: Trip): Promise<TripRecord> {
 export async function deleteTrip(key: string): Promise<void> {
   const d = await db();
   await d.delete('trips', key);
+  await d.delete('user', key);
   changed();
 }
 
 export async function deleteAll(): Promise<void> {
   const d = await db();
   await d.clear('trips');
+  await d.clear('user');
+  await d.clear('cache');
   changed();
 }
 

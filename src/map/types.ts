@@ -1,7 +1,7 @@
 import type { LatLng } from '../lib/geo';
 import type { LegMode } from '../plan/types';
 
-export type PointKind = 'stop' | 'breakfast' | 'lunch' | 'dinner' | 'snack';
+export type PointKind = 'stop' | 'breakfast' | 'lunch' | 'dinner' | 'snack' | 'event' | 'lodging' | 'hub' | 'step';
 
 export interface MapPoint extends LatLng {
   id: string;
@@ -11,6 +11,8 @@ export interface MapPoint extends LatLng {
   href?: string;
   done?: boolean; // tur modunda tetiklenmiş/geçilmiş
   active?: boolean; // tur modunda sıradaki
+  michelin?: boolean; // Michelin rehberindeki mekan: ayırt edici halka
+  faded?: boolean; // saati geçmiş etkinlik
 }
 
 export interface MapLeg {
@@ -28,7 +30,7 @@ export interface MapController {
 
 export function markerElement(p: MapPoint, onClick?: () => void): HTMLElement {
   const el = document.createElement('div');
-  el.className = `mk mk-${p.kind}${p.done ? ' mk-done' : ''}${p.active ? ' mk-active' : ''}`;
+  el.className = `mk mk-${p.kind}${p.done ? ' mk-done' : ''}${p.active ? ' mk-active' : ''}${p.michelin ? ' mk-michelin' : ''}${p.faded ? ' mk-faded' : ''}`;
   el.dataset.label = p.label;
   el.dataset.kind = p.kind;
   el.title = p.title;

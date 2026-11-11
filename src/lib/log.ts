@@ -18,9 +18,24 @@ export function readLog(): LogEntry[] {
   }
 }
 
+/**
+ * Günlüğe gizli bilgi yazılmaz: adreslerdeki key= değeri ve cihazda kayıtlı YouTube anahtarı
+ * metinden silinir.
+ */
+export function redact(msg: string): string {
+  let out = msg.replace(/([?&](?:key|api_key|apikey|token)=)[^&\s"'<>]+/gi, '$1•••');
+  try {
+    const k = localStorage.getItem('tur-rehberi:youtube-key');
+    if (k && k.length >= 6) out = out.split(k).join('•••');
+  } catch {
+    /* yok say */
+  }
+  return out;
+}
+
 export function addLog(kind: LogEntry['kind'], msg: string): void {
   const entries = readLog();
-  entries.push({ t: new Date().toISOString(), kind, msg: msg.slice(0, 2000) });
+  entries.push({ t: new Date().toISOString(), kind, msg: redact(msg).slice(0, 2000) });
   try {
     localStorage.setItem(KEY, JSON.stringify(entries.slice(-MAX)));
   } catch {

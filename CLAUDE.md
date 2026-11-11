@@ -6,7 +6,7 @@ Bu dosya her oturumda okunan proje talimatıdır. Kısa tutulur; ayrıntı aşa�
 
 Yapay zeka ile üretilmiş gezi planını numaralı duraklı rota haritasında gösteren ve durağa yaklaşınca anlatımı sesli okuyan bir web uygulaması. Safari'de bir bağlantıdan açılır.
 
-Kapsam (karar, 11.11.2026): kişisel kullanım; Apple cihazlar (iPhone öncelikli, iPad ve Mac aynı bağlantıyla); mağaza ve kurulum yok; ücretli servis, üyelik ve API anahtarı yok.
+Kapsam (karar, 11.11.2026): kişisel kullanım; Apple cihazlar (iPhone öncelikli, iPad ve Mac aynı bağlantıyla); mağaza ve kurulum yok; ücretli servis ve üyelik yok. Geliştirme 2'den beri isteğe bağlı, ücretsiz ve kullanıcının kendi cihazında girdiği anahtar serbesttir (değişmez kural 1).
 
 Bu kararın bedeli: ekran kilitliyken veya Safari arka plandayken konum ve ses çalışmaz. Tur modu ekran açıkken çalışır ve ekranı açık tutar. Cepte çalışan tur modu kapsam dışıdır; bunu vaat eden arayüz metni veya kod yazılmaz.
 
@@ -21,9 +21,10 @@ Piri'nin adı, logosu, metinleri, ses kayıtları ve ekran tasarımı kopyalanma
 | `URUN-TANIMI.md` | Ekranlar, veri modeli, mimari, riskler | Her yeni özellikten önce |
 | `REHBER-PROMPTU.md` | Plan kurallarının yazılı hali | Kural denetimine ve plan mantığına dokunmadan önce |
 | `ADIMLAR.md` | İş emri: özerk çalışma kuralları, aşamalar, teslim | Her aşamanın başında |
-| `plan.schema.json` | Plan dosyasının sözleşmesi; değiştirilmez | Plan modeline dokunmadan önce |
+| `GELISTIRME-2.md` | İkinci tur iş emri (profesyonel sürüm, Aşama A–G) | Geliştirme 2 işlerinde |
+| `plan.schema.json` | Plan dosyasının sözleşmesi (sürüm 2; sürüm 1 dosyaları da geçerli); değiştirilmez | Plan modeline dokunmadan önce |
 
-İş sırasında iki dosya üretilir: `ILERLEME.md` (hangi aşama bitti, sırada ne var) ve `TESLIM.md` (kullanıcıya teslim notu).
+İş sırasında üretilen dosyalar: `ILERLEME.md` (hangi aşama bitti, sırada ne var), `TESLIM.md` (ilk sürüm teslim notu) ve `TESLIM-2.md` (Geliştirme 2 teslim notu).
 
 ## Ortam
 
@@ -57,7 +58,10 @@ Kütüphane sürümlerini, tarayıcı desteğini ve servis koşullarını ezberd
 
 ## Değişmez kurallar
 
-1. Ücretli servis, API anahtarı veya üyelik isteyen hiçbir bağımlılık eklenmez. Böyle bir ihtiyaç doğarsa dur ve sor.
+1. Ücretli servis ve ücretli üyelik isteyen hiçbir bağımlılık eklenmez. Anahtar yalnız şu koşullarla serbesttir (Geliştirme 2):
+   - Ücretsizdir ve kullanıcı kendi cihazında Ayarlar'a girer.
+   - Anahtar depoya, derlemeye, yedek ve paylaşım dosyasına, önbelleğe ve hata günlüğüne girmez; yalnızca o cihazda saklanır.
+   - Anahtar yokken uygulamanın her özelliği çalışır; anahtarlı özelliğin yerine sade bir yedek gösterilir.
 2. Depo ve site herkese açık olabilir: depoya kişisel veri, gerçek gezi planı ve gizli bilgi konmaz. Planlar yalnızca cihazda durur.
 3. Koordinat uydurulmaz. Koordinatı olmayan yer haritaya konmaz, adresiyle listelenir.
 4. Kaynağı ve doğrulama tarihi olmayan mekan uyarı işaretiyle gösterilir; doğrulanmış gibi sunulmaz.
@@ -67,6 +71,7 @@ Kütüphane sürümlerini, tarayıcı desteğini ve servis koşullarını ezberd
 8. Konum izni yalnızca tur modu başlatılırken istenir.
 9. Arayüz Türkçedir; ekrandaki tüm metinler tek bir çeviri dosyasında tutulur. Kod, değişken adları ve commit mesajları İngilizce olabilir.
 10. Sayı ve tarih biçimi Türkçedir: 1.234,50 TL, 14.05.2027, %20.
+11. Uygulama bilgi uydurmaz. Yol tarifi, bilet ve ücret bilgisi, Michelin derecesi, etkinlik ve rezervasyon bağlantısı için uygulama yalnızca planla geleni gösterir; bunları kendisi üretmez ve tahmin etmez. Canlı yön için kullanıcı Haritalar'a devredilir.
 
 ## Çalışma biçimi
 

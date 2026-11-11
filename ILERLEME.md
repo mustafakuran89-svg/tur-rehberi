@@ -21,6 +21,17 @@ Son güncelleme: 11.11.2026
 
 11.11.2026: kontrol listesinin 6 maddesi gerçek iPhone'da sorunsuz.
 
-## Sırada
+## Geliştirme 2
 
-Sonraki geliştirmeler TESLIM.md bölüm 9'da.
+İş emri: `GELISTIRME-2.md`. Geri dönüş noktası: `v1.0` etiketi (11.11.2026; tip kontrolü, 32 birim, 30 uçtan uca test geçti).
+
+| Aşama | Durum | Not |
+|---|---|---|
+| Başlamadan | Tamam | Şema uzlaştırması: ilk sürümde şema değişmemişti; sürüm 2 dosyası doğrudan kondu. `v1.0` etiketi atıldı. |
+| A — Veri katmanı | Sürüyor | |
+| B — Durak ve mekan ekranı | Bekliyor | |
+| C — Gezi günü asistanı | Bekliyor | |
+| D — Kapıdan kapıya ve akşam | Bekliyor | |
+| E — Gezi öncesi hazırlık | Bekliyor | |
+| F — Cila ve güven | Bekliyor | |
+| G — Teslim | Bekliyor | |
