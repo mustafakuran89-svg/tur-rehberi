@@ -1,0 +1,77 @@
+import { useEffect, useState } from 'react';
+
+// Yönlendirme adres çubuğundaki # ile yapılır; statik barındırmada alt yol sorunu çıkmaz.
+export function currentPath(): string {
+  const h = window.location.hash.replace(/^#/, '');
+  return h.startsWith('/') ? h : '/' + h;
+}
+
+export function useHashPath(): string {
+  const [path, setPath] = useState(currentPath());
+  useEffect(() => {
+    const on = () => setPath(currentPath());
+    window.addEventListener('hashchange', on);
+    return () => window.removeEventListener('hashchange', on);
+  }, []);
+  return path;
+}
+
+export function go(path: string, replace = false): void {
+  if (replace) window.location.replace('#' + path);
+  else window.location.hash = path;
+}
+
+export function href(path: string): string {
+  return '#' + path;
+}
+
+export type Route =
+  | { name: 'trips' }
+  | { name: 'import' }
+  | { name: 'settings' }
+  | { name: 'summary'; key: string }
+  | { name: 'phrases'; key: string }
+  | { name: 'practical'; key: string }
+  | { name: 'day'; key: string; day: number }
+  | { name: 'food'; key: string; day: number }
+  | { name: 'tour'; key: string; day: number }
+  | { name: 'stop'; key: string; day: number; order: number }
+  | { name: 'pin'; key: string; day: number; kind: 'stop' | 'venue'; ref: string }
+  | { name: 'notFound' };
+
+export function parseRoute(path: string): Route {
+  const p = path.split('?')[0].split('/').filter(Boolean).map(decodeURIComponent);
+  if (p.length === 0) return { name: 'trips' };
+  if (p[0] === 'import' && p.length === 1) return { name: 'import' };
+  if (p[0] === 'settings' && p.length === 1) return { name: 'settings' };
+  if (p[0] === 'trip' && p[1]) {
+    const key = p[1];
+    if (p.length === 2) return { name: 'summary', key };
+    if (p[2] === 'phrases' && p.length === 3) return { name: 'phrases', key };
+    if (p[2] === 'practical' && p.length === 3) return { name: 'practical', key };
+    if (p[2] === 'day' && /^\d+$/.test(p[3] ?? '')) {
+      const day = Number(p[3]);
+      if (p.length === 4) return { name: 'day', key, day };
+      if (p[4] === 'food' && p.length === 5) return { name: 'food', key, day };
+      if (p[4] === 'tour' && p.length === 5) return { name: 'tour', key, day };
+      if (p[4] === 'stop' && /^\d+$/.test(p[5] ?? '') && p.length === 6) return { name: 'stop', key, day, order: Number(p[5]) };
+      if (p[4] === 'pin' && (p[5] === 'stop' || p[5] === 'venue') && p[6] && p.length === 7) return { name: 'pin', key, day, kind: p[5], ref: p[6] };
+    }
+  }
+  return { name: 'notFound' };
+}
+
+const k = (key: string) => encodeURIComponent(key);
+export const paths = {
+  trips: () => '/',
+  import: () => '/import',
+  settings: () => '/settings',
+  summary: (key: string) => `/trip/${k(key)}`,
+  phrases: (key: string) => `/trip/${k(key)}/phrases`,
+  practical: (key: string) => `/trip/${k(key)}/practical`,
+  day: (key: string, d: number) => `/trip/${k(key)}/day/${d}`,
+  food: (key: string, d: number) => `/trip/${k(key)}/day/${d}/food`,
+  tour: (key: string, d: number) => `/trip/${k(key)}/day/${d}/tour`,
+  stop: (key: string, d: number, o: number) => `/trip/${k(key)}/day/${d}/stop/${o}`,
+  pin: (key: string, d: number, kind: 'stop' | 'venue', ref: string | number) => `/trip/${k(key)}/day/${d}/pin/${kind}/${ref}`,
+};
