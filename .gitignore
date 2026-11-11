@@ -9,3 +9,6 @@ Thumbs.db
 # gerçek planlar depoya girmez
 plans/
 *.plan.json
+
+# teslim paketi (derlenmiş site zip) depoya girmez
+teslim/
