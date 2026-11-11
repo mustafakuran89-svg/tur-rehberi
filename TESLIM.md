@@ -49,6 +49,8 @@ Testler: 32 birim testi, 15 uçtan uca test × 2 tarayıcı (iPhone 13 ekran boy
 
 ## 3. iPhone kontrol listesi
 
+**Sonuç (11.11.2026):** Altı maddenin altısı kullanıcı tarafından gerçek iPhone'da denendi ve sorunsuz çalıştı.
+
 1. Bağlantı Safari'de açılıyor; Ana Ekrana eklenince tam ekran açılıyor.
 2. Örnek gezide bir durağın anlatımı Türkçe sesle okunuyor.
 3. Tur modunda konum izni soruluyor, konumunuz haritada görünüyor, ekran kendiliğinden kapanmıyor.

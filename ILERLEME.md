@@ -17,6 +17,10 @@ Son güncelleme: 11.11.2026
 - Uçtan uca: 30/30 (15 test × Chromium ve WebKit, iPhone 13 boyutu).
 - Yayına karşı duman testi: 4/4.
 
+## iPhone denemesi
+
+11.11.2026: kontrol listesinin 6 maddesi gerçek iPhone'da sorunsuz.
+
 ## Sırada
 
-Kullanıcının iPhone kontrol listesi (TESLIM.md bölüm 3). Sonraki geliştirmeler TESLIM.md bölüm 9'da.
+Sonraki geliştirmeler TESLIM.md bölüm 9'da.
