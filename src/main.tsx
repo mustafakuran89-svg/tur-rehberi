@@ -2,10 +2,13 @@ import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import { installErrorCapture, addLog } from './lib/log';
 import { ensureSample, requestPersist } from './lib/store';
+import { applyTheme, getSettings } from './lib/settings';
 import { App } from './App';
+import './theme.css';
 import './styles.css';
 
 installErrorCapture();
+applyTheme(getSettings().theme);
 
 // Service worker: uygulama kabuğu önbelleğe alınır; yeni sürüm yayımlanınca kendini günceller.
 // Kayıtlı geziler IndexedDB'de durduğu için güncellemede silinmez.

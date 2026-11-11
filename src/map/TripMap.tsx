@@ -89,12 +89,15 @@ export function TripMap({ points, legs, user = null, pending = null, onTap, heig
     ctrl.current?.update(points, legs, user, pending);
   }, [points, legs, user, pending, renderer]);
 
+  const hasKind = (k: string) => points.some((p) => p.kind === k);
   return (
     <div className="map-wrap">
       <div
         ref={box}
         className="map"
         style={{ height }}
+        role="region"
+        aria-label={tr.map.aria(points.length)}
         data-testid="map"
         data-renderer={renderer}
         data-basemap={basemap}
@@ -115,6 +118,8 @@ export function TripMap({ points, legs, user = null, pending = null, onTap, heig
           <li><span className="lg lg-dinner" /> {tr.map.legend.dinner}</li>
           <li><span className="lg lg-walk" /> {tr.map.legend.walk}</li>
           <li><span className="lg lg-drive" /> {tr.map.legend.drive}</li>
+          {hasKind('event') && <li><span className="lg lg-event" /> {tr.map.legend.event}</li>}
+          {hasKind('lodging') && <li><span className="lg lg-lodging" /> {tr.map.legend.lodging}</li>}
         </ul>
       )}
     </div>

@@ -1,4 +1,12 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
+import { useNow } from '../components/v2';
+import { LodgingCard } from '../components/trip';
+import { useTripTz } from './StopScreen';
+import { tripActive } from '../lib/today';
+import { buildIcs, downloadText, tripIcsEvents } from '../lib/ics';
+import { makeShare, shareFile } from '../lib/share';
+import { journalText } from '../lib/journal';
+import { forgetUserState } from '../lib/userState';
 import { tr } from '../i18n/tr';
 import { checkPlan } from '../plan/rules';
 import { deleteTrip, downloadJson } from '../lib/store';
@@ -7,7 +15,12 @@ import { go, href, paths } from '../lib/router';
 import { Confirm, Header, Loading, Missing, SampleBadge, Warnings, useTrip } from '../components/ui';
 
 export function SummaryScreen({ tripKey }: { tripKey: string }) {
-  const { rec } = useTrip(tripKey);
+  const { rec, us } = useTrip(tripKey);
+  const now = useNow();
+  const tz = useTripTz(tripKey);
+  useEffect(() => {
+    if (rec && window.location.hash.endsWith('?otel')) document.getElementById('otel')?.scrollIntoView({ block: 'center' });
+  }, [rec]);
   const warnings = useMemo(() => (rec ? checkPlan(rec.trip) : []), [rec]);
   const [confirmDel, setConfirmDel] = useState(false);
   if (rec === undefined) return <Loading />;
@@ -21,6 +34,27 @@ export function SummaryScreen({ tripKey }: { tripKey: string }) {
         <p className="muted">
           {formatDate(t.startDate)} – {formatDate(t.endDate)}
         </p>
+        {tripActive(t, now) && (
+          <a className="btn btn-primary btn-big btn-block" href={href(paths.today(tripKey))} data-testid="today-link">
+            ☀ {tr.today.open}
+          </a>
+        )}
+
+        <LodgingCard l={t.lodging} tripKey={tripKey} />
+        {(t.arrival || t.departure) && (
+          <nav className="link-grid">
+            {t.arrival && (
+              <a className="btn" href={href(paths.transfer(tripKey, 'arrival'))} data-testid="arrival-link">
+                ✈ {tr.transfer.arrivalLink}
+              </a>
+            )}
+            {t.departure && (
+              <a className="btn" href={href(paths.transfer(tripKey, 'departure'))} data-testid="departure-link">
+                ✈ {tr.transfer.departureLink}
+              </a>
+            )}
+          </nav>
+        )}
 
         <section>
           <h2 className="section-title">{tr.summary.days}</h2>
@@ -46,7 +80,28 @@ export function SummaryScreen({ tripKey }: { tripKey: string }) {
           <a className="btn" href={href(paths.practical(tripKey))} data-testid="practical-link">
             {tr.summary.practical}
           </a>
+          <a className="btn" href={href(paths.prepare(tripKey))} data-testid="prepare-link">
+            {tr.prepare.title}
+          </a>
+          <a className="btn" href={href(paths.checklist(tripKey))} data-testid="checklist-link">
+            {tr.checklist.title}
+          </a>
         </nav>
+
+        <section className="card">
+          <button
+            className="btn btn-block"
+            data-testid="ics-export"
+            onClick={() => {
+              const ev = tripIcsEvents(t, us);
+              downloadText(`${t.id}.ics`, buildIcs(ev, tz), 'text/calendar');
+            }}
+          >
+            📅 {tr.calendar.export}
+          </button>
+          <p className="small muted">{tr.calendar.hint}</p>
+          <p className="small muted">{tz ? tr.calendar.tzKnown(tz) : tr.calendar.tzFloating}</p>
+        </section>
 
         <section>
           <h2 className="section-title">{tr.summary.weather}</h2>
@@ -138,6 +193,20 @@ export function SummaryScreen({ tripKey }: { tripKey: string }) {
         </section>
 
         <div className="stack">
+          <button
+            className="btn"
+            data-testid="share"
+            onClick={async () => {
+              const f = await makeShare(tripKey);
+              if (f) await shareFile(`${t.id}-paylasim.json`, f, t.title);
+            }}
+          >
+            {tr.share.button}
+          </button>
+          <p className="small muted">{tr.share.hint}</p>
+          <button className="btn" data-testid="journal-export" onClick={() => downloadText(`${t.id}-gunluk.txt`, journalText(t, us), 'text/plain;charset=utf-8')}>
+            {tr.journal.export}
+          </button>
           <button className="btn" onClick={() => downloadJson(`${t.id}.json`, t)}>
             {tr.summary.exportPlan}
           </button>
@@ -156,6 +225,7 @@ export function SummaryScreen({ tripKey }: { tripKey: string }) {
           onCancel={() => setConfirmDel(false)}
           onOk={async () => {
             await deleteTrip(tripKey);
+            forgetUserState(tripKey);
             go(paths.trips(), true);
           }}
         />

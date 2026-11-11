@@ -2,7 +2,8 @@ import { useEffect, useState } from 'react';
 import { tr } from '../i18n/tr';
 import { listTrips, type TripRecord } from '../lib/store';
 import { formatDate } from '../lib/format';
-import { href, paths } from '../lib/router';
+import { go, href, paths } from '../lib/router';
+import { tripActive } from '../lib/today';
 import { Header, SampleBadge, useTripsVersion } from '../components/ui';
 
 function TripCard({ r }: { r: TripRecord }) {
@@ -26,6 +27,20 @@ export function TripsScreen() {
     listTrips().then(setTrips);
   }, [v]);
   const real = trips?.filter((t) => !t.isSample) ?? [];
+  const now = new Date();
+  const active = real.filter((r) => tripActive(r.trip, now));
+  // Gezi tarihlerindeyken açılış ekranı Bugün olur (oturumda bir kez; Geri ile listeye dönülür).
+  useEffect(() => {
+    if (!active.length) return;
+    try {
+      if (sessionStorage.getItem('tur-rehberi:today-shown')) return;
+      sessionStorage.setItem('tur-rehberi:today-shown', '1');
+    } catch {
+      /* yok say */
+    }
+    go(paths.today(active[0].key));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [active.length]);
   const sample = trips?.filter((t) => t.isSample) ?? [];
   return (
     <div className="page">
@@ -35,6 +50,11 @@ export function TripsScreen() {
         <a className="btn btn-primary btn-big btn-block" href={href(paths.import())} data-testid="import-link">
           ＋ {tr.nav.import}
         </a>
+        {active.map((r) => (
+          <a key={r.key} className="btn btn-primary btn-big btn-block" href={href(paths.today(r.key))} data-testid="trips-today">
+            ☀ {tr.today.title}: {r.trip.title}
+          </a>
+        ))}
         <section className="stack">
           {trips && real.length === 0 && <p className="muted">{tr.trips.empty}</p>}
           {real.map((r) => (

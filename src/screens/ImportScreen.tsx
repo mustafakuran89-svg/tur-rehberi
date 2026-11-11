@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { tr } from '../i18n/tr';
 import { processImportText, type ImportResult } from '../plan/importPlan';
 import type { SchemaProblem } from '../plan/validate';
@@ -23,6 +23,11 @@ export function ImportScreen() {
   const [busy, setBusy] = useState(false);
   const [lastId, setLastId] = useState<string | null>(null);
   const sharedRef = useRef<Partial<UserState> | undefined>(undefined);
+  const navTimer = useRef<number | null>(null);
+  // Ekrandan çıkılınca bekleyen yönlendirme iptal edilir (yoksa başka ekrandayken geri döndürür).
+  useEffect(() => () => {
+    if (navTimer.current) window.clearTimeout(navTimer.current);
+  }, []);
 
   async function save(items: Extract<ImportResult, { kind: 'trips' }>['items'], fromBackup: boolean) {
     const msgs: string[] = [];
@@ -54,7 +59,7 @@ export function ImportScreen() {
     await requestPersist();
     setDone(msgs);
     setLastId(items.length === 1 && last ? last.id : null);
-    if (items.length === 1 && last && msgs.length <= 3) setTimeout(() => go(paths.summary(last!.id)), 600);
+    if (items.length === 1 && last && msgs.length <= 3) navTimer.current = window.setTimeout(() => go(paths.summary(last!.id)), 600);
   }
 
   async function run(input: string) {

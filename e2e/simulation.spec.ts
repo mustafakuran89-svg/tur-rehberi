@@ -47,8 +47,10 @@ test('koordinatı olmayan yerin iğnesi elle konur', async ({ page }) => {
   await page.mouse.click(box.x + box.width * 0.3, box.y + box.height * 0.6);
   await expect(page.getByTestId('pin-pending')).toContainText('Seçilen nokta');
   await page.getByTestId('pin-save').click();
-  await expect(page).toHaveURL(/stop\/3$/);
+  // "pin/stop/3" de stop/3 ile biter: kaydedince durak sayfasına dönüldüğünü tam yolla bekle
+  await expect(page).toHaveURL(/day\/1\/stop\/3$/);
   await page.goto('./#/trip/__ornek__/day/1');
+  await expect(page.getByTestId('map')).not.toHaveAttribute('data-renderer', 'loading');
   await expect(page.getByTestId('map').locator('.mk-stop')).toHaveCount(5);
   await expect(page.getByTestId('no-coord-list')).toHaveCount(0);
 });

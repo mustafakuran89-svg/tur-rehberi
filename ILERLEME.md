@@ -28,10 +28,18 @@ Son güncelleme: 11.11.2026
 | Aşama | Durum | Not |
 |---|---|---|
 | Başlamadan | Tamam | Şema uzlaştırması: ilk sürümde şema değişmemişti; sürüm 2 dosyası doğrudan kondu. `v1.0` etiketi atıldı. |
-| A — Veri katmanı | Sürüyor | |
-| B — Durak ve mekan ekranı | Bekliyor | |
-| C — Gezi günü asistanı | Bekliyor | |
-| D — Kapıdan kapıya ve akşam | Bekliyor | |
-| E — Gezi öncesi hazırlık | Bekliyor | |
-| F — Cila ve güven | Bekliyor | |
-| G — Teslim | Bekliyor | |
+| A — Veri katmanı | Tamam | Şema 2 tipleri, kullanıcı durumu ayrı depoda (`src/lib/userState.ts`), plan güncelleme özeti (`src/plan/diff.ts`), 6 yeni uyarı, zenginleştirilmiş örnek gezi. |
+| B — Durak ve mekan ekranı | Tamam | Video kartı, kısa/uzun anlatım, hızlı bakış, galeri (Vikipedi/Commons), eylem düğmeleri, rezervasyon işareti, Michelin rozeti ve süzgeci. |
+| C — Gezi günü asistanı | Tamam | Bugün ekranı, açık-kapalı rozeti, yakın/açık sıralama, geç kaldım, hava (Open-Meteo). |
+| D — Kapıdan kapıya ve akşam | Tamam | Otel kartı, şoföre göster, otele dön, varış/dönüş ekranları, günün başı/sonu, akşam etkinlikleri. |
+| E — Gezi öncesi hazırlık | Tamam | Geziyi hazırla, hazırlık listesi, günün videoları, takvim dosyası. |
+| F — Cila ve güven | Tamam | `src/theme.css` tasarım değerleri, koyu tema, Dinamik Yazı, açılış ekranları, garsona göster, paylaş, gezi günlüğü, sürüm notları, erişilebilirlik denetimi. |
+| G — Teslim | Sürüyor | |
+
+B–F aynı oturumda birbirine bağlı yazıldığı için tek commit'te toplandı; her aşamanın testi ayrı ayrı yazıldı ve hepsi geçti.
+
+### Test durumu (Geliştirme 2)
+
+- Tip kontrolü: geçti.
+- Birim testleri: 71/71.
+- Uçtan uca: 56/56 (28 test × Chromium ve WebKit, iPhone 13 boyutu; erişilebilirlik denetimi açık ve koyu temada).

@@ -1,0 +1,163 @@
+/* Tasarım sistemi: renk, yazı ve boşluk değerlerinin TEK kaynağı. Bütün ekranlar bunları kullanır.
+   Açık tema varsayılan; koyu tema sistem ayarıyla ya da Ayarlar › Görünüm ile seçilir.
+   Yazı boyutu iOS'ta sistemin yazı boyutu (Dinamik Yazı) ayarına uyar: -apple-system-body. */
+:root {
+  /* Yüzeyler ve metin */
+  --paper: #f6f1e7;
+  --card: #fffdf8;
+  --input: #ffffff;
+  --ink: #1f2522;
+  --muted: #62665f;
+  --line: #e3dccd;
+  --note-bg: #efe8d8;
+  --banner-bg: #e4efe9;
+  --sim-bg: #e8e3f5;
+  --map-bg: #ece6d8;
+  --map-grid: #e4dccb;
+  --label-bg: rgba(255, 253, 248, 0.95);
+  --shadow: 0 1px 0 rgba(0, 0, 0, 0.03);
+  --scrim: rgba(0, 0, 0, 0.4);
+
+  /* Vurgu ve anlam renkleri */
+  --accent: #1f4d45; /* koyu yeşil: duraklar, birincil düğme */
+  --accent-ink: #ffffff;
+  --accent2: #9a6417; /* altın: hızlı bakış, puan */
+  --breakfast: #8f5c0f; /* K */
+  --lunch: #2f6f8f; /* O */
+  --dinner: #7a3b5e; /* A */
+  --snack: #7d5f27; /* S */
+  --event: #5b3f9a; /* E */
+  --lodging: #2c5aa0; /* otel */
+  --lodging-ink: #2c5aa0;
+  --drive: #7a4b2a;
+  --done: #6b736e;
+  --user: #1a73e8;
+  --on-color: #ffffff;
+  --warn: #8a5000;
+  --warn-bg: #fff4dd;
+  --warn-line: #efd29b;
+  --warn-ink: #5b3b00;
+  --danger: #a33a2a;
+  --danger-bg: #fbe4e0;
+  --ok: #2a6436;
+  --ok-bg: #e4f1e4;
+  --michelin: #9b1c31;
+  --michelin-bg: #fdf0f1;
+  --sample-bg: #2a2a2a;
+  --fs-bg: #fffdf8;
+  --fs-ink: #1f2522;
+  --fs-muted: #62665f;
+
+  /* Yazı */
+  --serif: ui-serif, 'New York', 'Iowan Old Style', Georgia, 'Times New Roman', serif;
+  --sans: -apple-system, system-ui, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  --mono: ui-monospace, Menlo, Consolas, monospace;
+  --fs-base: 17px;
+
+  /* Boşluk ve biçim */
+  --sp-1: 4px;
+  --sp-2: 8px;
+  --sp-3: 12px;
+  --sp-4: 16px;
+  --sp-5: 20px;
+  --sp-6: 28px;
+  --radius: 14px;
+  --radius-sm: 10px;
+  --tap: 48px;
+  color-scheme: light;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) {
+    --paper: #121614;
+    --card: #1b211e;
+    --input: #232a26;
+    --ink: #ecebe6;
+    --muted: #a9b0aa;
+    --line: #2f3833;
+    --note-bg: #232a26;
+    --banner-bg: #1d2f28;
+    --sim-bg: #262238;
+    --map-bg: #1e2421;
+    --map-grid: #252c28;
+    --label-bg: rgba(27, 33, 30, 0.95);
+    --shadow: none;
+    --scrim: rgba(0, 0, 0, 0.6);
+    --accent: #7cc4ad;
+    --accent-ink: #0f1a16;
+    --accent2: #e0b264;
+    --breakfast: #8f5c0f;
+    --lunch: #2f6f8f;
+    --dinner: #8a4a6c;
+    --snack: #7d5f27;
+    --event: #6b4fb0;
+    --lodging: #3a67b0;
+    --lodging-ink: #9dbbf0;
+    --drive: #c08a5e;
+    --done: #59615c;
+    --warn: #f0c070;
+    --warn-bg: #2e2516;
+    --warn-line: #5a4520;
+    --warn-ink: #f0d9a8;
+    --danger: #f08a78;
+    --danger-bg: #3a1f1a;
+    --ok: #8fd19e;
+    --ok-bg: #1b3121;
+    --michelin: #f19aa9;
+    --michelin-bg: #3a1a20;
+    --sample-bg: #e8e8e8;
+    --fs-bg: #121614;
+    --fs-ink: #f4f3ee;
+    --fs-muted: #b9c0ba;
+    color-scheme: dark;
+  }
+}
+:root[data-theme='dark'] {
+  --paper: #121614;
+  --card: #1b211e;
+  --input: #232a26;
+  --ink: #ecebe6;
+  --muted: #a9b0aa;
+  --line: #2f3833;
+  --note-bg: #232a26;
+  --banner-bg: #1d2f28;
+  --sim-bg: #262238;
+  --map-bg: #1e2421;
+  --map-grid: #252c28;
+  --label-bg: rgba(27, 33, 30, 0.95);
+  --shadow: none;
+  --scrim: rgba(0, 0, 0, 0.6);
+  --accent: #7cc4ad;
+  --accent-ink: #0f1a16;
+  --accent2: #e0b264;
+  --breakfast: #8f5c0f;
+  --lunch: #2f6f8f;
+  --dinner: #8a4a6c;
+  --snack: #7d5f27;
+  --event: #6b4fb0;
+  --lodging: #3a67b0;
+  --lodging-ink: #9dbbf0;
+  --drive: #c08a5e;
+  --done: #59615c;
+  --warn: #f0c070;
+  --warn-bg: #2e2516;
+  --warn-line: #5a4520;
+  --warn-ink: #f0d9a8;
+  --danger: #f08a78;
+  --danger-bg: #3a1f1a;
+  --ok: #8fd19e;
+  --ok-bg: #1b3121;
+  --michelin: #f19aa9;
+  --michelin-bg: #3a1a20;
+  --sample-bg: #e8e8e8;
+  --fs-bg: #121614;
+  --fs-ink: #f4f3ee;
+  --fs-muted: #b9c0ba;
+  color-scheme: dark;
+}
+
+/* iOS Dinamik Yazı: sistem yazı boyutu ayarı gövde yazısına yansır; rem birimleri buna göre büyür. */
+@supports (font: -apple-system-body) {
+  html { font: -apple-system-body; }
+  :root { --fs-base: 1rem; }
+}

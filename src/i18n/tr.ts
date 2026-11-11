@@ -194,6 +194,7 @@ export const tr = {
     legend: { stop: 'Durak', breakfast: 'Kahvaltı (K)', dinner: 'Akşam (A)', lunch: 'Öğle (O)', walk: 'Yürüyüş', drive: 'Araç / toplu taşıma', event: 'Akşam etkinliği (E)', lodging: 'Otel (⌂)' },
     tapToPlace: 'Doğru konuma dokunun.',
     attributionFallback: '© OpenStreetMap katkıcıları',
+    aria: (n: number) => `Harita, ${n} işaret. Aynı yerler aşağıda liste olarak da var.`,
   },
 
   pin: {

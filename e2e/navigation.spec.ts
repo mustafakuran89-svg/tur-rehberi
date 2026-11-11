@@ -49,9 +49,16 @@ test('yemek, ifadeler, pratik bilgiler ve ayarlar ekranları', async ({ page }) 
 
   await page.goto('./#/trip/__ornek__/phrases');
   await expect(page.getByRole('heading', { name: 'İtalyanca' })).toBeVisible();
-  await expect(page.getByTestId('phrase')).toHaveCount(17);
+  // 18 ifade + kısıt kartında aynı ifade bir kez daha
+  await expect(page.locator('.phrases [data-testid="phrase"]')).toHaveCount(18);
+  await expect(page.getByTestId('diet-card')).toContainText('Domuz eti olmasın');
   await page.getByTestId('phrase').filter({ hasText: 'Il conto' }).click();
+  await expect(page.getByTestId('waiter-original')).toHaveText('Il conto, per favore');
+  await expect(page.getByTestId('waiter-meaning')).toHaveText('Hesap lütfen');
+  await page.getByTestId('waiter-listen').click();
   await expect.poll(() => spoken(page)).toContain('Il conto, per favore');
+  await page.getByTestId('fs-close').click();
+  await expect(page.getByTestId('fullscreen')).toHaveCount(0);
 
   await page.goto('./#/trip/__ornek__/practical');
   await expect(page.getByRole('heading', { name: 'Acil numaralar' })).toBeVisible();

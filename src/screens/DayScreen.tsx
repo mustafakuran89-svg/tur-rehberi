@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { useEffect, useMemo } from 'react';
 import { tr } from '../i18n/tr';
 import { checkPlan } from '../plan/rules';
 import { stopsInOrder } from '../plan/normalize';
@@ -9,12 +9,37 @@ import { formatDate, formatMinutes, weekdayName } from '../lib/format';
 import { href, paths } from '../lib/router';
 import { appleMapsUrl } from '../lib/maps';
 import { FixedBadge, Header, Loading, Missing, SampleBadge, UnverifiedBadge, Warnings, isUnverified, useTrip } from '../components/ui';
-import type { Stop, Venue } from '../plan/types';
+import type { Day, EveningEvent, Stop, TimelineItem, Venue } from '../plan/types';
+import { clockMinutes } from '../plan/rules';
+import { firstClock } from '../lib/ics';
+import { eventKey } from '../lib/userState';
+import { useNow } from '../components/v2';
+import { DayLegCard, EventCard, ReturnHotelButton } from '../components/trip';
+
+type Row = { kind: 'plan'; item: TimelineItem } | { kind: 'event'; e: EveningEvent; i: number };
+
+/** Akış satırları + "gidiyorum" seçilen etkinlikler, saatine göre araya yerleştirilmiş. */
+export function timelineWithEvents(day: Day, going: (e: EveningEvent) => boolean): Row[] {
+  const rows: Row[] = day.timeline.map((item) => ({ kind: 'plan', item }));
+  (day.eveningEvents ?? []).forEach((e, i) => {
+    if (!going(e)) return;
+    const t = clockMinutes(e.startTime);
+    const at = t === null ? -1 : rows.findIndex((r) => r.kind === 'plan' && (clockMinutes(firstClock(r.item.time)) ?? -1) > t);
+    rows.splice(at === -1 ? rows.length : at, 0, { kind: 'event', e, i });
+  });
+  return rows;
+}
 
 export function DayScreen({ tripKey, dayIndex }: { tripKey: string; dayIndex: number }) {
-  const { rec } = useTrip(tripKey);
+  const { rec, us } = useTrip(tripKey);
+  const now = useNow();
   const day = rec?.trip.days[dayIndex];
-  const map = useMemo(() => (day ? dayMapData(day, tripKey, dayIndex) : { points: [], legs: [] }), [day, tripKey, dayIndex]);
+  const lodging = rec?.trip.lodging;
+  const map = useMemo(() => (day ? dayMapData(day, tripKey, dayIndex, { lodging, now }) : { points: [], legs: [] }), [day, tripKey, dayIndex, lodging, now]);
+  useEffect(() => {
+    const code = window.location.hash.split('?')[1];
+    if (rec && code) document.getElementById(code)?.scrollIntoView({ block: 'center' });
+  }, [rec]);
   const warnings = useMemo(() => (rec ? checkPlan(rec.trip).filter((w) => w.day === dayIndex) : []), [rec, dayIndex]);
   if (rec === undefined) return <Loading />;
   if (rec === null || !day) return <Missing />;
@@ -49,7 +74,19 @@ export function DayScreen({ tripKey, dayIndex }: { tripKey: string; dayIndex: nu
         <section>
           <h2 className="section-title">{tr.day.timeline}</h2>
           <ol className="timeline" data-testid="timeline">
-            {day.timeline.map((item, i) => {
+            {timelineWithEvents(day, (e) => !!us?.going[eventKey(e)]).map((row, i) => {
+              if (row.kind === 'event')
+                return (
+                  <li key={`e${i}`} className="tl tl-event" data-testid="tl-event">
+                    <div className="tl-time">{row.e.startTime ?? ''}</div>
+                    <div className="tl-body">
+                      <a href={href(paths.day(tripKey, dayIndex)) + `?E${row.i + 1}`}>
+                        <span className="codes">E{row.i + 1}</span> {row.e.title}
+                      </a>
+                    </div>
+                  </li>
+                );
+              const item = row.item;
               const s = item.stopOrder != null ? stopByOrder.get(item.stopOrder) : undefined;
               const isMeal = ['breakfast', 'lunch', 'dinner', 'snack'].includes(item.kind);
               return (
@@ -79,6 +116,7 @@ export function DayScreen({ tripKey, dayIndex }: { tripKey: string; dayIndex: nu
 
         <section>
           <h2 className="section-title">{tr.day.stops}</h2>
+          <DayLegCard leg={day.fromLodging} title={tr.lodging.fromLodging} testid="from-lodging" />
           <ol className="stops">
             {stops.map((s, i) => {
               const next = stops[i + 1];
@@ -111,7 +149,19 @@ export function DayScreen({ tripKey, dayIndex }: { tripKey: string; dayIndex: nu
               );
             })}
           </ol>
+          <DayLegCard leg={day.toLodging} title={tr.lodging.toLodging} testid="to-lodging" />
         </section>
+
+        {day.eveningEvents && day.eveningEvents.length > 0 && (
+          <section data-testid="evening">
+            <h2 className="section-title food-title food-E">{tr.events.title}</h2>
+            {day.eveningEvents.map((e, i) => (
+              <EventCard key={i} e={e} i={i} tripKey={tripKey} dayIndex={dayIndex} us={us} now={now} />
+            ))}
+          </section>
+        )}
+
+        <ReturnHotelButton l={lodging} />
 
         {noCoord.length > 0 && (
           <section>
@@ -140,9 +190,14 @@ export function DayScreen({ tripKey, dayIndex }: { tripKey: string; dayIndex: nu
           </section>
         )}
 
-        <a className="btn btn-block" href={href(paths.food(tripKey, dayIndex))} data-testid="food-link">
-          {tr.day.food}
-        </a>
+        <nav className="link-grid">
+          <a className="btn" href={href(paths.food(tripKey, dayIndex))} data-testid="food-link">
+            {tr.day.food}
+          </a>
+          <a className="btn" href={href(paths.videos(tripKey, dayIndex))} data-testid="videos-link">
+            {tr.video.link}
+          </a>
+        </nav>
 
         <section className="flex-box">
           <h2 className="section-title">{tr.day.flex}</h2>

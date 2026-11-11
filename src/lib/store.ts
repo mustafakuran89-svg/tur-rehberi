@@ -10,7 +10,11 @@ export interface TripRecord {
   trip: Trip;
   isSample: boolean;
   importedAt: string; // ISO
+  sampleRev?: string; // örnek gezinin sürümü; uygulama güncellenince örnek yenilenir
 }
+
+// Örnek gezinin içeriği değişince (yeni sürüm) cihazdaki eski örnek kendiliğinden yenilenir.
+export const SAMPLE_REV = `${(sampleJson as { schemaVersion: number }).schemaVersion}-${JSON.stringify(sampleJson).length}`;
 
 const DB_NAME = 'tur-rehberi';
 let dbp: Promise<IDBPDatabase> | null = null;
@@ -46,9 +50,9 @@ export function sampleTrip(): Trip {
 
 export async function ensureSample(): Promise<void> {
   const d = await db();
-  const existing = await d.get('trips', SAMPLE_KEY);
-  if (!existing) {
-    await d.put('trips', { key: SAMPLE_KEY, trip: sampleTrip(), isSample: true, importedAt: new Date().toISOString() } satisfies TripRecord);
+  const existing = (await d.get('trips', SAMPLE_KEY)) as TripRecord | undefined;
+  if (!existing || existing.sampleRev !== SAMPLE_REV) {
+    await d.put('trips', { key: SAMPLE_KEY, trip: sampleTrip(), isSample: true, importedAt: new Date().toISOString(), sampleRev: SAMPLE_REV } satisfies TripRecord);
     changed();
   }
 }

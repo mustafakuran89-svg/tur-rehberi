@@ -3,7 +3,7 @@
 // Plandan AYRI tutulur (IndexedDB 'user' deposu, gezi kimliğiyle). Aynı kimlikli plan yeniden
 // içe aktarılınca bu kayıt değişmez; anahtarlar durak/mekan ADINDAN türetildiği için durak sırası
 // değişse de işaretler yerinde kalır.
-import { useEffect, useState, useSyncExternalStore } from 'react';
+import { useEffect, useSyncExternalStore } from 'react';
 import type { EveningEvent, Stop, Trip, Venue, Video } from '../plan/types';
 import type { LatLng } from './geo';
 import { db } from './store';
@@ -64,41 +64,61 @@ export function subscribeUser(l: () => void): () => void {
   };
 }
 
+// Bellekteki kopya: işaretler dokunuşla anında görünür, veritabanına arkadan yazılır.
+const mem = new Map<string, UserState>();
+
+async function persist(s: UserState): Promise<void> {
+  const d = await db();
+  await d.put('user', s);
+}
+
 export async function getUserState(tripId: string): Promise<UserState> {
+  const m = mem.get(tripId);
+  if (m) return m;
   const d = await db();
   const r = (await d.get('user', tripId)) as UserState | undefined;
-  return r ? normalizeUserState(r) : emptyUserState(tripId);
+  const st = mem.get(tripId) ?? (r ? normalizeUserState(r) : emptyUserState(tripId));
+  mem.set(tripId, st);
+  return st;
 }
 
 export async function putUserState(s: UserState): Promise<void> {
-  const d = await db();
-  await d.put('user', s);
+  mem.set(s.tripId, s);
   changed();
+  await persist(s);
 }
 
-export async function updateUserState(tripId: string, fn: (s: UserState) => UserState): Promise<UserState> {
-  const next = fn(await getUserState(tripId));
-  await putUserState(next);
-  return next;
+export function updateUserState(tripId: string, fn: (s: UserState) => UserState): Promise<UserState> {
+  const apply = (cur: UserState) => {
+    const next = fn(cur);
+    mem.set(tripId, next);
+    changed();
+    return persist(next).then(() => next);
+  };
+  const cur = mem.get(tripId);
+  return cur ? apply(cur) : getUserState(tripId).then(apply);
 }
 
 export async function deleteUserState(tripId: string): Promise<void> {
+  mem.delete(tripId);
   const d = await db();
   await d.delete('user', tripId);
   changed();
 }
 
-/** Bir gezinin kullanıcı durumunu okur; değişince yeniden okur. */
+/** Veritabanı dışarıdan silindiğinde (bütün verileri sil, gezi sil) bellekteki kopyayı unutur. */
+export function forgetUserState(tripId?: string): void {
+  if (tripId) mem.delete(tripId);
+  else mem.clear();
+  changed();
+}
+
+/** Bir gezinin kullanıcı durumunu okur; değişince anında yeniden çizer. */
 export function useUserState(tripId: string): { us: UserState | undefined; update: (fn: (s: UserState) => UserState) => Promise<UserState> } {
-  const v = useSyncExternalStore(subscribeUser, () => version);
-  const [us, setUs] = useState<UserState | undefined>(undefined);
+  const us = useSyncExternalStore(subscribeUser, () => mem.get(tripId));
   useEffect(() => {
-    let alive = true;
-    getUserState(tripId).then((r) => alive && setUs(r));
-    return () => {
-      alive = false;
-    };
-  }, [tripId, v]);
+    if (!mem.has(tripId)) getUserState(tripId).then(() => changed());
+  }, [tripId]);
   return { us, update: (fn) => updateUserState(tripId, fn) };
 }
 

@@ -4,6 +4,7 @@ import type { BrowserContext, Page } from '@playwright/test';
 export const speechMock = () => {
   const w = window as unknown as Record<string, unknown>;
   w.__spoken = [] as string[];
+  w.__cancels = 0;
   class U {
     text: string;
     lang = '';
@@ -32,7 +33,9 @@ export const speechMock = () => {
         setTimeout(() => u.onend?.({}), 20);
       }, 5);
     },
-    cancel() {},
+    cancel() {
+      (w.__cancels as number)++;
+    },
     pause() {},
     resume() {},
     addEventListener() {},
@@ -45,6 +48,10 @@ export const speechMock = () => {
 /** Harita altlığını engeller: testler dış servise bağlı kalmaz, "altlık yok" yolu sınanır. */
 export async function blockBasemap(ctx: BrowserContext): Promise<void> {
   await ctx.route('**/tiles.openfreemap.org/**', (r) => r.abort());
+  // Dış servisler testte kapalıdır; gereken testler kendi sahte yanıtını sonradan ekler (sonraki kural önce gelir).
+  for (const h of ['**/tr.wikipedia.org/**', '**/commons.wikimedia.org/**', '**/api.open-meteo.com/**', '**/www.googleapis.com/**', '**/i.ytimg.com/**', '**/thumb.wikimedia.org/**', '**/upload.wikimedia.org/**']) {
+    await ctx.route(h, (r) => r.abort());
+  }
 }
 
 export async function spoken(page: Page): Promise<string[]> {

@@ -16,12 +16,19 @@ export async function cacheGet<T>(key: string): Promise<CacheEntry<T> | undefine
   }
 }
 
-export async function cachePut<T>(key: string, data: T): Promise<void> {
+export async function cachePut<T>(key: string, data: T): Promise<boolean> {
   try {
     await (await db()).put('cache', { key, t: Date.now(), data } satisfies CacheEntry<T>);
+    return true;
   } catch {
-    /* depolama dolu ya da kapalı olabilir */
+    return false; // depolama dolu ya da kapalı olabilir
   }
+}
+
+// Görsel, Blob yerine bayt dizisi olarak saklanır: bazı Safari kiplerinde IndexedDB Blob kabul etmez.
+interface StoredBytes {
+  type: string;
+  buf: ArrayBuffer;
 }
 
 export const DAY_MS = 24 * 60 * 60 * 1000;
@@ -31,15 +38,14 @@ export function fresh(e: { t: number } | undefined, maxAgeMs: number, now = Date
 
 /** Görseli (CORS ile) indirip cihazda saklar; çevrimdışı galeride bu kopya gösterilir. */
 export async function storeImage(url: string): Promise<boolean> {
-  const have = await cacheGet<Blob>(`img:${url}`);
+  const have = await cacheGet<StoredBytes>(`img:${url}`);
   if (have) return true;
   try {
     const r = await fetch(url, { mode: 'cors' });
     if (!r.ok) return false;
     const b = await r.blob();
     if (!b.type.startsWith('image/')) return false;
-    await cachePut(`img:${url}`, b);
-    return true;
+    return await cachePut<StoredBytes>(`img:${url}`, { type: b.type, buf: await b.arrayBuffer() });
   } catch {
     // CORS izni olmayan kaynak: service worker önbelleğini ısıtmayı dene
     try {
@@ -52,6 +58,6 @@ export async function storeImage(url: string): Promise<boolean> {
 }
 
 export async function storedImage(url: string): Promise<Blob | null> {
-  const e = await cacheGet<Blob>(`img:${url}`);
-  return e?.data ?? null;
+  const e = await cacheGet<StoredBytes>(`img:${url}`);
+  return e?.data?.buf ? new Blob([e.data.buf], { type: e.data.type }) : null;
 }

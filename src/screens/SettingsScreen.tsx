@@ -6,7 +6,71 @@ import { deleteAll, downloadJson, ensureSample, getTrip, isPersisted, makeBackup
 import { findVoice, onVoicesChanged, speak, speechSupported, voicesKnown } from '../lib/speech';
 import { moveTripNear } from '../sample/move';
 import { formatDate, formatNumber } from '../lib/format';
-import { paths } from '../lib/router';
+import { href, paths } from '../lib/router';
+import { getYoutubeKey, setYoutubeKey } from '../lib/youtube';
+import { forgetUserState } from '../lib/userState';
+
+function YoutubeKeySection({ onToast }: { onToast: (t: string) => void }) {
+  const [has, setHas] = useState(() => !!getYoutubeKey());
+  const [val, setVal] = useState('');
+  return (
+    <section className="settings-group" data-testid="yt-key">
+      <h2 className="section-title">{tr.ytKey.title}</h2>
+      <p className="small">{tr.ytKey.intro}</p>
+      <p className="small" data-testid="yt-key-status">
+        {has ? `✓ ${tr.ytKey.has}` : tr.ytKey.none}
+      </p>
+      <div className="row">
+        <input
+          className="text-input"
+          type="password"
+          autoComplete="off"
+          spellCheck={false}
+          aria-label={tr.ytKey.label}
+          placeholder={tr.ytKey.placeholder}
+          value={val}
+          onChange={(e) => setVal(e.target.value)}
+          data-testid="yt-key-input"
+        />
+        <button
+          className="btn btn-small btn-primary"
+          disabled={!val.trim()}
+          data-testid="yt-key-save"
+          onClick={() => {
+            setYoutubeKey(val);
+            setVal('');
+            setHas(true);
+            onToast(tr.ytKey.saved);
+          }}
+        >
+          {tr.ytKey.save}
+        </button>
+      </div>
+      {has && (
+        <button
+          className="btn btn-small btn-danger"
+          data-testid="yt-key-clear"
+          onClick={() => {
+            setYoutubeKey('');
+            setHas(false);
+            onToast(tr.ytKey.cleared);
+          }}
+        >
+          {tr.ytKey.clear}
+        </button>
+      )}
+      <details>
+        <summary>{tr.ytKey.howTitle}</summary>
+        <ol className="how">
+          {tr.ytKey.how.map((x, i) => (
+            <li key={i}>{x}</li>
+          ))}
+        </ol>
+        <p className="small muted">{tr.ytKey.quota}</p>
+      </details>
+    </section>
+  );
+}
 import { Confirm, Header, Toast, useToast } from '../components/ui';
 
 declare const __APP_VERSION__: string;
@@ -94,6 +158,19 @@ export function SettingsScreen() {
         </section>
 
         <section className="settings-group">
+          <h2 className="section-title">{tr.theme.title}</h2>
+          <div className="segmented" role="radiogroup" aria-label={tr.theme.label}>
+            {(['system', 'light', 'dark'] as const).map((th) => (
+              <button key={th} role="radio" aria-checked={s.theme === th} className={`seg${s.theme === th ? ' on' : ''}`} onClick={() => setSettings({ theme: th })} data-testid={`theme-${th}`}>
+                {tr.theme[th]}
+              </button>
+            ))}
+          </div>
+        </section>
+
+        <YoutubeKeySection onToast={showToast} />
+
+        <section className="settings-group">
           <h2 className="section-title">{tr.settings.data}</h2>
           <button className="btn btn-block" onClick={async () => downloadJson(`tur-rehberi-yedek-${new Date().toISOString().slice(0, 10)}.json`, await makeBackup())}>
             {tr.settings.exportBackup}
@@ -157,6 +234,9 @@ export function SettingsScreen() {
 
         <p className="muted small">{tr.settings.about}</p>
         <p className="muted small">{tr.settings.version(__APP_VERSION__, __BUILD_DATE__)}</p>
+        <a className="btn btn-small" href={href(paths.whatsnew())} data-testid="whatsnew-link">
+          {tr.settings.whatsnew}
+        </a>
       </main>
       <Toast text={toast} />
       {confirmAll && (
@@ -168,6 +248,7 @@ export function SettingsScreen() {
           onOk={async () => {
             setConfirmAll(false);
             await deleteAll();
+            forgetUserState();
             resetSettings();
             clearLog();
             try {

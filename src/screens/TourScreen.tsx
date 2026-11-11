@@ -11,6 +11,10 @@ import { useSettings } from '../lib/settings';
 import { speak, stopSpeaking, unlockSpeech } from '../lib/speech';
 import { releaseWakeLock, requestWakeLock } from '../lib/wakelock';
 import { addLog } from '../lib/log';
+import { setLastKnownPosition } from '../lib/links';
+import { cachedCandidates } from '../lib/youtube';
+import { stopKey } from '../lib/userState';
+import { ReturnHotelButton } from '../components/trip';
 import { clearProgress, evaluateTour, loadProgress, saveProgress, type TourProgress } from '../tour/engine';
 import { Header, Loading, Missing, SampleBadge, useTrip } from '../components/ui';
 
@@ -18,7 +22,7 @@ import { Header, Loading, Missing, SampleBadge, useTrip } from '../components/ui
 const AUTOPLAY_WAIT_MS = 2500;
 
 export function TourScreen({ tripKey, dayIndex }: { tripKey: string; dayIndex: number }) {
-  const { rec } = useTrip(tripKey);
+  const { rec, us } = useTrip(tripKey);
   const settings = useSettings();
   const day = rec?.trip.days[dayIndex];
   const stops = useMemo(() => (day ? stopsInOrder(day) : []), [day]);
@@ -33,6 +37,17 @@ export function TourScreen({ tripKey, dayIndex }: { tripKey: string; dayIndex: n
   const [error, setError] = useState<string | null>(null);
   const [wakeFail, setWakeFail] = useState(false);
   const [paused, setPaused] = useState(false);
+  const [lastTriggered, setLastTriggered] = useState<Stop | null>(null);
+  const [cachedVideo, setCachedVideo] = useState<Set<string>>(new Set());
+  useEffect(() => {
+    // Tur modunda video kendiliğinden başlamaz; önbellekte adayı olan durak için öneri kartı çıkar.
+    let alive = true;
+    Promise.all(stops.map(async (s) => ((await cachedCandidates(tripKey, stopKey(s)))?.candidates.length ? stopKey(s) : null))).then((r) => alive && setCachedVideo(new Set(r.filter((x): x is string => !!x))));
+    return () => {
+      alive = false;
+    };
+  }, [stops, tripKey]);
+  const hasVideo = (s: Stop) => !!(s.videos?.length || us?.videos[stopKey(s)] || cachedVideo.has(stopKey(s)));
 
   const progressRef = useRef(progress);
   progressRef.current = progress;
@@ -79,6 +94,7 @@ export function TourScreen({ tripKey, dayIndex }: { tripKey: string; dayIndex: n
   const onPosition = useCallback(
     (p: LatLng, acc: number | null, resumed = false) => {
       lastPos.current = p;
+      setLastKnownPosition(p);
       setPos(p);
       setAccuracy(acc);
       const ev = evaluateTour(stopsRef.current, progressRef.current, p, settingsRef.current.radiusM);
@@ -91,7 +107,10 @@ export function TourScreen({ tripKey, dayIndex }: { tripKey: string; dayIndex: n
       if (resumed) msgs.push(tr.tour.resumed);
       if (ev.newlyPassed.length) msgs.push(tr.tour.passed(ev.newlyPassed.map((o) => tr.stop.numbered(o)).join(', ')));
       if (msgs.length) setBanner(msgs.join(' '));
-      if (ev.enter) narrate(ev.enter, true);
+      if (ev.enter) {
+        setLastTriggered(ev.enter);
+        narrate(ev.enter, true);
+      }
     },
     [tripKey, dayIndex, narrate],
   );
@@ -173,12 +192,12 @@ export function TourScreen({ tripKey, dayIndex }: { tripKey: string; dayIndex: n
 
   const mapData = useMemo(() => {
     if (!day) return { points: [], legs: [] };
-    const d = dayMapData(day, tripKey, dayIndex, { venues: false });
+    const d = dayMapData(day, tripKey, dayIndex, { venues: false, lodging: rec?.trip.lodging });
     const done = new Set([...progress.triggered, ...progress.passed]);
     const next = stops.find((s) => hasCoord(s) && !done.has(s.order));
     // Tur haritasında işaretler bağlantı değildir: simülasyonda dokunuş konum olarak haritaya geçer.
-    return { legs: d.legs, points: d.points.map((p) => ({ ...p, href: undefined, done: done.has(Number(p.label)), active: next ? p.label === String(next.order) : false })) };
-  }, [day, tripKey, dayIndex, progress, stops]);
+    return { legs: d.legs, points: d.points.map((p) => ({ ...p, href: undefined, done: p.kind === 'stop' && done.has(Number(p.label)), active: next && p.kind === 'stop' ? p.label === String(next.order) : false })) };
+  }, [day, tripKey, dayIndex, progress, stops, rec?.trip.lodging]);
 
   if (rec === undefined) return <Loading />;
   if (!rec || !day) return <Missing />;
@@ -199,6 +218,12 @@ export function TourScreen({ tripKey, dayIndex }: { tripKey: string; dayIndex: n
             <span className="small">{tr.tour.inside(listenStop.order, listenStop.name)}</span>
             <span className="small">{tr.tour.listenHint}</span>
           </button>
+        )}
+
+        {lastTriggered && hasVideo(lastTriggered) && (
+          <a className="card video-hint" href={href(paths.stop(tripKey, dayIndex, lastTriggered.order))} data-testid="tour-video-hint">
+            🎬 {tr.video.tourHint}
+          </a>
         )}
 
         {banner && (
@@ -265,6 +290,7 @@ export function TourScreen({ tripKey, dayIndex }: { tripKey: string; dayIndex: n
         </ol>
         {missingCoords && <p className="note small">{tr.tour.noCoordStops}</p>}
 
+        <ReturnHotelButton l={rec.trip.lodging} />
         {running && (
           <div className="stack">
             <button className="btn btn-block" data-testid="end-tour" onClick={end}>

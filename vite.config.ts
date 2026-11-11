@@ -46,6 +46,20 @@ export default defineConfig({
         cleanupOutdatedCaches: true,
         clientsClaim: true,
         skipWaiting: true,
+        // Geziyi hazırla: harita karoları ve görseller service worker önbelleğinde kalır.
+        // Planlar ve kullanıcı durumu IndexedDB'dedir; YouTube API adresleri (anahtar içerir) önbelleğe alınmaz.
+        runtimeCaching: [
+          {
+            urlPattern: ({ url }) => url.hostname === 'tiles.openfreemap.org',
+            handler: 'CacheFirst',
+            options: { cacheName: 'harita', expiration: { maxEntries: 3000, maxAgeSeconds: 60 * 24 * 3600 }, cacheableResponse: { statuses: [0, 200] } },
+          },
+          {
+            urlPattern: ({ url }) => url.hostname === 'i.ytimg.com' || url.hostname === 'upload.wikimedia.org' || url.hostname === 'thumb.wikimedia.org',
+            handler: 'CacheFirst',
+            options: { cacheName: 'gorseller', expiration: { maxEntries: 600, maxAgeSeconds: 60 * 24 * 3600 }, cacheableResponse: { statuses: [0, 200] } },
+          },
+        ],
       },
     }),
   ],

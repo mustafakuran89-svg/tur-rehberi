@@ -125,10 +125,20 @@ export function speak(text: string, lang: string, rate: number, h: SpeakHandlers
   };
 }
 
+const stopListeners = new Set<() => void>();
+/** Okuma dışarıdan durdurulunca (ör. video başlayınca) haber verir. */
+export function onSpeechStopped(l: () => void): () => void {
+  stopListeners.add(l);
+  return () => {
+    stopListeners.delete(l);
+  };
+}
+
 export function stopSpeaking(): void {
   if (!speechSupported()) return;
   session++;
   window.speechSynthesis.cancel();
+  stopListeners.forEach((l) => l());
 }
 
 export function pauseSpeaking(): void {

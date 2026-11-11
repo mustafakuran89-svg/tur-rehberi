@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { tr } from '../i18n/tr';
 import type { Trip, Venue } from '../plan/types';
 import { dayMapData } from '../map/fromDay';
@@ -20,6 +20,10 @@ export function PinScreen({ tripKey, dayIndex, kind, refId }: { tripKey: string;
   const { rec } = useTrip(tripKey);
   const [pending, setPending] = useState<LatLng | null>(null);
   const [toast, showToast] = useToast();
+  const timer = useRef<number | null>(null);
+  useEffect(() => () => {
+    if (timer.current) window.clearTimeout(timer.current);
+  }, []);
   const day = rec?.trip.days[dayIndex];
   const map = useMemo(() => (rec && day ? dayMapData(day, tripKey, dayIndex, { lodging: rec.trip.lodging }) : { points: [], legs: [] }), [rec, day, tripKey, dayIndex]);
   if (rec === undefined) return <Loading />;
@@ -52,7 +56,7 @@ export function PinScreen({ tripKey, dayIndex, kind, refId }: { tripKey: string;
     const p = { lat: +pending.lat.toFixed(6), lng: +pending.lng.toFixed(6) };
     await updateUserState(tripKey, (u) => ({ ...u, pins: { ...u.pins, [key]: p } }));
     showToast(tr.pin.saved);
-    setTimeout(() => go(back), 500);
+    timer.current = window.setTimeout(() => go(back), 500);
   };
 
   return (

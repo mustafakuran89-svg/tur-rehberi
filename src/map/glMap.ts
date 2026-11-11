@@ -8,14 +8,19 @@ import type { LatLng } from '../lib/geo';
 
 setWorkerUrl(workerUrl);
 
-const BLANK_STYLE: StyleSpecification = {
-  version: 8,
-  sources: {},
-  layers: [{ id: 'zemin', type: 'background', paint: { 'background-color': '#ece6d8' } }],
-};
+/** Tema renkleri (src/theme.css): harita çizgileri de koyu temaya uyar. */
+function token(name: string, fallback: string): string {
+  const v = getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+  return v || fallback;
+}
+
+function blankStyle(): StyleSpecification {
+  return { version: 8, sources: {}, layers: [{ id: 'zemin', type: 'background', paint: { 'background-color': token('--map-bg', '#ece6d8') } }] };
+}
+
 
 async function loadStyle(): Promise<{ style: StyleSpecification | string; ok: boolean }> {
-  if (!navigator.onLine) return { style: BLANK_STYLE, ok: false };
+  if (!navigator.onLine) return { style: blankStyle(), ok: false };
   const ctrl = new AbortController();
   const timer = setTimeout(() => ctrl.abort(), BASEMAP_TIMEOUT_MS);
   try {
@@ -23,7 +28,7 @@ async function loadStyle(): Promise<{ style: StyleSpecification | string; ok: bo
     if (!res.ok) throw new Error(String(res.status));
     return { style: (await res.json()) as StyleSpecification, ok: true };
   } catch {
-    return { style: BLANK_STYLE, ok: false };
+    return { style: blankStyle(), ok: false };
   } finally {
     clearTimeout(timer);
   }
@@ -72,14 +77,14 @@ export async function createGlMap(
   });
 
   map.addSource('legs', { type: 'geojson', data: { type: 'FeatureCollection', features: [] } });
-  map.addLayer({ id: 'legs-casing', type: 'line', source: 'legs', layout: { 'line-cap': 'round', 'line-join': 'round' }, paint: { 'line-color': '#ffffff', 'line-width': 8, 'line-opacity': 0.85 } });
+  map.addLayer({ id: 'legs-casing', type: 'line', source: 'legs', layout: { 'line-cap': 'round', 'line-join': 'round' }, paint: { 'line-color': token('--card', '#ffffff'), 'line-width': 8, 'line-opacity': 0.85 } });
   map.addLayer({
     id: 'legs-walk',
     type: 'line',
     source: 'legs',
     filter: ['==', ['get', 'mode'], 'walk'],
     layout: { 'line-cap': 'round', 'line-join': 'round' },
-    paint: { 'line-color': '#1f4d45', 'line-width': 4, 'line-dasharray': [0.2, 2] },
+    paint: { 'line-color': token('--accent', '#1f4d45'), 'line-width': 4, 'line-dasharray': [0.2, 2] },
   });
   map.addLayer({
     id: 'legs-drive',
@@ -87,7 +92,7 @@ export async function createGlMap(
     source: 'legs',
     filter: ['!=', ['get', 'mode'], 'walk'],
     layout: { 'line-cap': 'round', 'line-join': 'round' },
-    paint: { 'line-color': '#7a4b2a', 'line-width': 5 },
+    paint: { 'line-color': token('--drive', '#7a4b2a'), 'line-width': 5 },
   });
 
   map.on('click', (e) => opts.onTap({ lat: e.lngLat.lat, lng: e.lngLat.lng }));

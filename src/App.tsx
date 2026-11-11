@@ -11,6 +11,12 @@ import { SettingsScreen } from './screens/SettingsScreen';
 import { TourScreen } from './screens/TourScreen';
 import { ImportScreen } from './screens/ImportScreen';
 import { PinScreen } from './screens/PinScreen';
+import { TodayScreen } from './screens/TodayScreen';
+import { TransferScreen } from './screens/TransferScreen';
+import { PrepareScreen } from './screens/PrepareScreen';
+import { ChecklistScreen } from './screens/ChecklistScreen';
+import { VideosScreen } from './screens/VideosScreen';
+import { WhatsNewScreen } from './screens/WhatsNewScreen';
 import { Missing } from './components/ui';
 import { tr } from './i18n/tr';
 
@@ -43,6 +49,18 @@ export function App() {
       return <StopScreen key={`${r.key}-${r.day}-${r.order}`} tripKey={r.key} dayIndex={r.day} order={r.order} />;
     case 'pin':
       return <PinScreen tripKey={r.key} dayIndex={r.day} kind={r.kind} refId={r.ref} />;
+    case 'today':
+      return <TodayScreen key={r.key} tripKey={r.key} />;
+    case 'transfer':
+      return <TransferScreen key={`${r.key}-${r.which}`} tripKey={r.key} which={r.which} />;
+    case 'prepare':
+      return <PrepareScreen tripKey={r.key} />;
+    case 'checklist':
+      return <ChecklistScreen tripKey={r.key} />;
+    case 'videos':
+      return <VideosScreen tripKey={r.key} dayIndex={r.day} />;
+    case 'whatsnew':
+      return <WhatsNewScreen />;
     default:
       return <Missing text={tr.notFound} />;
   }
