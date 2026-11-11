@@ -1,6 +1,6 @@
 # İlerleme
 
-Son güncelleme: 11.11.2026
+Son güncelleme: 11.11.2026 (Geliştirme 2 tamam)
 
 | Aşama | Durum | Not |
 |---|---|---|
@@ -34,7 +34,7 @@ Son güncelleme: 11.11.2026
 | D — Kapıdan kapıya ve akşam | Tamam | Otel kartı, şoföre göster, otele dön, varış/dönüş ekranları, günün başı/sonu, akşam etkinlikleri. |
 | E — Gezi öncesi hazırlık | Tamam | Geziyi hazırla, hazırlık listesi, günün videoları, takvim dosyası. |
 | F — Cila ve güven | Tamam | `src/theme.css` tasarım değerleri, koyu tema, Dinamik Yazı, açılış ekranları, garsona göster, paylaş, gezi günlüğü, sürüm notları, erişilebilirlik denetimi. |
-| G — Teslim | Sürüyor | |
+| G — Teslim | Tamam | Yayın: https://mustafakuran89-svg.github.io/tur-rehberi/ · yayına karşı duman testi 6/6 · `v2.0` etiketi · `teslim/` yenilendi · `TESLIM-2.md`. |
 
 B–F aynı oturumda birbirine bağlı yazıldığı için tek commit'te toplandı; her aşamanın testi ayrı ayrı yazıldı ve hepsi geçti.
 
@@ -43,3 +43,8 @@ B–F aynı oturumda birbirine bağlı yazıldığı için tek commit'te topland
 - Tip kontrolü: geçti.
 - Birim testleri: 71/71.
 - Uçtan uca: 56/56 (28 test × Chromium ve WebKit, iPhone 13 boyutu; erişilebilirlik denetimi açık ve koyu temada).
+- Yayına karşı duman testi: 6/6.
+
+## Sırada
+
+Gerçek iPhone'da `TESLIM-2.md` bölüm 4'teki 14 madde. Sonraki geliştirmeler `TESLIM-2.md` bölüm 9'da.

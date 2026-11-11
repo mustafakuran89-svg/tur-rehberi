@@ -98,10 +98,12 @@ Node.js ve gh bu makinede taşınabilir kuruludur: `%LOCALAPPDATA%\Programs\devt
 | Uçtan uca testler (iPhone boyutu, Chromium ve WebKit) | `npm run e2e` (ilk kez: `npx playwright install chromium webkit`) |
 | Yayımlanmış adrese duman testi | PowerShell: `$env:TUR_LIVE_URL='https://<kullanıcı>.github.io/tur-rehberi/'; npm run e2e:live` |
 | Örnek geziyi yeniden üret | `node scripts/make-sample.mjs` |
-| Simgeleri yeniden üret | `npm run icons` |
+| Simgeleri ve açılış ekranlarını yeniden üret | `npm run icons` |
 | Yayımla | `git push` (main dalı; GitHub Actions derler, test eder ve Pages'e koyar) |
 
 Notlar:
 - Tarayıcı panelinde harita, sekme arka plandayken çizilmez (requestAnimationFrame durur); haritayı denetlerken sekmeyi öne al.
 - Geliştirme sunucusunda service worker yoktur; çevrimdışı davranış yalnız üretim derlemesinde (`preview`) sınanır.
 - `npm run e2e`, 4173 portunda çalışan eski bir `preview` sunucusunu yeniden kullanır; kod değiştiyse önce onu durdur.
+- Uçtan uca testler dış servisleri (harita, Vikipedi/Commons, Open-Meteo, YouTube) kapatır; gereken test kendi sahte yanıtını verir (`e2e/helpers.ts`).
+- Tasarım değerleri (renk, yazı, boşluk) yalnız `src/theme.css` içindedir; koyu tema da oradadır.

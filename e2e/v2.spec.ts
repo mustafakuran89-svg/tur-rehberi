@@ -34,6 +34,7 @@ test('A: sürüm 1 ve sürüm 2 planları içe aktarılır; güncellemede işare
   await page.goto('./#/trip/eski-plan');
   await expect(page.getByRole('heading', { level: 1 })).toHaveText('ÖRNEK Eski Plan');
   await expect(page.getByTestId('lodging')).toHaveCount(0);
+  await expect(page.getByTestId('mark-hotel')).toBeVisible();
   await expect(page.getByTestId('arrival-link')).toHaveCount(0);
   await expect(page.getByTestId('departure-link')).toHaveCount(0);
   await page.goto('./#/trip/eski-plan/day/0');
