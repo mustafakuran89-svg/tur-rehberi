@@ -35,7 +35,7 @@ export const speechMock = () => {
       (w.__utter as unknown[]).push({ text: u.text, voice: u.voice?.voiceURI ?? null, rate: u.rate, pitch: u.pitch });
       setTimeout(() => {
         u.onstart?.({});
-        setTimeout(() => u.onend?.({}), 20);
+        setTimeout(() => u.onend?.({}), (w.__speechMs as number | undefined) ?? 20);
       }, 5);
     },
     cancel() {

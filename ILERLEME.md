@@ -1,6 +1,6 @@
 # İlerleme
 
-Son güncelleme: 11.11.2026 (Geliştirme 2 tamam)
+Son güncelleme: 12.11.2026 (Geliştirme 3 tamam)
 
 | Aşama | Durum | Not |
 |---|---|---|
@@ -45,7 +45,7 @@ B–F aynı oturumda birbirine bağlı yazıldığı için tek commit'te topland
 - Uçtan uca: 56/56 (28 test × Chromium ve WebKit, iPhone 13 boyutu; erişilebilirlik denetimi açık ve koyu temada).
 - Yayına karşı duman testi: 6/6.
 
-## Sırada
+## Sırada (Geliştirme 2 sonrası)
 
 Gerçek iPhone'da `TESLIM-2.md` bölüm 4'teki 14 madde. Sonraki geliştirmeler `TESLIM-2.md` bölüm 9'da.
 
@@ -72,3 +72,15 @@ Düzeltme bu nedenlere göre: harita stil, kaynak, karo, yazı tipi ve simgeleri
 | B — Rehber kanalı ve bölüm videosu | Tamam | Öncelikli kanal listesi (başlangıç: Ayrıcalıklı Rotalar), kanal dizini (cihazda, 2.000 video, 30 günde bir), açıklamadan bölüm bulma, beş basamaklı sıralama, start/end ile bölüm oynatma, tamamını izle, başlangıcı ayarla (kalıcı), anahtarsız "Kanalda ara" ve "YouTube'da ara", "bu kanalı öncelikli yap", sonra izle. |
 | C — Rehber anlatımı ve ses | Tamam | Kısa/Uzun anlatım anahtarı ve süre, kısaltılmış anlatım işareti, tur modunda rehber ağzı (`src/i18n/guide.ts`), Ses bölümü (Türkçe sesler, örnek dinle, üç ton, hız ve perde), cümle cümle okuma (önceki/sonraki, duraklat/sürdür), okunuş sözlüğü, çevrimdışıyken cihazdaki sese düşme. Birim 111/111; v3 uçtan uca 16/16; bütün takım 72/76 (kalan dört: tur testi yeni karşılama cümlesine uyarlandı, yeniden üretim testi düzeltme sonrası emekliye ayrıldı). |
 | D — Tam çevrimdışı | Tamam | Harita için üçüncü basamak (depoda üretilen bölge paketi; ilk bölge Viyana, 817 karo, 24,1 MB). Bölge dosyası parça parça iner, Cache Storage'da durur; harita stil, yazı tipi ve simgelerle ağsız açılır; alan dışı notu; 15. düzeyin ötesinde büyütme. Çevrimdışı hazır denetimi ve gezi kartı rozeti, hatırlatma kartı, Safari/Ana Ekran ayrımı, kalıcı depolama, soğuk açılışta son gezi, çevrimdışı video kartı ve sonra izle. Testte bulunan iki ek hata düzeltildi: opak görsel önbelleği fotoğraf kaydını bozuyordu; WebKit MapLibre işçi betiğini ağdan istiyordu. Birim 117/117; uçtan uca 78/78 (bütün takım; düzeltilen iki test ayrıca koşturuldu). |
+| E — Teslim | Tamam | Yayın: https://mustafakuran89-svg.github.io/tur-rehberi/ (Viyana bölgesi iş akışında üretildi, 817 karo, 24,1 MB) · yayına karşı duman testi 8/8 · gerçek Viyana dosyasıyla canlı deneme 2/2 · `v3.0` etiketi · `teslim/` yenilendi · `TESLIM-3.md`. Yayında bulunan: GitHub Pages sıkıştırma kabul edilince aralığı sıkıştırılmış veriye göre veriyor; tarayıcılar aralıklı istekte sıkıştırmayı kapattığı için sorun yok, yine de indirme bunu denetler ve gerekirse tek parça iner. |
+
+### Test durumu (Geliştirme 3)
+
+- Tip kontrolü: geçti.
+- Birim testleri: 117/117.
+- Uçtan uca: 80/80 (40 test × Chromium ve WebKit, iPhone 13 boyutu).
+- Yayına karşı duman testi: 8/8; gerçek Viyana bölgesiyle canlı deneme 2/2.
+
+## Sırada (Geliştirme 3 sonrası)
+
+Gerçek iPhone'da `TESLIM-3.md` bölüm 8'deki 8 madde.

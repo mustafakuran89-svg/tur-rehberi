@@ -43,7 +43,7 @@ Uygulama yeni sürüme kendiliğinden geçer; bir kez kapatıp açmanız yeterli
 | Şema sürüm 3: videoda `channelId`, `startSeconds`, `endSeconds`, `chapterTitle`; durakta `altNames`; gezide `pronunciations`. Sürüm 1 ve 2 dosyaları değişmeden içe aktarılır. Dört yeni uyarı eklendi: kısa anlatım yok; kısa anlatım 40-90 kelime dışında; uzun anlatım 120-300 kelime dışında; video bitişi başlangıçtan önce. | Otomatik testle doğrulandı |
 | Yedek dosyasına kullanıcı durumu (notlar, işaretler, ayarlanan başlangıçlar) ve cihaz ayarları (ses, kanal listesi, sonra izle) girer. YouTube anahtarı girmez. | Otomatik testle doğrulandı (birim) |
 
-Test sayıları: tip kontrolü geçti · birim testleri 117/117 · uçtan uca TOPLAM_E2E (iPhone 13 boyutunda Chromium ve WebKit) · yayına karşı duman testi CANLI_SONUC.
+Test sayıları: tip kontrolü geçti · birim testleri 117/117 · uçtan uca 80/80 (40 test × iPhone 13 boyutunda Chromium ve WebKit) · yayına karşı duman testi 8/8, ayrıca yayımlanmış sitede gerçek Viyana dosyasıyla uçtan uca deneme 2/2 (Chromium ve WebKit: 24,1 MB indi, ağ kapalıyken Viyana merkezinde 16. düzeyde 271 harita ögesi ve 27 yazı çizildi).
 
 ## 3. Bildirilen çevrimdışı sorunun nedeni
 

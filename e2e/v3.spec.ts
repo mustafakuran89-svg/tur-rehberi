@@ -158,6 +158,8 @@ test('C: kısa ve uzun anlatım ayrı okunur; kısaltılmış anlatım işaretli
 });
 
 test('C: cümle cümle okuma: sonraki, önceki, duraklat ve sürdür', async ({ page }) => {
+  // her cümle 3 sn sürsün: düğmeler okunan cümle değişmeden sınanır
+  await page.addInitScript(() => ((window as unknown as { __speechMs: number }).__speechMs = 3000));
   await page.goto('./#/trip/__ornek__/day/0/stop/1');
   await page.getByTestId('narr-long').click();
   const player = page.getByTestId('player');

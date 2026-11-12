@@ -113,12 +113,18 @@ export interface DownloadProgress {
   total: number;
 }
 
-async function fetchRange(url: string, from: number, to: number): Promise<ArrayBuffer> {
+async function fetchRange(url: string, from: number, to: number, expectTotal: number): Promise<ArrayBuffer> {
   let last: unknown;
   for (let i = 1; i <= RETRIES; i++) {
     try {
-      const r = await fetch(url, { headers: { Range: `bytes=${from}-${to}` } });
-      if (r.status === 206) return await r.arrayBuffer();
+      // identity: GitHub Pages sıkıştırma kabul edilince dosyayı gzip'leyip aralığı sıkıştırılmış
+      // veriye göre veriyor; aralık yanıtının toplamı dosya boyutuyla aynı değilse tek parça inilir.
+      const r = await fetch(url, { headers: { Range: `bytes=${from}-${to}` }, cache: 'no-store' });
+      const total = Number(r.headers.get('content-range')?.split('/')[1] ?? NaN);
+      if (r.status === 206 && (r.headers.get('content-encoding') ?? 'identity') === 'identity' && (isNaN(total) || total === expectTotal)) {
+        const b = await r.arrayBuffer();
+        if (b.byteLength === to - from + 1 && (from > 0 || new TextDecoder().decode(b.slice(0, 7)) === 'PMTiles')) return b;
+      }
       if (r.ok) throw new Error('aralıklı istek desteklenmiyor');
       throw new Error(`yanıt ${r.status}`);
     } catch (e) {
@@ -147,7 +153,7 @@ export async function downloadRegion(r: Region, onProgress: (p: DownloadProgress
       [0, 1].map(async () => {
         while (next < ranges.length) {
           const k = next++;
-          parts[k] = await fetchRange(url, ranges[k][0], ranges[k][1]);
+          parts[k] = await fetchRange(url, ranges[k][0], ranges[k][1], total);
           done += parts[k].byteLength;
           onProgress({ done, total });
         }
@@ -155,11 +161,19 @@ export async function downloadRegion(r: Region, onProgress: (p: DownloadProgress
     );
   } catch (e) {
     if ((e as Error).message !== 'aralıklı istek desteklenmiyor') throw e;
+    // Tek parça: tarayıcı sıkıştırmayı kendisi açar; ilerleme açılmış bayttan hesaplanır.
     parts.length = 0;
-    const res = await fetch(url);
-    if (!res.ok) throw new Error(`yanıt ${res.status}`);
-    parts.push(await res.arrayBuffer());
-    onProgress({ done: total, total });
+    const res = await fetch(url, { cache: 'no-store' });
+    if (!res.ok || !res.body) throw new Error(`yanıt ${res.status}`);
+    const reader = res.body.getReader();
+    let got = 0;
+    for (;;) {
+      const { done: end, value } = await reader.read();
+      if (end) break;
+      parts.push(value.slice().buffer);
+      got += value.byteLength;
+      onProgress({ done: Math.min(got, total), total });
+    }
   }
   const blob = new Blob(parts, { type: 'application/octet-stream' });
   if (blob.size !== total) throw new Error(`eksik dosya: ${blob.size}/${total}`);
