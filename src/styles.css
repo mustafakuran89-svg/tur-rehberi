@@ -383,3 +383,10 @@ details > summary { cursor: pointer; }
 .narration-toggle .seg { flex: 1; }
 .sentence-nav { align-items: center; justify-content: space-between; }
 input[type="range"] { width: 100%; accent-color: var(--accent); min-height: var(--tap); }
+
+/* Geliştirme 3: çevrimdışı rozetleri */
+.badge-offline-ready { background: var(--ok-bg); color: var(--ok); border: 1px solid var(--ok); }
+.badge-offline-partial { background: var(--warn-bg); color: var(--warn-ink); border: 1px solid var(--warn-line); }
+.badge-offline-none { background: transparent; color: var(--muted); border: 1px solid var(--line); }
+.prep-warn .prep-icon { color: var(--warn); }
+.prep-info .prep-icon { color: var(--muted); }

@@ -32,6 +32,30 @@ test('yayın: sürüm 2 — otel kartı, hızlı bakış, kısa dinle, varış a
   await expect(page.getByTestId('whatsnew')).toContainText('Bugün ekranı');
 });
 
+test('yayın: sürüm 3 — anlatım anahtarı, ses ve kanal ayarları, bölge listesi ve dosyası', async ({ page, request, baseURL }) => {
+  await page.goto('./#/trip/__ornek__/day/0/stop/2');
+  await expect(page.getByTestId('narr-long')).toBeVisible();
+  await expect(page.getByTestId('channel-search')).toHaveAttribute('href', /@AyricalikliRotalar\/search\?query=/);
+  await page.goto('./#/settings');
+  await expect(page.getByTestId('voice-settings')).toBeVisible();
+  await expect(page.getByTestId('channel-row').first()).toContainText('@AyricalikliRotalar');
+  await page.goto('./#/whatsnew');
+  await expect(page.getByTestId('whatsnew')).toContainText('Tam çevrimdışı harita');
+  // Viyana bölge dosyası yalnız yayın iş akışında üretilir
+  if (!process.env.TUR_LIVE_URL) return;
+  const m = await request.get(new URL('haritalar/bolgeler.json', baseURL).toString());
+  expect(m.status()).toBe(200);
+  const list = (await m.json()) as { bolgeler: { id: string; dosya: string; bayt: number; surum: string }[] };
+  const v = list.bolgeler.find((b) => b.id === 'viyana')!;
+  expect(v.bayt).toBeGreaterThan(1_000_000);
+  // aralıklı istek (parça parça indirme) destekleniyor
+  const r = await request.get(new URL(`haritalar/${v.dosya}?v=${v.surum}`, baseURL).toString(), { headers: { Range: 'bytes=0-6' } });
+  expect(r.status()).toBe(206);
+  expect(await r.text()).toBe('PMTiles');
+  const font = await request.get(new URL('haritalar/fonts/Noto%20Sans%20Regular/0-255.pbf', baseURL).toString());
+  expect(font.status()).toBe(200);
+});
+
 test('yayın: manifest ve service worker dosyaları', async ({ request, baseURL }) => {
   const m = await request.get(new URL('manifest.webmanifest', baseURL).toString());
   expect(m.status()).toBe(200);

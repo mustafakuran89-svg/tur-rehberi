@@ -4,6 +4,7 @@ import type { LatLng } from '../lib/geo';
 import { createSvgMap } from './svgMap';
 import { addLog } from '../lib/log';
 import { tr } from '../i18n/tr';
+import { savedRegionFor } from './regions';
 
 function webglAvailable(): boolean {
   try {
@@ -41,7 +42,8 @@ export function TripMap({ points, legs, user = null, pending = null, onTap, heig
   const latest = useRef({ points, legs, user, pending });
   latest.current = { points, legs, user, pending };
   const [renderer, setRenderer] = useState<'loading' | 'gl' | 'svg'>('loading');
-  const [basemap, setBasemap] = useState<'loading' | 'ok' | 'none'>('loading');
+  const [basemap, setBasemap] = useState<'loading' | 'region' | 'ok' | 'none'>('loading');
+  const [outside, setOutside] = useState(false);
 
   useEffect(() => {
     let cancelled = false;
@@ -59,8 +61,15 @@ export function TripMap({ points, legs, user = null, pending = null, onTap, heig
     };
     if (!webglAvailable() || forceSvg()) useSvg();
     else {
-      import('./glMap')
-        .then((m) => m.createGlMap(el, { onTap: onTapCb, onBasemap: (ok) => !cancelled && setBasemap(ok ? 'ok' : 'none') }))
+      Promise.all([import('./glMap'), savedRegionFor(latest.current.points).catch(() => null)])
+        .then(([m, region]) =>
+          m.createGlMap(el, {
+            onTap: onTapCb,
+            onBasemap: (k) => !cancelled && setBasemap(k),
+            region,
+            onOutside: (o) => !cancelled && setOutside(o),
+          }),
+        )
         .then((c) => {
           if (cancelled) {
             c.destroy();
@@ -108,6 +117,11 @@ export function TripMap({ points, legs, user = null, pending = null, onTap, heig
         <p className="map-note">
           {renderer === 'svg' ? tr.map.simpleMap + ' ' : ''}
           {tr.map.noBasemap}
+        </p>
+      )}
+      {basemap === 'region' && outside && (
+        <p className="map-note" data-testid="outside-region">
+          {tr.map.outsideRegion}
         </p>
       )}
       {showLegend && (

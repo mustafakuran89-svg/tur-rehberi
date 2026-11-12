@@ -104,6 +104,9 @@ Node.js ve gh bu makinede taşınabilir kuruludur: `%LOCALAPPDATA%\Programs\devt
 | Yayımlanmış adrese duman testi | PowerShell: `$env:TUR_LIVE_URL='https://<kullanıcı>.github.io/tur-rehberi/'; npm run e2e:live` |
 | Örnek geziyi yeniden üret | `node scripts/make-sample.mjs` |
 | Simgeleri ve açılış ekranlarını yeniden üret | `npm run icons` |
+| Çevrimdışı harita bölgelerini üret (iş akışı yapar; elle denemek için) | `node scripts/make-regions.mjs dist` (girdi `haritalar/bolgeler.json`) |
+| Tek bölge çıkar (test verisi) | `node scripts/make-regions.mjs --bbox=batı,güney,doğu,kuzey --out=dosya.pmtiles --minzoom=12 --maxzoom=15` |
+| Harita yazı tiplerini ve simgelerini yenile | `node scripts/fetch-map-assets.mjs` (çıktı `public/haritalar/`, depoya girer) |
 | Yayımla | `git push` (main dalı; GitHub Actions derler, test eder ve Pages'e koyar) |
 
 Notlar:
@@ -112,3 +115,5 @@ Notlar:
 - `npm run e2e`, 4173 portunda çalışan eski bir `preview` sunucusunu yeniden kullanır; kod değiştiyse önce onu durdur.
 - Uçtan uca testler dış servisleri (harita, Vikipedi/Commons, Open-Meteo, YouTube) kapatır; gereken test kendi sahte yanıtını verir (`e2e/helpers.ts`).
 - Tasarım değerleri (renk, yazı, boşluk) yalnız `src/theme.css` içindedir; koyu tema da oradadır.
+- Test sunucusu derlenmiş siteye küçük bir örnek bölge koyar (`scripts/e2e-region.mjs`, gerçek OpenStreetMap verisinden `e2e/fixtures/ornek-bolge.pmtiles`). WebKit'te service worker'ın yaptığı istekler `context.route` ile yakalanamaz; çevrimdışı testler bu yüzden gerçek dosya kullanır.
+- Bash'te sed/heredoc ile Türkçe karakterli metin değiştirmek bazen eşleşmez; Türkçe içerikli düzenlemeyi düzenleme aracıyla ya da dosyaya yazılmış Node betiğiyle yap.

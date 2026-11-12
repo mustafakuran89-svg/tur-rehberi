@@ -1,7 +1,11 @@
-// "Geziyi hazırla": videolar bulunur, galeri fotoğrafları ve video küçük resimleri cihaza kaydedilir,
-// hava tahmini alınır, harita karoları ısıtılır. OpenFreeMap koşulu (openfreemap.org/quick_start,
-// 11.11.2026): çevrimdışı indirme tek seferde en çok 3.000 karo / 50 MB, en çok 4 paralel istek.
-// Uygulama bunun çok altında kalır: en çok 500 karo, 4 paralel istek.
+// "Geziyi hazırla" (Geliştirme 3): öncelikli kanal dizinleri ve durak videoları bulunur, video
+// küçük resimleri ve fotoğraflar cihaza kaydedilir, hava tahmini alınır, gezi bölgesinin harita
+// dosyası indirilir; sonunda uygulama ağa çıkmadan kendini sınar (src/lib/offlineCheck.ts).
+// Harita: gezi alanını kapsayan bölge paketi varsa o indirilir (src/map/regions.ts). Yoksa eski
+// yol: OpenFreeMap karoları ısıtılır. OpenFreeMap koşulu (openfreemap.org/quick_start, 12.11.2026):
+// çevrimdışı indirme en çok 3.000 karo / 50 MB, en çok 4 paralel istek ve özgün User-Agent ister.
+// Tarayıcı User-Agent'ı değiştiremediği için bu yol yalnız tarayıcının olağan önbelleğine dayanır
+// ve en çok 500 karo ile sınırlıdır; tam çevrimdışı garantisi yalnız bölge paketindedir.
 import type { Trip } from '../plan/types';
 import { stopsInOrder } from '../plan/normalize';
 import { storeImage } from './cache';
@@ -10,7 +14,13 @@ import { cachedCandidates, getCandidates, getYoutubeKey, thumbUrl, videoQueryFor
 import { getWeather, forecastRange } from './weather';
 import { stopKey, type UserState } from './userState';
 import { hasCoord, type LatLng } from './geo';
+import { getSettings } from './settings';
+import { cachedIndexes, getIndex } from './channels';
+import { needsGeneralSearch, rankVideos } from './videoRank';
+import { requestPersist } from './store';
 import { BASEMAP_STYLE_URL } from '../map/config';
+import { downloadRegion, savedRegions, type Region } from '../map/regions';
+import { offlineCheck, type OfflineStatus } from './offlineCheck';
 
 export const MAX_TILES = 500;
 export const PARALLEL = 4;
@@ -20,11 +30,15 @@ export interface PrepStep {
   id: 'videos' | 'photos' | 'thumbs' | 'weather' | 'map';
   done: number;
   total: number;
+  unit?: 'bytes';
   state: 'wait' | 'run' | 'ok' | 'partial' | 'skip' | 'fail';
 }
 export interface PrepReport {
   steps: PrepStep[];
   missing: string[];
+  /** YouTube kotası: liste/ayrıntı birimi (10.000/gün) ve arama çağrısı (100/gün). */
+  quota: { units: number; searches: number };
+  check?: OfflineStatus;
 }
 
 async function pool<T>(items: T[], n: number, fn: (x: T) => Promise<void>): Promise<void> {
@@ -67,9 +81,10 @@ export function tilesFor(points: LatLng[], zooms = TILE_ZOOMS, max = MAX_TILES):
   return out;
 }
 
+/** Gezi alanının noktaları: durak, mekan, etkinlik, otel (havalimanı dahil değil; bölge seçimini daraltmasın). */
 export function tripPoints(t: Trip): LatLng[] {
   const pts: LatLng[] = [];
-  const add = (x: { lat: number | null; lng: number | null }) => hasCoord(x) && pts.push({ lat: x.lat, lng: x.lng });
+  const add = (x: { lat?: number | null; lng?: number | null }) => x.lat != null && x.lng != null && hasCoord({ lat: x.lat, lng: x.lng }) && pts.push({ lat: x.lat, lng: x.lng });
   t.days.forEach((d) => {
     d.stops.forEach(add);
     [...d.breakfast, ...d.dinner, ...d.snacks, ...(d.lunch ? [d.lunch.main, ...(d.lunch.backup ? [d.lunch.backup] : [])] : [])].forEach(add);
@@ -85,7 +100,6 @@ async function warmMap(points: LatLng[], onTile: () => void): Promise<number> {
   if (!src?.url) throw new Error('karo kaynağı yok');
   const tj = (await (await fetch(src.url)).json()) as { tiles: string[] };
   const tpl = tj.tiles[0];
-  // yazı tipleri (Türkçe harfler 256-511 aralığında) ve simge seti
   const fonts = new Set<string>();
   style.layers.forEach((l) => {
     const f = l.layout?.['text-font'];
@@ -111,40 +125,56 @@ async function warmMap(points: LatLng[], onTile: () => void): Promise<number> {
   return ok;
 }
 
-export async function prepareTrip(key: string, t: Trip, isSample: boolean, us: UserState | undefined, onProgress: (r: PrepReport) => void): Promise<PrepReport> {
+export async function prepareTrip(key: string, t: Trip, isSample: boolean, us: UserState | undefined, onProgress: (r: PrepReport) => void, opts: { region?: Region | null } = {}): Promise<PrepReport> {
   const rep: PrepReport = {
     steps: (['videos', 'thumbs', 'photos', 'weather', 'map'] as const).map((id) => ({ id, done: 0, total: 0, state: 'wait' as const })),
     missing: [],
+    quota: { units: 0, searches: 0 },
   };
   const step = (id: PrepStep['id']) => rep.steps.find((s) => s.id === id)!;
-  const emit = () => onProgress({ steps: rep.steps.map((s) => ({ ...s })), missing: [...rep.missing] });
+  const emit = () => onProgress({ ...rep, steps: rep.steps.map((s) => ({ ...s })), missing: [...rep.missing] });
+  await requestPersist();
   const city = t.destinations[0] ?? '';
   const stops = t.days.flatMap((d) => stopsInOrder(d));
 
-  // 1. Videolar
+  // 1. Videolar: önce öncelikli kanal dizinleri (30 günde bir), sonra gerekirse genel arama
   const ytKey = getYoutubeKey();
+  const settings = getSettings();
   const vs = step('videos');
   vs.total = stops.length;
   vs.state = 'run';
   emit();
+  if (ytKey) {
+    for (const c of settings.channels) {
+      try {
+        const r = await getIndex(c, ytKey);
+        if (r.built && r.index) rep.quota.units += r.index.calls;
+      } catch {
+        vs.state = 'partial';
+      }
+    }
+  }
+  const indexes = await cachedIndexes(settings.channels);
   const thumbIds = new Set<string>();
   for (const s of stops) {
     const k = stopKey(s);
-    const own = us?.videos[k] ?? s.videos?.[0];
-    if (own) thumbIds.add(own.youtubeId);
-    else {
-      let cands = (await cachedCandidates(key, k))?.candidates ?? [];
-      if (ytKey) {
-        try {
-          cands = (await getCandidates(key, k, videoQueryFor(s, city), s.name, ytKey))?.candidates ?? [];
-        } catch {
-          vs.state = 'partial';
+    let general = (await cachedCandidates(key, k))?.candidates ?? [];
+    let ranked = rankVideos({ stop: s, city, userVideo: us?.videos[k], channels: settings.channels, indexes, general });
+    if (ytKey && needsGeneralSearch(ranked) && !general.length) {
+      try {
+        const before = (await cachedCandidates(key, k))?.checkedAt;
+        general = (await getCandidates(key, k, videoQueryFor(s, city), [s.name, ...(s.altNames ?? [])], ytKey))?.candidates ?? [];
+        if ((await cachedCandidates(key, k))?.checkedAt !== before) {
+          rep.quota.searches++;
+          rep.quota.units += 2; // ayrıntı ve kanal tanıtımı
         }
+        ranked = rankVideos({ stop: s, city, userVideo: us?.videos[k], channels: settings.channels, indexes, general });
+      } catch {
+        vs.state = 'partial';
       }
-      if (cands[0]) thumbIds.add(cands[0].youtubeId);
-      else rep.missing.push(`video:${s.name}`);
     }
-    s.videos?.forEach((v) => thumbIds.add(v.youtubeId));
+    if (ranked[0]) thumbIds.add(ranked[0].youtubeId);
+    else rep.missing.push(`video:${s.name}`);
     vs.done++;
     emit();
   }
@@ -209,20 +239,45 @@ export async function prepareTrip(key: string, t: Trip, isSample: boolean, us: U
   // 5. Harita
   const ms = step('map');
   const pts = tripPoints(t);
-  ms.total = tilesFor(pts).length;
   ms.state = 'run';
-  emit();
-  try {
-    const ok = await warmMap(pts, () => {
-      ms.done++;
-      emit();
-    });
-    ms.done = ok;
-    ms.state = ok === ms.total ? 'ok' : 'partial';
-  } catch {
-    ms.state = 'fail';
-    rep.missing.push('map');
+  const region = opts.region ?? null;
+  if (region) {
+    ms.unit = 'bytes';
+    ms.total = region.bayt;
+    emit();
+    const have = (await savedRegions()).find((r) => r.id === region.id && r.surum === region.surum);
+    try {
+      if (!have) {
+        await downloadRegion(region, (p) => {
+          ms.done = p.done;
+          emit();
+        });
+      }
+      ms.done = region.bayt;
+      ms.state = 'ok';
+    } catch {
+      ms.state = 'fail';
+      rep.missing.push('map');
+    }
+  } else {
+    ms.total = tilesFor(pts).length;
+    emit();
+    try {
+      const ok = await warmMap(pts, () => {
+        ms.done++;
+        emit();
+      });
+      ms.done = ok;
+      ms.state = ok ? 'partial' : 'fail'; // bölge paketi yoksa çevrimdışı harita kısmidir
+    } catch {
+      ms.state = 'fail';
+      rep.missing.push('map');
+    }
   }
+  emit();
+
+  // 6. Çevrimdışı hazır denetimi (ağa çıkmadan)
+  rep.check = await offlineCheck(key, t, us);
   emit();
   return rep;
 }

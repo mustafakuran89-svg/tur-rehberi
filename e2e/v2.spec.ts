@@ -308,7 +308,9 @@ test('E: geziyi hazırla sonrası ağ kapalıyken galeri fotoğrafları ve video
   await expect(page.getByTestId('video-unpin')).toBeVisible();
 
   await page.goto('./#/trip/__ornek__/prepare');
+  await expect(page.getByTestId('prep-region')).toBeVisible(); // test sunucusunda örnek bölge var: önce boyut onayı
   await page.getByTestId('prepare-start').click();
+  await page.getByTestId('confirm-ok').click();
   await expect(page.getByTestId('prepare-done')).toBeVisible({ timeout: 30_000 });
   await expect(page.getByTestId('prep-photos')).toHaveAttribute('data-state', 'ok');
   await expect(page.getByTestId('prep-thumbs')).toHaveAttribute('data-state', 'ok');

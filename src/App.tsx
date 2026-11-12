@@ -19,6 +19,7 @@ import { VideosScreen } from './screens/VideosScreen';
 import { WhatsNewScreen } from './screens/WhatsNewScreen';
 import { Missing } from './components/ui';
 import { tr } from './i18n/tr';
+import { rememberTrip } from './lib/lastTrip';
 
 export function App() {
   const path = useHashPath();
@@ -26,6 +27,10 @@ export function App() {
   useEffect(() => {
     window.scrollTo(0, 0);
   }, [path.split('?')[0]]);
+  const tripKey = 'key' in r ? r.key : null;
+  useEffect(() => {
+    if (tripKey) rememberTrip(tripKey);
+  }, [tripKey]);
   switch (r.name) {
     case 'trips':
       return <TripsScreen />;

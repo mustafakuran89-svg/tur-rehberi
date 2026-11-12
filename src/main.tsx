@@ -18,6 +18,9 @@ if ('serviceWorker' in navigator && import.meta.env.PROD) {
     .catch((e) => addLog('info', `SW yüklenemedi: ${String(e)}`));
 }
 
+// v2.0'ın görsel önbelleği opak yanıtlar tutabiliyordu; bir kez silinir (yerine 'gorseller-v3').
+if ('caches' in window) caches.delete('gorseller').catch(() => {});
+
 ensureSample().catch((e) => addLog('error', `Örnek gezi yüklenemedi: ${String(e)}`));
 requestPersist().catch(() => {});
 

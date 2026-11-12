@@ -23,7 +23,7 @@ export default defineConfig({
     { name: 'iphone-webkit', use: { ...iphone, browserName: 'webkit', defaultBrowserType: 'webkit' } },
   ],
   webServer: {
-    command: 'npm run build && npm run preview',
+    command: 'npm run build && node scripts/e2e-region.mjs && npm run preview',
     url: 'http://localhost:4173/tur-rehberi/',
     reuseExistingServer: true,
     timeout: 120_000,

@@ -5,8 +5,19 @@ import workerUrl from 'maplibre-gl/dist/maplibre-gl-worker.mjs?worker&url';
 import { BASEMAP_STYLE_URL, BASEMAP_TIMEOUT_MS } from './config';
 import { legLabelElement, markerElement, pendingElement, userElement, type MapController, type MapLeg, type MapPoint } from './types';
 import type { LatLng } from '../lib/geo';
+import { openArchive, type SavedRegion } from './regions';
+import { regionStyle } from './regionStyle';
 
-setWorkerUrl(workerUrl);
+// İşçi betiği fetch ile (service worker önbelleğinden) okunup blob adresinden başlatılır: WebKit
+// işçi betiğini service worker'dan geçirmeden ağdan istiyor, ağ yokken harita açılmıyordu.
+let workerReady: Promise<void> | null = null;
+function initWorker(): Promise<void> {
+  workerReady ??= fetch(workerUrl)
+    .then((r) => (r.ok ? r.text() : Promise.reject(new Error(String(r.status)))))
+    .then((src) => setWorkerUrl(URL.createObjectURL(new Blob([src], { type: 'text/javascript' }))))
+    .catch(() => setWorkerUrl(workerUrl));
+  return workerReady;
+}
 
 /** Tema renkleri (src/theme.css): harita çizgileri de koyu temaya uyar. */
 function token(name: string, fallback: string): string {
@@ -19,8 +30,17 @@ function blankStyle(): StyleSpecification {
 }
 
 
+// Çevrimdışıyken de istenir: service worker önbelleğinde stil varsa oradan gelir (v2.0'da
+// navigator.onLine yanlışsa hiç istenmiyordu; bildirilen çevrimdışı harita sorununun nedeni buydu).
 async function loadStyle(): Promise<{ style: StyleSpecification | string; ok: boolean }> {
-  if (!navigator.onLine) return { style: blankStyle(), ok: false };
+  // Ağ yokken yalnız önbellekte stil varsa istenir (boşuna başarısız istek yapılmaz).
+  if (!navigator.onLine) {
+    try {
+      if (!(await caches.match(BASEMAP_STYLE_URL))) return { style: blankStyle(), ok: false };
+    } catch {
+      return { style: blankStyle(), ok: false };
+    }
+  }
   const ctrl = new AbortController();
   const timer = setTimeout(() => ctrl.abort(), BASEMAP_TIMEOUT_MS);
   try {
@@ -36,10 +56,20 @@ async function loadStyle(): Promise<{ style: StyleSpecification | string; ok: bo
 
 export async function createGlMap(
   container: HTMLElement,
-  opts: { onTap: (p: LatLng) => void; onBasemap: (ok: boolean) => void },
+  opts: { onTap: (p: LatLng) => void; onBasemap: (kind: 'region' | 'ok' | 'none') => void; region?: SavedRegion | null; onOutside?: (outside: boolean) => void },
 ): Promise<MapController> {
-  const { style, ok } = await loadStyle();
-  opts.onBasemap(ok);
+  await initWorker();
+  // Cihazda gezi alanının bölge dosyası varsa harita ondan açılır (çevrimiçi ve çevrimdışı aynı görünüm).
+  const pm = opts.region ? await openArchive(opts.region) : null;
+  let style: StyleSpecification | string;
+  if (pm) {
+    style = regionStyle(pm);
+    opts.onBasemap('region');
+  } else {
+    const r = await loadStyle();
+    style = r.style;
+    opts.onBasemap(r.ok ? 'ok' : 'none');
+  }
   const map = new MlMap({
     container,
     style,
@@ -48,7 +78,18 @@ export async function createGlMap(
     attributionControl: { compact: false },
     dragRotate: false,
     pitchWithRotate: false,
+    maxZoom: 19, // bölgenin en yüksek düzeyinin ötesinde eldeki karo büyütülür
   });
+  (window as unknown as { __tripMap?: unknown }).__tripMap = map; // test ve hata ayıklama
+  // İndirilen alanın dışına çıkılırsa "bu alan indirilmedi" notu
+  if (pm && opts.region && opts.onOutside) {
+    const b = opts.region.bbox;
+    const check = () => {
+      const c = map.getCenter();
+      opts.onOutside!(c.lng < b[0] || c.lng > b[2] || c.lat < b[1] || c.lat > b[3]);
+    };
+    map.on('moveend', check);
+  }
   map.touchZoomRotate.disableRotation();
 
   // Karoların gelmesi beklenmez: stil çözülünce rota ve işaretler çizilir. Karolar gelmezse

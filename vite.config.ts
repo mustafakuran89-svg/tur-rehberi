@@ -40,7 +40,9 @@ export default defineConfig({
         ],
       },
       workbox: {
-        globPatterns: ['**/*.{js,css,html,png,svg,json,webmanifest}'],
+        globPatterns: ['**/*.{js,css,html,png,svg,json,webmanifest,pbf}'],
+        // Bölge listesi ağdan okunur (yeni derleme); bölge dosyaları ayrı önbellekte durur (src/map/regions.ts).
+        globIgnores: ['haritalar/bolgeler.json', '**/*.pmtiles'],
         maximumFileSizeToCacheInBytes: 6 * 1024 * 1024,
         navigateFallback: 'index.html',
         cleanupOutdatedCaches: true,
@@ -57,7 +59,9 @@ export default defineConfig({
           {
             urlPattern: ({ url }) => url.hostname === 'i.ytimg.com' || url.hostname === 'upload.wikimedia.org' || url.hostname === 'thumb.wikimedia.org',
             handler: 'CacheFirst',
-            options: { cacheName: 'gorseller', expiration: { maxEntries: 600, maxAgeSeconds: 60 * 24 * 3600 }, cacheableResponse: { statuses: [0, 200] } },
+            // Yalnız CORS'lu (200) yanıt saklanır: <img> ile gelen opak yanıt saklanırsa sonraki CORS isteği
+            // (fotoğrafı cihaza kaydetme) onu alıp başarısız oluyordu (Geliştirme 3'te bulunan hata).
+            options: { cacheName: 'gorseller-v3', expiration: { maxEntries: 600, maxAgeSeconds: 60 * 24 * 3600 }, cacheableResponse: { statuses: [200] } },
           },
         ],
       },

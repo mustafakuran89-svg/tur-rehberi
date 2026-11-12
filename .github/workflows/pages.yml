@@ -5,6 +5,9 @@ on:
   push:
     branches: [main]
   workflow_dispatch:
+  # Harita bölgeleri ayda bir yeni OpenStreetMap verisiyle yenilenir
+  schedule:
+    - cron: '0 3 1 * *'
 
 permissions:
   contents: read
@@ -28,6 +31,10 @@ jobs:
       - run: npm run typecheck
       - run: npm test
       - run: npm run build
+      # Çevrimdışı harita bölgeleri (haritalar/bolgeler.json): Protomaps günlük derlemesinden çıkarılır
+      - name: Harita bölgeleri
+        run: node scripts/make-regions.mjs dist
+        continue-on-error: true
       - uses: actions/configure-pages@v6
       - uses: actions/upload-pages-artifact@v5
         with:
