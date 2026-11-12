@@ -1,5 +1,5 @@
 {
-  "schemaVersion": 2,
+  "schemaVersion": 3,
   "id": "ornek-gezi",
   "title": "ÖRNEK Gezi: İki Günde ÖRNEK Kent",
   "destinations": [
@@ -185,6 +185,10 @@
             }
           ],
           "verifiedAt": "2026-11-11",
+          "altNames": [
+            "ÖRNEK Pazar Alanı",
+            "ÖRNEK Piazza del Mercato"
+          ],
           "narrationShort": "Bu meydan uydurma bir kentin uydurma kalbidir. Kent, iki dere arasındaki düzlükte kurulan haftalık pazarla doğdu; ortadaki taş çeşmenin pazarın ilk günlerinden kaldığı anlatılır. Kemerli revaklara, yerdeki koyu taşlara ve saat kulesinin altındaki küçük kapıya bakın. Sonraki durağa o kapının önünden geçeceğiz. Bu anlatım örnektir.",
           "lookFor": [
             "Ortadaki taş çeşme",
@@ -192,7 +196,7 @@
             "Saat kulesinin altındaki küçük kapı"
           ],
           "videoQuery": "tarihi pazar meydanı belgesel",
-          "narration": "Bu meydan uydurma bir kentin uydurma kalbidir; burada anlatılan her şey uygulamayı denemeniz için yazıldı. Hikayeye göre kent, iki dere arasındaki bu düzlükte kurulan haftalık pazarla doğdu. Köylüler buğdaylarını, çömlekçiler testilerini buraya getirdi; pazar büyüdükçe çevresine evler, evlerin arasına sokaklar eklendi. Meydanın ortasındaki taş çeşme pazarın ilk günlerinden kalmadır derler, ama bu bir rivayettir. Şimdi çevrenize bakın. Kemerli revakların altında gölge arayan insanları göreceksiniz. Yerdeki taşların bazıları ötekilerden daha koyudur; eski pazar tezgahlarının yerini gösterir. Saat kulesine doğru dönün ve kulenin altındaki küçük kapıya dikkat edin. Bir sonraki durağa o kapının önünden geçerek gideceğiz. Acele etmeyin, çeşmenin suyundan bir yudum alın ve meydanın sesini dinleyin.",
+          "narration": "Bu meydan uydurma bir kentin uydurma kalbidir; burada anlatılan her şey uygulamayı denemeniz için yazıldı. Hikayeye göre kent, iki dere arasındaki bu düzlükte kurulan haftalık pazarla doğdu. Köylüler buğdaylarını, çömlekçiler testilerini buraya getirdi; pazar büyüdükçe çevresine evler, evlerin arasına sokaklar eklendi. Meydanın ortasındaki taş çeşme pazarın ilk günlerinden kalmadır derler, ama bu bir rivayettir. Şimdi çevrenize bakın. Kemerli revakların altında gölge arayan insanları göreceksiniz. Yerdeki taşların bazıları ötekilerden daha koyudur; eski pazar tezgahlarının yerini gösterir. Saat kulesine doğru dönün ve kulenin altındaki küçük kapıya dikkat edin. Bir sonraki durağa o kapının önünden geçerek gideceğiz. Acele etmeyin, çeşmenin suyundan bir yudum alın ve meydanın sesini dinleyin.\n\nŞimdi biraz da meydanın gündelik hayatına bakalım. Sabah erkenden fırının kepengi açılır, revakların altına masalar dizilir ve meydan yavaş yavaş dolar. Öğleye doğru gölge daralır, insanlar çeşmenin çevresine toplanır. Burada acele eden kimseyi görmezsiniz. Siz de bir süre durun, sesleri ayırmaya çalışın: su, adımlar, uzaktan bir çan.",
           "practicalLine": "En iyi sabah dokuzdan önce; çeşmenin suyu içilebilir.",
           "legToNext": {
             "mode": "walk",
@@ -228,6 +232,10 @@
             }
           ],
           "verifiedAt": "2026-11-11",
+          "altNames": [
+            "ÖRNEK Torre dell Orologio",
+            "ÖRNEK Kule"
+          ],
           "hours": {
             "tue": [
               [
@@ -268,7 +276,7 @@
           },
           "ticketUrl": "https://example.com/ornek/kule-bileti",
           "website": "https://example.com/ornek/saat-kulesi",
-          "narrationShort": "Saat kulesi, rivayete göre uzak limanlardan dönen bir tüccarın kente armağanıdır. Önce ahşaptan yapılmış, yangından sonra taşla yeniden kurulmuş. Kadranda rakam yerine on iki ayın işini anlatan kabartmalar vardır. Merdiven dar; tırabzana tutunun. Bu anlatım örnektir.",
+          "narrationShort": "Saat kulesi, rivayete göre uzak limanlardan dönen bir tüccarın kente armağanıdır. Önce ahşaptan yapılmış, yangından sonra taşla yeniden kurulmuş. Kadranda rakam yerine on iki ayın işini anlatan kabartmalar vardır. Merdiven dar; tırabzana tutunun. Tepeye çıkınca kırmızı çatılara ve iki derenin izine bakın. Bu anlatım örnektir.",
           "lookFor": [
             "Kadrandaki on iki kabartma",
             "Tepeden kırmızı kiremitli çatılar",
@@ -284,7 +292,7 @@
               "sourceUrl": "https://commons.wikimedia.org/wiki/File:Krakow_2024_068_Old_Town_Hall_Tower.jpg"
             }
           ],
-          "narration": "Saat kulesi, rivayete göre, bir tüccarın kente armağanıdır. Tüccar uzak limanlardan döndüğünde herkesin aynı saati bilmesini istemiş, çünkü pazarın ne zaman açılıp kapanacağı her gün tartışma konusu olurmuş. Kule önce ahşaptan yapılmış, yangından sonra taşla yeniden kurulmuş. Bu bilgiler örnek içindir; gerçek bir kuleye ait değildir. Kulenin dibinde durun ve yukarı bakın. Saatin kadranında rakam yerine on iki küçük kabartma göreceksiniz. Her biri bir ayı ve o ayın işini anlatır: hasat, bağbozumu, odun kesimi. Merdivenler dar ve diktir, yukarı çıkarsanız tırabzana tutunun. Tepeden bakınca kırmızı kiremitli çatıların arasında iki derenin izini sürebilirsiniz. Kent hala onların çizdiği yolu izler.",
+          "narration": "Saat kulesi, rivayete göre, bir tüccarın kente armağanıdır. Tüccar uzak limanlardan döndüğünde herkesin aynı saati bilmesini istemiş, çünkü pazarın ne zaman açılıp kapanacağı her gün tartışma konusu olurmuş. Kule önce ahşaptan yapılmış, yangından sonra taşla yeniden kurulmuş. Bu bilgiler örnek içindir; gerçek bir kuleye ait değildir. Kulenin dibinde durun ve yukarı bakın. Saatin kadranında rakam yerine on iki küçük kabartma göreceksiniz. Her biri bir ayı ve o ayın işini anlatır: hasat, bağbozumu, odun kesimi. Merdivenler dar ve diktir, yukarı çıkarsanız tırabzana tutunun. Tepeden bakınca kırmızı kiremitli çatıların arasında iki derenin izini sürebilirsiniz. Kent hala onların çizdiği yolu izler.\n\nKulenin bir de saatçisi varmış. Her sabah merdivenleri tırmanıp saati kurar, sonra pencereden meydana bakıp herkese günaydın dermiş. Kent onu öyle sevmiş ki ölünce kadranın altına küçük bir anahtar oydurmuşlar. Kadranın hemen altındaki anahtar biçimindeki oyuğu arayın; bulursanız bu hikayenin geri kalanını siz tamamlayabilirsiniz.",
           "practicalLine": "Merdiven dar; 20 dakika ayırın, çantayı aşağıda bırakın.",
           "legToNext": {
             "mode": "walk",
@@ -320,6 +328,7 @@
             }
           ],
           "verifiedAt": "2026-11-11",
+          "narrationShort": "Bu küçük müze uydurma kentin hikayesini eşyalarla anlatır. İlk salonda pazar günlerinden kalan tartılar ve resmi ölçü kapları durur; tüccarlar birbirine güvenmediği için ölçüler burada saklanırmış. İkinci salondaki büyük haritada kent iki derenin arasında küçük bir adaya benzer. Köşedeki imzanın yanında küçük bir balık resmi var, onu bulmaya çalışın. Bu anlatım örnektir.",
           "hours": {
             "tue": [
               [
@@ -364,7 +373,7 @@
             "İlk salondaki ölçü kapları",
             "Büyük haritadaki imza ve balık resmi"
           ],
-          "narration": "Bu küçük müze, kentin uydurma tarihini anlatan eşyaları bir araya getirir. Anlatım uygulamayı denemek için yazıldı; burada sözü geçen eşyalar gerçek değildir. İlk salonda pazar günlerinden kalan tartılar ve ölçü kapları durur. Tüccarlar birbirine güvenmezmiş, bu yüzden kentin resmi ölçüleri bu salonda saklanırmış. İkinci salona geçince duvardaki büyük haritaya bakın. Haritada kent bugünkünden çok küçüktür ve iki derenin arasında bir ada gibi durur. Haritanın köşesindeki imzayı bulmaya çalışın. Kimin çizdiği bilinmez, ama imzanın yanında küçük bir balık resmi vardır. Son salonda pencerenin önüne oturup biraz dinlenin. Avlunun ortasındaki limon ağacı müzenin en yaşlı sakinidir, en azından öyle anlatılır.",
+          "narration": "Bu küçük müze, kentin uydurma tarihini anlatan eşyaları bir araya getirir. Anlatım uygulamayı denemek için yazıldı; burada sözü geçen eşyalar gerçek değildir. İlk salonda pazar günlerinden kalan tartılar ve ölçü kapları durur. Tüccarlar birbirine güvenmezmiş, bu yüzden kentin resmi ölçüleri bu salonda saklanırmış. İkinci salona geçince duvardaki büyük haritaya bakın. Haritada kent bugünkünden çok küçüktür ve iki derenin arasında bir ada gibi durur. Haritanın köşesindeki imzayı bulmaya çalışın. Kimin çizdiği bilinmez, ama imzanın yanında küçük bir balık resmi vardır. Son salonda pencerenin önüne oturup biraz dinlenin. Avlunun ortasındaki limon ağacı müzenin en yaşlı sakinidir, en azından öyle anlatılır.\n\nMüzeden çıkmadan önce kapının yanındaki konuk defterine bir göz atın. Yüzlerce el yazısı, yüzlerce dilde aynı şeyi söyler: buraya küçük bir yer sanarak girip daha büyük bir hikayeyle çıkmışlar. Siz de bir satır yazabilirsiniz. Sonra avluya dönüp limon ağacının gölgesinde bir dakika soluklanın; sıradaki durak birkaç dakika uzakta.",
           "practicalLine": "Bilet girişte alınır; müze pazartesi kapalı.",
           "legToNext": {
             "mode": "walk",
@@ -434,7 +443,8 @@
             }
           ],
           "verifiedAt": "2026-11-11",
-          "narration": "Bu bahçe bir zamanlar bir manastırın sebze bahçesiymiş. Bu da örnek bir hikayedir. Keşişler burada kent pazarına satılacak otları yetiştirirmiş; fesleğen, adaçayı ve kekik hala bahçenin kenarlarında kendiliğinden büyür. Yürüyüş yolunu izleyin ve ilk kavşakta sola dönün. Taş bir havuzun başına varacaksınız. Havuzun suyu yukarıdaki dereden gelir ve hiç kurumadığı söylenir. Kenardaki taşlara oyulmuş harfleri görebilirsiniz; her biri bahçede çalışan bir ailenin baş harfidir. Öğleden sonra güneş havuzun suyuna vurunca bahçenin bütün renkleri değişir. Burası yürüyüşe ara vermek için iyi bir yerdir. Bankların birine oturun, kentin uğultusunun ne kadar uzaktan geldiğine dikkat edin.",
+          "narrationShort": "Burası bir zamanlar manastırın sebze bahçesiymiş. Keşişler pazara satılacak otları burada yetiştirirmiş; fesleğen ve kekik hala kenarlarda kendiliğinden büyür. Yolu izleyip ilk kavşakta sola dönün, taş havuza varacaksınız. Kenar taşlarındaki harfler bahçede çalışan ailelerin baş harfleridir. Bir banka oturun ve kentin uğultusunun ne kadar uzaktan geldiğini dinleyin. Bu anlatım örnektir.",
+          "narration": "Bu bahçe bir zamanlar bir manastırın sebze bahçesiymiş. Bu da örnek bir hikayedir. Keşişler burada kent pazarına satılacak otları yetiştirirmiş; fesleğen, adaçayı ve kekik hala bahçenin kenarlarında kendiliğinden büyür. Yürüyüş yolunu izleyin ve ilk kavşakta sola dönün. Taş bir havuzun başına varacaksınız. Havuzun suyu yukarıdaki dereden gelir ve hiç kurumadığı söylenir. Kenardaki taşlara oyulmuş harfleri görebilirsiniz; her biri bahçede çalışan bir ailenin baş harfidir. Öğleden sonra güneş havuzun suyuna vurunca bahçenin bütün renkleri değişir. Burası yürüyüşe ara vermek için iyi bir yerdir. Bankların birine oturun, kentin uğultusunun ne kadar uzaktan geldiğine dikkat edin.\n\nBahçenin en sessiz köşesi havuzun arkasındaki küçük çardaktır. Keşişler orada dua eder, kitap okur, bazen de yalnızca kuşları dinlermiş. Çardağın direklerine sarılan asma her yaz yeniden yeşerir. Oradan bakınca manastırın eski çan kulesini ağaçların arasından seçebilirsiniz. Günün ilk bölümü burada biter; dinlenip suyunuzu tazeleyin.",
           "practicalLine": "Gölgelik az; şapka ve su alın.",
           "legToNext": null
         }
@@ -1118,7 +1128,28 @@
             }
           ],
           "verifiedAt": "2026-11-11",
-          "narration": "Eski köprü iki dereden büyüğünün üzerinden geçer. Örnek hikayeye göre köprü yapılmadan önce dereyi bir salla geçerlermiş ve salcı, kentin en zengin adamıymış. Köprü yapılınca salcı işsiz kalmış, ama kent ona köprünün ortasındaki küçük evi vermiş. O ev hala oradadır; şimdi bir dondurmacıdır. Köprünün ortasına gelince durun ve akıntı yönüne bakın. Suyun içinde eski sal iskelesinin taşlarını görebilirsiniz. Köprünün korkuluklarında yüzlerce küçük çentik vardır. Her yıl ilk sel geldiğinde suyun yüksekliği buraya işaretlenirmiş. En yüksek çentiği bulun; o yıl suyun köprünün üstünden aştığı anlatılır. Bu anlatım uygulamayı denemek için yazıldı.",
+          "narrationShort": "Eski köprü iki dereden büyüğünün üzerinden geçer. Hikayeye göre köprüden önce dereyi salla geçerlermiş; işsiz kalan salcıya köprünün ortasındaki küçük ev verilmiş, bugün orası bir dondurmacı. Korkuluklardaki çentikler her yıl ilk selin yüksekliğini gösterir. En yüksek çentiği bulun; o yıl suyun köprünün üstünden aştığı anlatılır. Bu anlatım örnektir.",
+          "altNames": [
+            "ÖRNEK Ponte Vecchio di Esempio"
+          ],
+          "videos": [
+            {
+              "youtubeId": "ORNEKvideo1",
+              "title": "ÖRNEK video: ÖRNEK Kent gezisi (gerçek bir video değildir)",
+              "channel": "ÖRNEK Rehber Kanalı",
+              "channelId": null,
+              "language": "tr",
+              "durationSeconds": 2460,
+              "likeCount": null,
+              "viewCount": null,
+              "checkedAt": "2026-11-11",
+              "source": "plan",
+              "startSeconds": 754,
+              "endSeconds": 1032,
+              "chapterTitle": "ÖRNEK Eski Köprü"
+            }
+          ],
+          "narration": "Eski köprü iki dereden büyüğünün üzerinden geçer. Örnek hikayeye göre köprü yapılmadan önce dereyi bir salla geçerlermiş ve salcı, kentin en zengin adamıymış. Köprü yapılınca salcı işsiz kalmış, ama kent ona köprünün ortasındaki küçük evi vermiş. O ev hala oradadır; şimdi bir dondurmacıdır. Köprünün ortasına gelince durun ve akıntı yönüne bakın. Suyun içinde eski sal iskelesinin taşlarını görebilirsiniz. Köprünün korkuluklarında yüzlerce küçük çentik vardır. Her yıl ilk sel geldiğinde suyun yüksekliği buraya işaretlenirmiş. En yüksek çentiği bulun; o yıl suyun köprünün üstünden aştığı anlatılır. Bu anlatım uygulamayı denemek için yazıldı.\n\nKöprünün iki ucunda birer taş aslan bekler. Biri suya, öteki kente bakar. Kentliler suya bakan aslanın selleri, kente bakanın da hırsızları gözlediğini söyler. Köprüden inerken aslanlardan birinin pençesine dokunun; buranın geleneğine göre dokunan kişi bu kente bir gün yeniden gelir. Bu da örnek hikayenin bir parçasıdır.",
           "practicalLine": "Köprü her saat açık; sabah erken sakin.",
           "legToNext": {
             "mode": "walk",
@@ -1154,7 +1185,11 @@
             }
           ],
           "verifiedAt": "2026-11-11",
-          "narration": "Kapalı pazar, meydandaki açık pazarın büyüyüp çatı altına girmiş halidir. Bu bir örnek anlatımdır. Sabahları balıkçılar, öğleye doğru peynirciler ve fırıncılar tezgah açar. İçeri girince önce kokuya dikkat edin; her koridorun kendine ait bir kokusu vardır. Sağdaki koridor taze ekmek, soldaki olgun peynir kokar. Ortadaki büyük tezgahta yerel zeytinyağları sıralanır ve satıcılar tatmanız için ekmek dilimleri uzatır. Tavana bakın; demir kirişlerin arasında eski pazar fenerleri asılıdır. Pazarın çıkışında küçük bir kahve tezgahı vardır, ayakta içilen sert bir kahveyle yola devam edebilirsiniz. Akşamüstü pazar erken kapanır, alışverişi öğleden önce yapın.",
+          "narrationShort": "Kapalı pazar, meydandaki açık pazarın çatı altına girmiş halidir. Sabah balıkçılar, öğleye doğru peynirciler ve fırıncılar tezgah açar. Her koridorun kendi kokusu vardır: sağda taze ekmek, solda olgun peynir. Ortadaki tezgahta yerel zeytinyağlarını tadabilirsiniz. Tavandaki eski fenerlere bakmayı unutmayın, çıkışta ayakta bir kahve için. Bu anlatım örnektir.",
+          "altNames": [
+            "ÖRNEK Mercato Coperto"
+          ],
+          "narration": "Kapalı pazar, meydandaki açık pazarın büyüyüp çatı altına girmiş halidir. Bu bir örnek anlatımdır. Sabahları balıkçılar, öğleye doğru peynirciler ve fırıncılar tezgah açar. İçeri girince önce kokuya dikkat edin; her koridorun kendine ait bir kokusu vardır. Sağdaki koridor taze ekmek, soldaki olgun peynir kokar. Ortadaki büyük tezgahta yerel zeytinyağları sıralanır ve satıcılar tatmanız için ekmek dilimleri uzatır. Tavana bakın; demir kirişlerin arasında eski pazar fenerleri asılıdır. Pazarın çıkışında küçük bir kahve tezgahı vardır, ayakta içilen sert bir kahveyle yola devam edebilirsiniz. Akşamüstü pazar erken kapanır, alışverişi öğleden önce yapın.\n\nPazarın asıl ruhunu satıcılarla konuşunca anlarsınız. Yerliler buraya Mercato der ve her tezgahın bir ailenin adını taşıdığını bilir. Bir peynirciye hangi köyden geldiğini sorun; büyük olasılıkla size bir dilim tattırıp uzun bir hikaye anlatacaktır. Fiyat sormaktan çekinmeyin, ama pazarlık burada pek alışılmış değildir.",
           "practicalLine": "Öğleden önce gelin; nakit getirin.",
           "legToNext": {
             "mode": "walk",
@@ -1224,7 +1259,8 @@
             }
           ],
           "verifiedAt": "2026-11-11",
-          "narration": "Kent surlarının bu bölümü, örnek hikayede kentin en eski parçasıdır. Surlar pazarı ve evleri korumak için yapılmış, ama hiçbir zaman büyük bir kuşatma görmemiş. Kentliler bu yüzden surlara biraz da gülümseyerek bakar. Surun üstündeki yürüyüş yolunu izleyin. Her yüz adımda bir küçük gözetleme kulesi göreceksiniz. Kulelerin duvarlarında nöbetçilerin can sıkıntısından kazıdığı resimler vardır: gemiler, atlar ve bir tanesinde de çok büyük bir peynir. Batıya dönük kulede durun. Gün batımında güneş tam karşıdaki tepenin ardına iner ve surların taşları kızıla boyanır. Bu anlatım uygulamayı denemek içindir; burada anlatılanlar gerçek bir yere ait değildir.",
+          "narrationShort": "Surların bu bölümü örnek hikayede kentin en eski parçasıdır. Surlar hiç büyük bir kuşatma görmemiş, kentliler bu yüzden onlara gülümseyerek bakar. Yürüyüş yolunda her yüz adımda bir gözetleme kulesi var; duvarlarda nöbetçilerin kazıdığı gemi, at ve kocaman bir peynir resmi görülür. Batıya bakan kulede durup gün batımını bekleyin. Bu anlatım örnektir.",
+          "narration": "Kent surlarının bu bölümü, örnek hikayede kentin en eski parçasıdır. Surlar pazarı ve evleri korumak için yapılmış, ama hiçbir zaman büyük bir kuşatma görmemiş. Kentliler bu yüzden surlara biraz da gülümseyerek bakar. Surun üstündeki yürüyüş yolunu izleyin. Her yüz adımda bir küçük gözetleme kulesi göreceksiniz. Kulelerin duvarlarında nöbetçilerin can sıkıntısından kazıdığı resimler vardır: gemiler, atlar ve bir tanesinde de çok büyük bir peynir. Batıya dönük kulede durun. Gün batımında güneş tam karşıdaki tepenin ardına iner ve surların taşları kızıla boyanır. Bu anlatım uygulamayı denemek içindir; burada anlatılanlar gerçek bir yere ait değildir.\n\nSur kapısının kemerine yakından bakın. Taşların bazılarında küçük işaretler vardır: bir çekiç, bir yıldız, bir anahtar. Bunlar taşı yontan ustaların imzasıdır. Her usta yonttuğu taşa kendi işaretini kazır, ödemesini de işaret sayısına göre alırmış. Kaç farklı işaret bulabileceğinize bakın; sonra yolumuza tepeye doğru devam edeceğiz.",
           "practicalLine": "Surun üstü rüzgarlı; kaygan taşlara dikkat.",
           "legToNext": {
             "mode": "drive",
@@ -1258,7 +1294,8 @@
             }
           ],
           "verifiedAt": "2026-11-11",
-          "narration": "Bu teras kentin en yüksek noktasıdır ve günü bitirmek için seçildi. Örnek hikayeye göre burada bir zamanlar rüzgar değirmeni varmış; pazarın unu burada öğütülürmüş. Değirmen yıkılmış ama taşları terasın duvarına örülmüş. Duvarın üstündeki yuvarlak taşı bulun; değirmenin eski taşıdır. Buradan bakınca gün boyunca gezdiğiniz yerleri tek tek seçebilirsiniz: meydan, saat kulesi, köprü ve surlar. Akşam ışıkları yanmaya başlayınca kentin iki derenin arasına nasıl sıkıştığını daha iyi görürsünüz. Rüzgar sert eser, yanınıza bir hırka alın. Bu anlatım örnektir; uygulamanın sesli anlatımını denemeniz için yazıldı.",
+          "narrationShort": "Bu teras kentin en yüksek noktası ve günü bitirmek için seçildi. Burada eskiden bir rüzgar değirmeni varmış; değirmenin yuvarlak taşı bugün terasın duvarına örülü durur. Buradan gün boyu gezdiğiniz yerleri tek tek seçebilirsiniz: meydan, kule, köprü ve surlar. Rüzgar serttir, bir hırka alın ve akşam ışıklarının yanışını izleyin. Bu anlatım örnektir.",
+          "narration": "Bu teras kentin en yüksek noktasıdır ve günü bitirmek için seçildi. Örnek hikayeye göre burada bir zamanlar rüzgar değirmeni varmış; pazarın unu burada öğütülürmüş. Değirmen yıkılmış ama taşları terasın duvarına örülmüş. Duvarın üstündeki yuvarlak taşı bulun; değirmenin eski taşıdır. Buradan bakınca gün boyunca gezdiğiniz yerleri tek tek seçebilirsiniz: meydan, saat kulesi, köprü ve surlar. Akşam ışıkları yanmaya başlayınca kentin iki derenin arasına nasıl sıkıştığını daha iyi görürsünüz. Rüzgar sert eser, yanınıza bir hırka alın. Bu anlatım örnektir; uygulamanın sesli anlatımını denemeniz için yazıldı.\n\nGünün sonunda buraya gelmek bir gelenektir. Kentliler gün batımını izlemek için yanlarında küçük bir şişe ve bir parça peynirle gelir, kimse konuşmaz. Güneş tepenin ardında kaybolunca biri alkışlamaya başlar, ötekiler de katılır. Siz de bu sessiz törene katılın. Yarın başka bir kentte olsanız bile bu alkışı hatırlayacaksınız.",
           "practicalLine": "Gün batımından yarım saat önce orada olun.",
           "legToNext": null
         }
@@ -1951,6 +1988,16 @@
   ],
   "verifiedAt": "2026-11-11",
   "notes": "ÖRNEK veri. Gerçek mekan değildir.",
+  "pronunciations": [
+    {
+      "text": "Mercato",
+      "say": "Merkato"
+    },
+    {
+      "text": "Piazza",
+      "say": "Piyatsa"
+    }
+  ],
   "lodging": {
     "name": "ÖRNEK Dere Oteli",
     "address": "ÖRNEK Dere Caddesi No: 7, ÖRNEK Kent",

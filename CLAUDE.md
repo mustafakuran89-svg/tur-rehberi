@@ -22,9 +22,10 @@ Piri'nin adı, logosu, metinleri, ses kayıtları ve ekran tasarımı kopyalanma
 | `REHBER-PROMPTU.md` | Plan kurallarının yazılı hali | Kural denetimine ve plan mantığına dokunmadan önce |
 | `ADIMLAR.md` | İş emri: özerk çalışma kuralları, aşamalar, teslim | Her aşamanın başında |
 | `GELISTIRME-2.md` | İkinci tur iş emri (profesyonel sürüm, Aşama A–G) | Geliştirme 2 işlerinde |
-| `plan.schema.json` | Plan dosyasının sözleşmesi (sürüm 2; sürüm 1 dosyaları da geçerli); değiştirilmez | Plan modeline dokunmadan önce |
+| `GELISTIRME-3.md` | Üçüncü tur iş emri (rehber anlatımı, bölüm videosu, tam çevrimdışı; Aşama A–E) | Geliştirme 3 işlerinde |
+| `plan.schema.json` | Plan dosyasının sözleşmesi (sürüm 3; sürüm 1 ve 2 dosyaları da geçerli); değiştirilmez | Plan modeline dokunmadan önce |
 
-İş sırasında üretilen dosyalar: `ILERLEME.md` (hangi aşama bitti, sırada ne var), `TESLIM.md` (ilk sürüm teslim notu) ve `TESLIM-2.md` (Geliştirme 2 teslim notu).
+İş sırasında üretilen dosyalar: `ILERLEME.md` (hangi aşama bitti, sırada ne var), `TESLIM.md` (ilk sürüm teslim notu) ve `TESLIM-2.md` (Geliştirme 2 teslim notu), `TESLIM-3.md` (Geliştirme 3 teslim notu).
 
 ## Ortam
 
@@ -72,6 +73,10 @@ Kütüphane sürümlerini, tarayıcı desteğini ve servis koşullarını ezberd
 9. Arayüz Türkçedir; ekrandaki tüm metinler tek bir çeviri dosyasında tutulur. Kod, değişken adları ve commit mesajları İngilizce olabilir.
 10. Sayı ve tarih biçimi Türkçedir: 1.234,50 TL, 14.05.2027, %20.
 11. Uygulama bilgi uydurmaz. Yol tarifi, bilet ve ücret bilgisi, Michelin derecesi, etkinlik ve rezervasyon bağlantısı için uygulama yalnızca planla geleni gösterir; bunları kendisi üretmez ve tahmin etmez. Canlı yön için kullanıcı Haritalar'a devredilir.
+12. YouTube içeriği yalnızca YouTube'un kendi oynatıcısıyla gösterilir. Video cihaza indirilmez, kesilip saklanmaz, başka yerde yayımlanmaz (Geliştirme 3).
+13. Gerçek bir kişinin sesi taklit edilmez. Uygulama yalnızca cihazın hazır seslerini kullanır.
+14. Harita verisi yalnızca sağlayıcısının koşullarının izin verdiği yoldan indirilir. Çevrimdışı harita bölge dosyaları depodaki iş akışında açık lisanslı arşivden çıkarılır ve siteyle yayımlanır (`haritalar/bolgeler.json`).
+15. Ücretli servis yasağı ve anahtar kuralı (kural 1) sürer.
 
 ## Çalışma biçimi
 

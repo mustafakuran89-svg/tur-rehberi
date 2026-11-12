@@ -16,13 +16,13 @@ describe('şema sürüm 2', () => {
     expect(validatePlan(v1).ok).toBe(true);
     const r = processImportText(JSON.stringify(v1));
     expect(r.kind).toBe('trips');
-    // sürüm 1 örneğinde rezervasyonu şart mekanda bağlantı ve telefon yok: yalnız yeni uyarı çıkar
-    if (r.kind === 'trips') expect([...new Set(r.items[0].warnings.map((w) => w.rule))]).toEqual(['booking-contact']);
+    // sürüm 1 örneğinde rezervasyonu şart mekanda bağlantı ve telefon yok; kısa anlatım alanı da yok (sürüm 3 uyarıları)
+    if (r.kind === 'trips') expect([...new Set(r.items[0].warnings.map((w) => w.rule))].sort()).toEqual(['booking-contact', 'narration-length', 'narration-short-missing']);
   });
   it('sürüm 2 örneği geçer ve yeni alanları taşır', () => {
     expect(validatePlan(sample).ok).toBe(true);
     const t = clone();
-    expect(t.schemaVersion).toBe(2);
+    expect(t.schemaVersion).toBe(3);
     expect(t.lodging?.name).toContain('ÖRNEK');
     expect(t.arrival?.steps.length).toBeGreaterThan(0);
     expect(t.departure?.leaveBy).toBeTruthy();
@@ -43,9 +43,9 @@ describe('şema sürüm 2', () => {
     expect(t.arrival?.flight).toContain('ÖRNEK');
     expect(t.departure?.flight).toContain('ÖRNEK');
   });
-  it('sürüm 3 reddedilir', () => {
+  it('sürüm 4 reddedilir', () => {
     const t = clone() as unknown as { schemaVersion: number };
-    t.schemaVersion = 3;
+    t.schemaVersion = 4;
     expect(validatePlan(t).ok).toBe(false);
   });
 });

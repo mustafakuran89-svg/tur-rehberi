@@ -6,7 +6,8 @@ import type { Trip } from '../plan/types';
 import { getTrip, requestPersist, saveImported } from '../lib/store';
 import { diffIsEmpty, diffPlans } from '../plan/diff';
 import { saveSharedUser } from '../lib/share';
-import type { UserState } from '../lib/userState';
+import { normalizeUserState, putUserState, type UserState } from '../lib/userState';
+import { getSettings, migrateSettings, setSettings, type Settings } from '../lib/settings';
 import { formatDate } from '../lib/format';
 import { go, href, paths } from '../lib/router';
 import { Confirm, Header } from '../components/ui';
@@ -23,6 +24,7 @@ export function ImportScreen() {
   const [busy, setBusy] = useState(false);
   const [lastId, setLastId] = useState<string | null>(null);
   const sharedRef = useRef<Partial<UserState> | undefined>(undefined);
+  const backupRef = useRef<{ users?: UserState[]; settings?: Partial<Settings> } | null>(null);
   const navTimer = useRef<number | null>(null);
   // Ekrandan çıkılınca bekleyen yönlendirme iptal edilir (yoksa başka ekrandayken geri döndürür).
   useEffect(() => () => {
@@ -52,6 +54,12 @@ export function ImportScreen() {
       }
     }
     if (fromBackup) msgs.push(tr.importer.backupSaved(items.length));
+    if (fromBackup && backupRef.current) {
+      const { users, settings } = backupRef.current;
+      for (const u of users ?? []) await putUserState(normalizeUserState(u));
+      if (settings) setSettings(migrateSettings({ ...getSettings(), ...settings }));
+      backupRef.current = null;
+    }
     if (sharedRef.current && last) {
       await saveSharedUser(last.id, sharedRef.current);
       msgs.push(tr.share.imported);
@@ -78,6 +86,7 @@ export function ImportScreen() {
         return;
       }
       sharedRef.current = r.sharedUser;
+      backupRef.current = r.fromBackup ? { users: r.backupUsers, settings: r.backupSettings } : null;
       // Aynı kimlikli gezi varsa önce sor
       for (const it of r.items) {
         const ex = await getTrip(it.trip.id);

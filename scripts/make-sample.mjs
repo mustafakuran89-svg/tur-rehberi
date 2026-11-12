@@ -1,4 +1,4 @@
-// Örnek gezi üreticisi (şema sürüm 2). Çıktı: src/sample/ornek-plan.json
+// Örnek gezi üreticisi (şema sürüm 3). Çıktı: src/sample/ornek-plan.json
 // Sürüm 2 alanlarında da uydurma bilgi gerçek gibi sunulmaz: Michelin derecesi, etkinlik, uçuş,
 // otel ve rezervasyon bağlantısı ÖRNEK etiketlidir ve example.com adreslerine gider. Görseller
 // Wikimedia Commons'tan alınmış gerçek, özgür lisanslı genel fotoğraflardır (eser sahibi ve lisans).
@@ -91,20 +91,60 @@ const N = {
     'Bu teras kentin en yüksek noktasıdır ve günü bitirmek için seçildi. Örnek hikayeye göre burada bir zamanlar rüzgar değirmeni varmış; pazarın unu burada öğütülürmüş. Değirmen yıkılmış ama taşları terasın duvarına örülmüş. Duvarın üstündeki yuvarlak taşı bulun; değirmenin eski taşıdır. Buradan bakınca gün boyunca gezdiğiniz yerleri tek tek seçebilirsiniz: meydan, saat kulesi, köprü ve surlar. Akşam ışıkları yanmaya başlayınca kentin iki derenin arasına nasıl sıkıştığını daha iyi görürsünüz. Rüzgar sert eser, yanınıza bir hırka alın. Bu anlatım örnektir; uygulamanın sesli anlatımını denemeniz için yazıldı.',
 };
 
+// Sürüm 3: uzun anlatım ana durakta 120-300 kelime. Her anlatıma rehber ağzıyla ikinci bir paragraf eklenir.
+const EK = {
+  meydan: 'Şimdi biraz da meydanın gündelik hayatına bakalım. Sabah erkenden fırının kepengi açılır, revakların altına masalar dizilir ve meydan yavaş yavaş dolar. Öğleye doğru gölge daralır, insanlar çeşmenin çevresine toplanır. Burada acele eden kimseyi görmezsiniz. Siz de bir süre durun, sesleri ayırmaya çalışın: su, adımlar, uzaktan bir çan.',
+  kule: 'Kulenin bir de saatçisi varmış. Her sabah merdivenleri tırmanıp saati kurar, sonra pencereden meydana bakıp herkese günaydın dermiş. Kent onu öyle sevmiş ki ölünce kadranın altına küçük bir anahtar oydurmuşlar. Kadranın hemen altındaki anahtar biçimindeki oyuğu arayın; bulursanız bu hikayenin geri kalanını siz tamamlayabilirsiniz.',
+  muze: 'Müzeden çıkmadan önce kapının yanındaki konuk defterine bir göz atın. Yüzlerce el yazısı, yüzlerce dilde aynı şeyi söyler: buraya küçük bir yer sanarak girip daha büyük bir hikayeyle çıkmışlar. Siz de bir satır yazabilirsiniz. Sonra avluya dönüp limon ağacının gölgesinde bir dakika soluklanın; sıradaki durak birkaç dakika uzakta.',
+  bahce: 'Bahçenin en sessiz köşesi havuzun arkasındaki küçük çardaktır. Keşişler orada dua eder, kitap okur, bazen de yalnızca kuşları dinlermiş. Çardağın direklerine sarılan asma her yaz yeniden yeşerir. Oradan bakınca manastırın eski çan kulesini ağaçların arasından seçebilirsiniz. Günün ilk bölümü burada biter; dinlenip suyunuzu tazeleyin.',
+  kopru: 'Köprünün iki ucunda birer taş aslan bekler. Biri suya, öteki kente bakar. Kentliler suya bakan aslanın selleri, kente bakanın da hırsızları gözlediğini söyler. Köprüden inerken aslanlardan birinin pençesine dokunun; buranın geleneğine göre dokunan kişi bu kente bir gün yeniden gelir. Bu da örnek hikayenin bir parçasıdır.',
+  pazar: 'Pazarın asıl ruhunu satıcılarla konuşunca anlarsınız. Yerliler buraya Mercato der ve her tezgahın bir ailenin adını taşıdığını bilir. Bir peynirciye hangi köyden geldiğini sorun; büyük olasılıkla size bir dilim tattırıp uzun bir hikaye anlatacaktır. Fiyat sormaktan çekinmeyin, ama pazarlık burada pek alışılmış değildir.',
+  surlar: 'Sur kapısının kemerine yakından bakın. Taşların bazılarında küçük işaretler vardır: bir çekiç, bir yıldız, bir anahtar. Bunlar taşı yontan ustaların imzasıdır. Her usta yonttuğu taşa kendi işaretini kazır, ödemesini de işaret sayısına göre alırmış. Kaç farklı işaret bulabileceğinize bakın; sonra yolumuza tepeye doğru devam edeceğiz.',
+  teras: 'Günün sonunda buraya gelmek bir gelenektir. Kentliler gün batımını izlemek için yanlarında küçük bir şişe ve bir parça peynirle gelir, kimse konuşmaz. Güneş tepenin ardında kaybolunca biri alkışlamaya başlar, ötekiler de katılır. Siz de bu sessiz törene katılın. Yarın başka bir kentte olsanız bile bu alkışı hatırlayacaksınız.',
+};
+for (const k of Object.keys(EK)) N[k] += '\n\n' + EK[k];
+
+// Kısa anlatım: kendi başına dinlenen 50-70 kelimelik rehber anlatımı (uzun anlatımın ilk cümleleri değil).
+const KISA = {
+  muze: 'Bu küçük müze uydurma kentin hikayesini eşyalarla anlatır. İlk salonda pazar günlerinden kalan tartılar ve resmi ölçü kapları durur; tüccarlar birbirine güvenmediği için ölçüler burada saklanırmış. İkinci salondaki büyük haritada kent iki derenin arasında küçük bir adaya benzer. Köşedeki imzanın yanında küçük bir balık resmi var, onu bulmaya çalışın. Bu anlatım örnektir.',
+  bahce: 'Burası bir zamanlar manastırın sebze bahçesiymiş. Keşişler pazara satılacak otları burada yetiştirirmiş; fesleğen ve kekik hala kenarlarda kendiliğinden büyür. Yolu izleyip ilk kavşakta sola dönün, taş havuza varacaksınız. Kenar taşlarındaki harfler bahçede çalışan ailelerin baş harfleridir. Bir banka oturun ve kentin uğultusunun ne kadar uzaktan geldiğini dinleyin. Bu anlatım örnektir.',
+  kopru: 'Eski köprü iki dereden büyüğünün üzerinden geçer. Hikayeye göre köprüden önce dereyi salla geçerlermiş; işsiz kalan salcıya köprünün ortasındaki küçük ev verilmiş, bugün orası bir dondurmacı. Korkuluklardaki çentikler her yıl ilk selin yüksekliğini gösterir. En yüksek çentiği bulun; o yıl suyun köprünün üstünden aştığı anlatılır. Bu anlatım örnektir.',
+  pazar: 'Kapalı pazar, meydandaki açık pazarın çatı altına girmiş halidir. Sabah balıkçılar, öğleye doğru peynirciler ve fırıncılar tezgah açar. Her koridorun kendi kokusu vardır: sağda taze ekmek, solda olgun peynir. Ortadaki tezgahta yerel zeytinyağlarını tadabilirsiniz. Tavandaki eski fenerlere bakmayı unutmayın, çıkışta ayakta bir kahve için. Bu anlatım örnektir.',
+  surlar: 'Surların bu bölümü örnek hikayede kentin en eski parçasıdır. Surlar hiç büyük bir kuşatma görmemiş, kentliler bu yüzden onlara gülümseyerek bakar. Yürüyüş yolunda her yüz adımda bir gözetleme kulesi var; duvarlarda nöbetçilerin kazıdığı gemi, at ve kocaman bir peynir resmi görülür. Batıya bakan kulede durup gün batımını bekleyin. Bu anlatım örnektir.',
+  teras: 'Bu teras kentin en yüksek noktası ve günü bitirmek için seçildi. Burada eskiden bir rüzgar değirmeni varmış; değirmenin yuvarlak taşı bugün terasın duvarına örülü durur. Buradan gün boyu gezdiğiniz yerleri tek tek seçebilirsiniz: meydan, kule, köprü ve surlar. Rüzgar serttir, bir hırka alın ve akşam ışıklarının yanışını izleyin. Bu anlatım örnektir.',
+};
+
+// Bölümlü video örneği: gerçek değildir, ÖRNEK etiketlidir. Kimlik uydurmadır; oynatıcı açılırsa "video yok" der.
+const VIDEO_ORNEK = {
+  youtubeId: 'ORNEKvideo1',
+  title: 'ÖRNEK video: ÖRNEK Kent gezisi (gerçek bir video değildir)',
+  channel: 'ÖRNEK Rehber Kanalı',
+  channelId: null,
+  language: 'tr',
+  durationSeconds: 2460,
+  likeCount: null,
+  viewCount: null,
+  checkedAt: V,
+  source: 'plan',
+  startSeconds: 754,
+  endSeconds: 1032,
+  chapterTitle: 'ÖRNEK Eski Köprü',
+};
+
 const day1Stops = [
-  stop(1, 'Pazar Meydanı', 'main', at(0, 0), { closedDays: null, closedWeekdays: [], fee: 'Ücretsiz', openHours: 'Her saat açık', narrationShort: 'Bu meydan uydurma bir kentin uydurma kalbidir. Kent, iki dere arasındaki düzlükte kurulan haftalık pazarla doğdu; ortadaki taş çeşmenin pazarın ilk günlerinden kaldığı anlatılır. Kemerli revaklara, yerdeki koyu taşlara ve saat kulesinin altındaki küçük kapıya bakın. Sonraki durağa o kapının önünden geçeceğiz. Bu anlatım örnektir.', lookFor: ['Ortadaki taş çeşme', 'Yerdeki koyu renkli taşlar: eski tezgahların yeri', 'Saat kulesinin altındaki küçük kapı'], videoQuery: 'tarihi pazar meydanı belgesel', narration: N.meydan, practicalLine: 'En iyi sabah dokuzdan önce; çeşmenin suyu içilebilir.', legToNext: { mode: 'walk', minutes: 6, approx: false } }),
-  stop(2, 'Saat Kulesi', 'main', at(320, 180), { hours: notMon(['09:00', '18:00']), ticketUrl: 'https://example.com/ornek/kule-bileti', website: 'https://example.com/ornek/saat-kulesi', ticketOrBooking: 'Saatli bilet; ÖRNEK bilet sayfasından alınır.', narrationShort: 'Saat kulesi, rivayete göre uzak limanlardan dönen bir tüccarın kente armağanıdır. Önce ahşaptan yapılmış, yangından sonra taşla yeniden kurulmuş. Kadranda rakam yerine on iki ayın işini anlatan kabartmalar vardır. Merdiven dar; tırabzana tutunun. Bu anlatım örnektir.', lookFor: ['Kadrandaki on iki kabartma', 'Tepeden kırmızı kiremitli çatılar', 'Çatılar arasında iki derenin izi'], videoQuery: 'saat kulesi tarihi belgesel', wikipediaTr: 'Saat kulesi', images: [IMG_TOWER], narration: N.kule, practicalLine: 'Merdiven dar; 20 dakika ayırın, çantayı aşağıda bırakın.', legToNext: { mode: 'walk', minutes: null, approx: false } }),
-  stop(3, 'Kent Müzesi', 'main', at(560, -120), { hours: notMon(['10:00', '17:30']), website: 'https://example.com/ornek/kent-muzesi', phone: FAKE_PHONE, lookFor: ['İlk salondaki ölçü kapları', 'Büyük haritadaki imza ve balık resmi'], narration: N.muze, practicalLine: 'Bilet girişte alınır; müze pazartesi kapalı.', legToNext: { mode: 'walk', minutes: null, approx: false } }),
+  stop(1, 'Pazar Meydanı', 'main', at(0, 0), { altNames: ['ÖRNEK Pazar Alanı', 'ÖRNEK Piazza del Mercato'], closedDays: null, closedWeekdays: [], fee: 'Ücretsiz', openHours: 'Her saat açık', narrationShort: 'Bu meydan uydurma bir kentin uydurma kalbidir. Kent, iki dere arasındaki düzlükte kurulan haftalık pazarla doğdu; ortadaki taş çeşmenin pazarın ilk günlerinden kaldığı anlatılır. Kemerli revaklara, yerdeki koyu taşlara ve saat kulesinin altındaki küçük kapıya bakın. Sonraki durağa o kapının önünden geçeceğiz. Bu anlatım örnektir.', lookFor: ['Ortadaki taş çeşme', 'Yerdeki koyu renkli taşlar: eski tezgahların yeri', 'Saat kulesinin altındaki küçük kapı'], videoQuery: 'tarihi pazar meydanı belgesel', narration: N.meydan, practicalLine: 'En iyi sabah dokuzdan önce; çeşmenin suyu içilebilir.', legToNext: { mode: 'walk', minutes: 6, approx: false } }),
+  stop(2, 'Saat Kulesi', 'main', at(320, 180), { altNames: ['ÖRNEK Torre dell Orologio', 'ÖRNEK Kule'], hours: notMon(['09:00', '18:00']), ticketUrl: 'https://example.com/ornek/kule-bileti', website: 'https://example.com/ornek/saat-kulesi', ticketOrBooking: 'Saatli bilet; ÖRNEK bilet sayfasından alınır.', narrationShort: 'Saat kulesi, rivayete göre uzak limanlardan dönen bir tüccarın kente armağanıdır. Önce ahşaptan yapılmış, yangından sonra taşla yeniden kurulmuş. Kadranda rakam yerine on iki ayın işini anlatan kabartmalar vardır. Merdiven dar; tırabzana tutunun. Tepeye çıkınca kırmızı çatılara ve iki derenin izine bakın. Bu anlatım örnektir.', lookFor: ['Kadrandaki on iki kabartma', 'Tepeden kırmızı kiremitli çatılar', 'Çatılar arasında iki derenin izi'], videoQuery: 'saat kulesi tarihi belgesel', wikipediaTr: 'Saat kulesi', images: [IMG_TOWER], narration: N.kule, practicalLine: 'Merdiven dar; 20 dakika ayırın, çantayı aşağıda bırakın.', legToNext: { mode: 'walk', minutes: null, approx: false } }),
+  stop(3, 'Kent Müzesi', 'main', at(560, -120), { narrationShort: KISA.muze, hours: notMon(['10:00', '17:30']), website: 'https://example.com/ornek/kent-muzesi', phone: FAKE_PHONE, lookFor: ['İlk salondaki ölçü kapları', 'Büyük haritadaki imza ve balık resmi'], narration: N.muze, practicalLine: 'Bilet girişte alınır; müze pazartesi kapalı.', legToNext: { mode: 'walk', minutes: null, approx: false } }),
   stop(4, 'Çeşme Sokağı', 'minor', at(800, 60), { narration: 'Bu dar sokak, adını sokağın başındaki küçük çeşmeden alır. Örnek bir duraktır. Çeşmenin üstündeki aslan başına dikkat edin, ağzından değil kulağından su akar.', practicalLine: 'Fotoğraf için öğleden önce gelin.', visitMinutes: 15, closedDays: null, closedWeekdays: [], fee: null, legToNext: { mode: 'walk', minutes: null, approx: false } }),
-  stop(5, 'Manastır Bahçesi', 'main', at(1050, 320), { narration: N.bahce, practicalLine: 'Gölgelik az; şapka ve su alın.', legToNext: null }),
+  stop(5, 'Manastır Bahçesi', 'main', at(1050, 320), { narrationShort: KISA.bahce, narration: N.bahce, practicalLine: 'Gölgelik az; şapka ve su alın.', legToNext: null }),
 ];
 
 const day2Stops = [
-  stop(1, 'Eski Köprü', 'main', at(-300, -250), { narration: N.kopru, practicalLine: 'Köprü her saat açık; sabah erken sakin.', closedDays: null, closedWeekdays: [], fee: 'Ücretsiz', legToNext: { mode: 'walk', minutes: 7, approx: false } }),
-  stop(2, 'Kapalı Pazar', 'main', at(-520, 30), { narration: N.pazar, practicalLine: 'Öğleden önce gelin; nakit getirin.', closedDays: 'Pazar', closedWeekdays: ['sun'], fee: 'Ücretsiz', legToNext: { mode: 'walk', minutes: null, approx: false } }),
+  stop(1, 'Eski Köprü', 'main', at(-300, -250), { narrationShort: KISA.kopru, altNames: ['ÖRNEK Ponte Vecchio di Esempio'], videos: [VIDEO_ORNEK], narration: N.kopru, practicalLine: 'Köprü her saat açık; sabah erken sakin.', closedDays: null, closedWeekdays: [], fee: 'Ücretsiz', legToNext: { mode: 'walk', minutes: 7, approx: false } }),
+  stop(2, 'Kapalı Pazar', 'main', at(-520, 30), { narrationShort: KISA.pazar, altNames: ['ÖRNEK Mercato Coperto'], narration: N.pazar, practicalLine: 'Öğleden önce gelin; nakit getirin.', closedDays: 'Pazar', closedWeekdays: ['sun'], fee: 'Ücretsiz', legToNext: { mode: 'walk', minutes: null, approx: false } }),
   stop(3, 'Gizli Avlu', 'minor', null, { narration: 'Bu avlunun koordinatı bilerek boş bırakıldı; uygulama onu haritaya koymaz, adresiyle listeler. Örnek bir duraktır.', practicalLine: 'Koordinatı olmayan yerlerin nasıl göründüğünü gösterir.', visitMinutes: 15, closedDays: null, closedWeekdays: [], fee: null, legToNext: { mode: 'walk', minutes: 8, approx: false } }),
-  stop(4, 'Sur Kapısı', 'main', at(-900, 350), { narration: N.surlar, practicalLine: 'Surun üstü rüzgarlı; kaygan taşlara dikkat.', legToNext: { mode: 'drive', minutes: null, approx: false } }),
-  stop(5, 'Tepe Terası', 'main', at(-1900, 1400), { narration: N.teras, practicalLine: 'Gün batımından yarım saat önce orada olun.', closedDays: null, closedWeekdays: [], fee: 'Ücretsiz', bestTime: 'Gün batımı', legToNext: null }),
+  stop(4, 'Sur Kapısı', 'main', at(-900, 350), { narrationShort: KISA.surlar, narration: N.surlar, practicalLine: 'Surun üstü rüzgarlı; kaygan taşlara dikkat.', legToNext: { mode: 'drive', minutes: null, approx: false } }),
+  stop(5, 'Tepe Terası', 'main', at(-1900, 1400), { narrationShort: KISA.teras, narration: N.teras, practicalLine: 'Gün batımından yarım saat önce orada olun.', closedDays: null, closedWeekdays: [], fee: 'Ücretsiz', bestTime: 'Gün batımı', legToNext: null }),
 ];
 
 const breakfasts = (base) => [
@@ -218,7 +258,7 @@ const phrases = [
 ].map(([original, pronunciationTr, meaning, context]) => ({ original, script: null, pronunciationTr, meaning, context }));
 
 const plan = {
-  schemaVersion: 2,
+  schemaVersion: 3,
   id: 'ornek-gezi',
   title: 'ÖRNEK Gezi: İki Günde ÖRNEK Kent',
   destinations: ['ÖRNEK Kent'],
@@ -259,6 +299,10 @@ const plan = {
   ],
   verifiedAt: V,
   notes: 'ÖRNEK veri. Gerçek mekan değildir.',
+  pronunciations: [
+    { text: 'Mercato', say: 'Merkato' },
+    { text: 'Piazza', say: 'Piyatsa' },
+  ],
   lodging: {
     name: 'ÖRNEK Dere Oteli',
     address: 'ÖRNEK Dere Caddesi No: 7, ÖRNEK Kent',

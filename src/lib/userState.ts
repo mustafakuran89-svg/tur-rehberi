@@ -24,10 +24,12 @@ export interface UserState {
   booked: Record<string, BookingMark>;
   going: Record<string, boolean>; // etkinlik anahtarı → gidiyorum
   transferDone: { arrival: number[]; departure: number[] };
+  // sürüm 3: "Başlangıcı ayarla" ile elle seçilen video başlangıcı (durak anahtarı → video ve saniye)
+  videoStarts: Record<string, { youtubeId: string; start: number }>;
 }
 
 export function emptyUserState(tripId: string): UserState {
-  return { tripId, visited: {}, notes: {}, ratings: {}, pins: {}, videos: {}, hiddenImages: {}, booked: {}, going: {}, transferDone: { arrival: [], departure: [] } };
+  return { tripId, visited: {}, notes: {}, ratings: {}, pins: {}, videos: {}, hiddenImages: {}, booked: {}, going: {}, transferDone: { arrival: [], departure: [] }, videoStarts: {} };
 }
 
 /** Eksik alanları tamamlar (eski ya da paylaşımla gelen kayıtlar için). */

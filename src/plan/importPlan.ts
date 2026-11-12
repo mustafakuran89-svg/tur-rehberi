@@ -6,10 +6,11 @@ import type { Trip } from './types';
 import { isBackup } from '../lib/store';
 import { isShare } from '../lib/share';
 import type { UserState } from '../lib/userState';
+import type { Settings } from '../lib/settings';
 
 export type ImportResult =
   | { kind: 'error'; message: string; problems: SchemaProblem[] }
-  | { kind: 'trips'; items: { trip: Trip; warnings: RuleWarning[]; filled: number }[]; fromBackup: boolean; sharedUser?: Partial<UserState> };
+  | { kind: 'trips'; items: { trip: Trip; warnings: RuleWarning[]; filled: number }[]; fromBackup: boolean; sharedUser?: Partial<UserState>; backupUsers?: UserState[]; backupSettings?: Partial<Settings> };
 
 export function processImportText(text: string): ImportResult {
   const parsed = parsePlanText(text);
@@ -31,5 +32,8 @@ export function processImportData(data: unknown): ImportResult {
     const { trip, filled } = fillLegDurations(v.trip);
     items.push({ trip, warnings: checkPlan(trip), filled });
   }
-  return { kind: 'trips', items, fromBackup, sharedUser: shared?.user };
+  const b = fromBackup ? (data as { users?: unknown; settings?: unknown }) : null;
+  const backupUsers = Array.isArray(b?.users) ? (b.users as UserState[]).filter((u) => u && typeof u.tripId === 'string') : undefined;
+  const backupSettings = b?.settings && typeof b.settings === 'object' ? (b.settings as Partial<Settings>) : undefined;
+  return { kind: 'trips', items, fromBackup, sharedUser: shared?.user, backupUsers, backupSettings };
 }

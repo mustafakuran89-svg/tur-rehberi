@@ -110,6 +110,8 @@ export interface Stop {
   videos?: Video[];
   wikipediaTr?: string | null;
   images?: PlanImage[];
+  // sürüm 3
+  altNames?: string[];
 }
 
 /** SS:DD; gece yarısından sonraki kapanış 24:00-29:59. */
@@ -128,6 +130,16 @@ export interface Video {
   checkedAt?: ISODate | null;
   source: 'plan' | 'auto' | 'manual';
   pinned?: boolean;
+  // sürüm 3
+  channelId?: string | null;
+  startSeconds?: number | null;
+  endSeconds?: number | null;
+  chapterTitle?: string | null;
+}
+
+export interface Pronunciation {
+  text: string;
+  say: string;
 }
 
 export interface PlanImage {
@@ -278,7 +290,7 @@ export interface Day {
 }
 
 export interface Trip {
-  schemaVersion: 1 | 2;
+  schemaVersion: 1 | 2 | 3;
   id: string;
   title: string;
   destinations: string[];
@@ -299,4 +311,6 @@ export interface Trip {
   lodging?: Lodging | null;
   arrival?: Transfer | null;
   departure?: Transfer | null;
+  // sürüm 3
+  pronunciations?: Pronunciation[];
 }

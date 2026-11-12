@@ -2,6 +2,8 @@
 import { openDB, type IDBPDatabase } from 'idb';
 import type { Trip } from '../plan/types';
 import sampleJson from '../sample/ornek-plan.json';
+import { getUserState, type UserState } from './userState';
+import { getSettings, type Settings } from './settings';
 
 export const SAMPLE_KEY = '__ornek__';
 
@@ -20,13 +22,15 @@ const DB_NAME = 'tur-rehberi';
 let dbp: Promise<IDBPDatabase> | null = null;
 
 // Sürüm 2: 'user' (kullanıcı durumu, planla ayrı) ve 'cache' (video, galeri, hava, görsel önbelleği).
+// Sürüm 3: 'regions' (çevrimdışı harita bölge dosyaları, bayt dizisi olarak).
 export function db(): Promise<IDBPDatabase> {
   if (!dbp) {
-    dbp = openDB(DB_NAME, 2, {
+    dbp = openDB(DB_NAME, 3, {
       upgrade(d) {
         if (!d.objectStoreNames.contains('trips')) d.createObjectStore('trips', { keyPath: 'key' });
         if (!d.objectStoreNames.contains('user')) d.createObjectStore('user', { keyPath: 'tripId' });
         if (!d.objectStoreNames.contains('cache')) d.createObjectStore('cache', { keyPath: 'key' });
+        if (!d.objectStoreNames.contains('regions')) d.createObjectStore('regions', { keyPath: 'id' });
       },
     });
   }
@@ -120,11 +124,16 @@ export interface Backup {
   format: typeof BACKUP_FORMAT;
   createdAt: string;
   trips: Trip[];
+  // sürüm 3: kullanıcı durumu ve cihaz ayarları (ses, kanal listesi, sonra izle). YouTube anahtarı girmez.
+  users?: UserState[];
+  settings?: Partial<Settings>;
 }
 
 export async function makeBackup(): Promise<Backup> {
-  const recs = await listTrips();
-  return { format: BACKUP_FORMAT, createdAt: new Date().toISOString(), trips: recs.filter((r) => !r.isSample).map((r) => r.trip) };
+  const recs = (await listTrips()).filter((r) => !r.isSample);
+  const users: UserState[] = [];
+  for (const r of recs) users.push(await getUserState(r.trip.id));
+  return { format: BACKUP_FORMAT, createdAt: new Date().toISOString(), trips: recs.map((r) => r.trip), users, settings: { ...getSettings() } };
 }
 
 export function isBackup(x: unknown): x is Backup {

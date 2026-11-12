@@ -48,3 +48,24 @@ B–F aynı oturumda birbirine bağlı yazıldığı için tek commit'te topland
 ## Sırada
 
 Gerçek iPhone'da `TESLIM-2.md` bölüm 4'teki 14 madde. Sonraki geliştirmeler `TESLIM-2.md` bölüm 9'da.
+
+## Geliştirme 3
+
+İş emri: `GELISTIRME-3.md`. Başlangıç noktası: `v2.0` etiketi (var; Geliştirme 2 baştan yapılmadı). Şema sürüm 3'e geçti (`plan.schema.json`, yalnız isteğe bağlı alanlar eklendi).
+
+### Bildirilen çevrimdışı sorunun nedeni (otomatik testte yeniden üretildi)
+
+Test: `e2e/repro-offline.spec.ts`, Chromium ve WebKit, v2.0 kodu. Gezi hazırlandı (OpenFreeMap sahte yanıtla), ağ kapatıldı. Sonuç her iki tarayıcıda aynı: hazırlık ekranı harita adımını "tamam" gösterdi, ama gün haritası altlıksız açıldı (`data-basemap="none"`). Durağa sabitlenmiş video, ağ yokken oynatıcıyı açtı (`video-frame` = 1); kart "İnternet gerekli" demedi.
+
+Nedenler:
+
+1. **Harita (asıl neden).** `src/map/glMap.ts` içindeki `loadStyle`, `navigator.onLine` yanlışsa harita stilini hiç istemiyor, doğrudan boş zemin kuruyordu. Hazırlıkta önbelleğe alınan stil, karolar ve yazı tipleri bu yüzden çevrimdışıyken hiç kullanılmıyordu. Hazırlık ekranı da karoları "indirildi" diye sayıp sonucu kendi okuyarak sınamıyordu.
+2. **Harita (ikinci neden).** Önbellek yalnız OpenFreeMap'in o anki karo adresini tutuyordu: 12-15 yakınlaştırma, en çok 500 karo ve üç yazı tipi aralığı. Karo adresi sürümlüdür (her yeni OpenFreeMap derlemesinde değişir); stil ve kaynak tanımı da tarayıcı önbelleğinin ömrüne bağlıydı. Bu yüzden stil açılsa bile alanın bir kısmı boş kalacaktı. OpenFreeMap'in toplu indirme koşulundaki "özgün User-Agent" şartı tarayıcıdan karşılanamıyor.
+3. **Video.** Video kartı ağ durumuna bakmadan YouTube oynatıcısını açıyordu; ağ yokken oynatıcı boş ya da hatalı görünüyordu.
+
+Düzeltme bu nedenlere göre: harita stil, kaynak, karo, yazı tipi ve simgeleri cihazdaki bölge paketinden okur (Aşama D); hazırlık sonunda ağa çıkmadan kendini sınar; video kartı çevrimdışıyken oynatıcıyı açmaz.
+
+| Aşama | Durum | Not |
+|---|---|---|
+| Başlamadan | Tamam | `v2.0` var. Sorun yeniden üretildi, neden yukarıda. TESLIM-2'den çıkan harita, video, ses maddeleri: harita önbelleği "yalnızca gerçek cihazda" ve "tamamı garanti değil"; video oynatıcıdan "başladı" bilgisi alınmıyor; ses yalnız cihazın Türkçe sesi, hız tek ayar. |
+| A — Veri katmanı | Tamam | Şema 3 tipleri (video bölümü, `altNames`, `pronunciations`); 4 yeni uyarı; cihaz ayarları (anlatım uzunluğu, ses, hız, perde, kanal listesi, sonra izle) ve elle video başlangıcı; yedek dosyasına kullanıcı durumu ve ayarlar girdi (anahtar girmez); IndexedDB sürüm 3 (`regions` deposu); örnek gezi sürüm 3. Birim 81/81, uçtan uca 58/60 (iki WebKit çevrimdışı testi tam koşuda zaman aşımı, tek başına geçti; izleniyor). |

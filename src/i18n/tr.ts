@@ -346,6 +346,10 @@ export const tr = {
     eventDate: (d: number, title: string, ev: string, day: string) => `${d}. gün: “${title}” etkinliğinin tarihi (${ev}) günün tarihine (${day}) uymuyor.`,
     departureTime: (leave: string, travel: string, flight: string, gap: string) => `Dönüş: otelden ${leave}’de çıkıp ${travel} yolla havalimanına uçuştan (${flight}) yalnızca ${gap} önce varılıyor; en az 2 saat beklenir.`,
     lodgingTransfer: (noArr: boolean, noDep: boolean) => `Konaklama var ama ${noArr && noDep ? 'varış ve dönüş' : noArr ? 'varış' : 'dönüş'} yol tarifi yok.`,
+    narrationShortMissing: (d: number, label: string) => `${d}. gün: ${label} için kısa anlatım yok; kısa seçenekte uzun anlatımın ilk cümleleri okunur.`,
+    narrationShortLength: (d: number, label: string, n: number, min: number, max: number) => `${d}. gün: ${label} kısa anlatımı ${n} kelime; ${min}-${max} kelime beklenir.`,
+    narrationLength: (d: number, label: string, n: number, min: number, max: number) => `${d}. gün: ${label} uzun anlatımı ${n} kelime; ana durakta ${min}-${max} kelime beklenir.`,
+    videoRange: (d: number, label: string, title: string) => `${d}. gün: ${label} videosunda (${title}) bölüm bitişi başlangıçtan sonra değil; bitiş yok sayılır.`,
   },
 
   log: {

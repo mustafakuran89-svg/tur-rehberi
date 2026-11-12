@@ -24,7 +24,11 @@ export type RuleId =
   | 'michelin-url'
   | 'event-date'
   | 'departure-time'
-  | 'lodging-transfer';
+  | 'lodging-transfer'
+  | 'narration-short-missing'
+  | 'narration-short-length'
+  | 'narration-length'
+  | 'video-range';
 
 export interface RuleWarning {
   rule: RuleId;
@@ -51,6 +55,11 @@ export const LIMITS = {
   outlierFactor: 4, // ortanca uzaklığın bu katından uzak nokta işaretlenir
   outlierAbsKm: 40, // bu mesafeden uzak nokta her durumda işaretlenir
   airportBufferMin: 120, // dönüşte havalimanına uçuştan en az bu kadar önce varılmalı
+  // sürüm 3 (GELISTIRME-3 A.2): anlatım kelime sınırları
+  shortMin: 40,
+  shortMax: 90,
+  longMin: 120,
+  longMax: 300,
 };
 
 /** "SS:DD" → gece yarısından dakika. Okunamazsa null. */
@@ -67,6 +76,11 @@ export function transferMinutes(t: { totalMinutes?: number | null; steps: { dura
 }
 
 const W = tr.rules;
+
+/** Boşlukla ayrılmış sözcük sayısı. */
+export function wordCount(s: string | null | undefined): number {
+  return (s ?? '').trim().split(/\s+/).filter(Boolean).length;
+}
 
 function allVenues(day: Day): { venue: Venue; list: 'breakfast' | 'lunch' | 'dinner' | 'snacks' }[] {
   const out: { venue: Venue; list: 'breakfast' | 'lunch' | 'dinner' | 'snacks' }[] = [];
@@ -257,6 +271,27 @@ export function checkPlan(trip: Trip): RuleWarning[] {
   if (trip.lodging && (!trip.arrival || !trip.departure)) {
     out.push({ rule: 'lodging-transfer', message: W.lodgingTransfer(!trip.arrival, !trip.departure) });
   }
+
+  // Sürüm 3 uyarıları: anlatım uzunlukları ve video bölümü
+  trip.days.forEach((day, d) => {
+    const dayNo = d + 1;
+    day.stops.forEach((s) => {
+      const label = W.stopLabel(s.order, s.name);
+      const short = s.narrationShort?.trim();
+      if (s.kind === 'main' && !short) out.push({ rule: 'narration-short-missing', day: d, stopOrder: s.order, message: W.narrationShortMissing(dayNo, label) });
+      if (short) {
+        const n = wordCount(short);
+        if (n < LIMITS.shortMin || n > LIMITS.shortMax) out.push({ rule: 'narration-short-length', day: d, stopOrder: s.order, message: W.narrationShortLength(dayNo, label, n, LIMITS.shortMin, LIMITS.shortMax) });
+      }
+      if (s.kind === 'main') {
+        const n = wordCount(s.narration);
+        if (n < LIMITS.longMin || n > LIMITS.longMax) out.push({ rule: 'narration-length', day: d, stopOrder: s.order, message: W.narrationLength(dayNo, label, n, LIMITS.longMin, LIMITS.longMax) });
+      }
+      (s.videos ?? []).forEach((v) => {
+        if (v.endSeconds != null && v.endSeconds <= (v.startSeconds ?? 0)) out.push({ rule: 'video-range', day: d, stopOrder: s.order, message: W.videoRange(dayNo, label, v.title) });
+      });
+    });
+  });
 
   // İfadeler
   trip.phrases.forEach((list, i) => {
