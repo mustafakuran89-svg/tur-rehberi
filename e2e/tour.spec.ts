@@ -88,6 +88,8 @@ test('otomatik anlatım başlamazsa büyük "Dinle" düğmesi çıkar', async ({
   await expect(listen).toContainText('Dinle');
   await page.evaluate(() => ((window as unknown as { __block: boolean }).__block = false));
   await listen.click();
-  await expect.poll(async () => count(await spoken(page), NARR_1)).toBeGreaterThanOrEqual(2);
+  // engellenen ilk cümle rehberin karşılamasıydı (durağın adıyla); dokunuşla anlatım okunur
+  expect((await spoken(page)).find((x) => x.startsWith('ENGELLENDİ'))).toContain('ÖRNEK Pazar Meydanı');
+  await expect.poll(async () => count(await spoken(page), NARR_1)).toBeGreaterThanOrEqual(1);
   await expect(listen).toBeHidden();
 });

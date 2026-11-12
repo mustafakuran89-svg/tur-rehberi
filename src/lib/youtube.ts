@@ -5,6 +5,7 @@
 // günde 100 çağrılık ayrı kovadan 1 birim; videos.list 10.000 birimlik günlük kotadan 1 birim.
 import type { Video } from '../plan/types';
 import { cacheGet, cachePut, DAY_MS, fresh } from './cache';
+import { findChapter, foldText, parseChapters } from './chapters';
 
 const KEY_STORE = 'tur-rehberi:youtube-key';
 export const SEARCH_EVERY_MS = 30 * DAY_MS; // durak başına en çok 30 günde bir arama
@@ -72,36 +73,54 @@ export function looksTurkish(sn: { title?: string; description?: string; default
 
 export interface YtVideoItem {
   id: string;
-  snippet?: { title?: string; description?: string; channelTitle?: string; defaultAudioLanguage?: string; defaultLanguage?: string; liveBroadcastContent?: string };
+  snippet?: { title?: string; description?: string; channelTitle?: string; channelId?: string; defaultAudioLanguage?: string; defaultLanguage?: string; liveBroadcastContent?: string };
   contentDetails?: { duration?: string };
   statistics?: { viewCount?: string; likeCount?: string };
   liveStreamingDetails?: unknown;
 }
 
+/** Genel aramadan gelen aday: bölüm bilgisi ve kanal "rehber" işareti taşıyabilir. */
+export interface PickedVideo extends Video {
+  rehber?: boolean;
+}
+
 /**
- * Eleme ve sıralama: Türkçe, 2-30 dakika, canlı yayın değil, başlıkta durak adının ayırt edici
- * sözcüğü. Beğeni sayısı büyükten küçüğe; beğenisi gizli olanlar beğenisi görünenlerden sonra,
- * izlenme sayısına göre. İlk beş aday döner.
+ * Eleme ve sıralama (genel arama): Türkçe, canlı yayın değil; ya açıklamasında durakla eşleşen
+ * bölüm var (süre sınırı yok, bölümden oynar) ya da 2-30 dakika ve başlıkta durak adının ayırt
+ * edici sözcüğü. Beğeni sayısı büyükten küçüğe; beğenisi gizli olanlar sonra, izlenme sayısına
+ * göre; eşitlikte kanal adında ya da tanıtımında "rehber" geçen öne. İlk beş aday döner.
+ * names: durağın adı ve diğer adları (ilk öge plandaki ad).
  */
-export function pickVideos(items: YtVideoItem[], stopName: string, today: string): Video[] {
-  const words = distinctiveWords(stopName);
+export function pickVideos(items: YtVideoItem[], stopName: string | string[], today: string, rehberChannels: Set<string> = new Set()): PickedVideo[] {
+  const names = Array.isArray(stopName) ? stopName : [stopName];
+  const words = distinctiveWords(names[0] ?? '');
+  const chapterOf = new Map<string, ReturnType<typeof findChapter>>();
   const ok = items.filter((v) => {
     const sn = v.snippet ?? {};
     if (!looksTurkish(sn)) return false;
     if ((sn.liveBroadcastContent && sn.liveBroadcastContent !== 'none') || v.liveStreamingDetails) return false;
     const sec = isoDurationSeconds(v.contentDetails?.duration);
-    if (sec === null || sec < MIN_SECONDS || sec > MAX_SECONDS) return false;
+    if (sec === null) return false;
+    const ch = findChapter(parseChapters(sn.description, sec), names);
+    if (ch) {
+      chapterOf.set(v.id, ch);
+      return true;
+    }
+    if (sec < MIN_SECONDS || sec > MAX_SECONDS) return false;
     const title = new Set(normalizeWords(sn.title ?? ''));
     return words.some((w) => title.has(w));
   });
+  const isRehber = (v: YtVideoItem) => rehberChannels.has(v.snippet?.channelId ?? '') || /\brehber/.test(foldText(v.snippet?.channelTitle ?? ''));
   const num = (x: string | undefined) => (x === undefined ? null : Number(x));
   ok.sort((a, b) => {
     const la = num(a.statistics?.likeCount);
     const lb = num(b.statistics?.likeCount);
-    if (la !== null && lb !== null) return lb - la;
-    if (la !== null) return -1;
-    if (lb !== null) return 1;
-    return (num(b.statistics?.viewCount) ?? 0) - (num(a.statistics?.viewCount) ?? 0);
+    let d = 0;
+    if (la !== null && lb !== null) d = lb - la;
+    else if (la !== null) return -1;
+    else if (lb !== null) return 1;
+    else d = (num(b.statistics?.viewCount) ?? 0) - (num(a.statistics?.viewCount) ?? 0);
+    return d || Number(isRehber(b)) - Number(isRehber(a)); // eşitlikte rehber kanalı öne
   });
   return ok.slice(0, KEEP).map((v) => ({
     youtubeId: v.id,
@@ -113,6 +132,11 @@ export function pickVideos(items: YtVideoItem[], stopName: string, today: string
     viewCount: num(v.statistics?.viewCount),
     checkedAt: today,
     source: 'auto' as const,
+    channelId: v.snippet?.channelId ?? null,
+    startSeconds: chapterOf.get(v.id)?.start ?? null,
+    endSeconds: chapterOf.get(v.id)?.end ?? null,
+    chapterTitle: chapterOf.get(v.id)?.title ?? null,
+    rehber: isRehber(v),
   }));
 }
 
@@ -138,20 +162,22 @@ const valid = (id: string) => (/^[A-Za-z0-9_-]{11}$/.test(id) ? id : null);
 
 export const thumbUrl = (id: string) => `https://i.ytimg.com/vi/${id}/hqdefault.jpg`;
 // Gizlilik dostu gömme (youtube-nocookie.com). playsinline: iPhone'da sayfa içinde oynar.
-export const embedUrl = (id: string) => `https://www.youtube-nocookie.com/embed/${id}?autoplay=1&playsinline=1&rel=0`;
+// start/end: bölüm; end videonun başından ölçülür (developers.google.com/youtube/player_parameters, 12.11.2026).
+export const embedUrl = (id: string, start?: number | null, end?: number | null) =>
+  `https://www.youtube-nocookie.com/embed/${id}?autoplay=1&playsinline=1&rel=0${start ? `&start=${Math.floor(start)}` : ''}${end ? `&end=${Math.floor(end)}` : ''}`;
 export const watchUrl = (id: string) => `https://www.youtube.com/watch?v=${id}`;
 export const searchUrl = (q: string) => `https://www.youtube.com/results?search_query=${encodeURIComponent(q)}`;
 
 export function videoQueryFor(stop: { name: string; videoQuery?: string | null }, city: string): string {
   if (stop.videoQuery?.trim()) return stop.videoQuery.trim();
-  const name = stop.name.replace(/\bÖRNEK\b/g, '').trim();
+  const name = stop.name.replace(/ÖRNEK\s*/g, '').trim();
   return `${name} ${city}`.trim();
 }
 
 export class YoutubeError extends Error {}
 
-/** Arama + istatistik çağrısı. Hata mesajına anahtar ya da adres girmez. */
-export async function searchVideos(query: string, stopName: string, key: string, fetchFn: typeof fetch = fetch): Promise<Video[]> {
+/** Arama + istatistik (+ kanal tanıtımı) çağrısı. Hata mesajına anahtar ya da adres girmez. */
+export async function searchVideos(query: string, stopName: string | string[], key: string, fetchFn: typeof fetch = fetch): Promise<PickedVideo[]> {
   const base = 'https://www.googleapis.com/youtube/v3';
   const sp = new URLSearchParams({ part: 'snippet', type: 'video', q: query, relevanceLanguage: 'tr', regionCode: 'TR', videoEmbeddable: 'true', maxResults: '25', key });
   const r1 = await fetchFn(`${base}/search?${sp}`);
@@ -163,12 +189,26 @@ export async function searchVideos(query: string, stopName: string, key: string,
   const r2 = await fetchFn(`${base}/videos?${vp}`);
   if (!r2.ok) throw new YoutubeError(`YouTube istatistik yanıtı ${r2.status}`);
   const j2 = (await r2.json()) as { items?: YtVideoItem[] };
-  return pickVideos(j2.items ?? [], stopName, new Date().toISOString().slice(0, 10));
+  // Kanal tanıtımında "rehber" geçiyor mu (1 birim; başarısız olursa yalnız kanal adına bakılır)
+  const rehber = new Set<string>();
+  const chIds = [...new Set((j2.items ?? []).map((v) => v.snippet?.channelId).filter((x): x is string => !!x))].slice(0, 50);
+  if (chIds.length) {
+    try {
+      const r3 = await fetchFn(`${base}/channels?${new URLSearchParams({ part: 'snippet', id: chIds.join(','), key })}`);
+      if (r3.ok) {
+        const j3 = (await r3.json()) as { items?: { id: string; snippet?: { title?: string; description?: string } }[] };
+        for (const c of j3.items ?? []) if (/\brehber/.test(foldText(`${c.snippet?.title ?? ''} ${c.snippet?.description ?? ''}`))) rehber.add(c.id);
+      }
+    } catch {
+      /* yok say */
+    }
+  }
+  return pickVideos(j2.items ?? [], stopName, new Date().toISOString().slice(0, 10), rehber);
 }
 
 export interface VideoCandidates {
   checkedAt: string;
-  candidates: Video[];
+  candidates: PickedVideo[];
 }
 export const videoCacheKey = (tripId: string, stopKey: string) => `yt:${tripId}:${stopKey}`;
 
@@ -176,7 +216,7 @@ export const videoCacheKey = (tripId: string, stopKey: string) => `yt:${tripId}:
  * Önbellekteki adayları döndürür; 30 günden eskiyse ve anahtar varsa yeniden arar.
  * force: önbellek 30 günden yeni olsa bile aramaz (kota korunur); yalnız yoksa arar.
  */
-export async function getCandidates(tripId: string, stopKey: string, query: string, stopName: string, key: string): Promise<VideoCandidates | null> {
+export async function getCandidates(tripId: string, stopKey: string, query: string, stopName: string | string[], key: string): Promise<VideoCandidates | null> {
   const ck = videoCacheKey(tripId, stopKey);
   const c = await cacheGet<VideoCandidates>(ck);
   if (fresh(c, SEARCH_EVERY_MS) || !key) return c?.data ?? null;

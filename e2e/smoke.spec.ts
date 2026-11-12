@@ -24,7 +24,7 @@ test('yayın: sürüm 2 — otel kartı, hızlı bakış, kısa dinle, varış a
   await expect(page.getByTestId('lodging')).toContainText('ÖRNEK Dere Oteli');
   await page.goto('./#/trip/__ornek__/day/0/stop/2');
   await expect(page.getByTestId('look-for')).toBeVisible();
-  await expect(page.getByTestId('play-short')).toBeVisible();
+  await expect(page.getByTestId('narr-short')).toBeVisible();
   await expect(page.getByTestId('video-card')).toBeVisible();
   await page.goto('./#/trip/__ornek__/arrival');
   await expect(page.getByTestId('step')).toHaveCount(3);

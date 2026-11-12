@@ -73,8 +73,10 @@ test('A: sürüm 1 ve sürüm 2 planları içe aktarılır; güncellemede işare
 test('B: kısa ve uzun dinle; anahtar yokken "YouTube’da ara"; anahtarla Türkçe video, dokununca sayfa içinde oynar ve anlatım susar', async ({ page, context }) => {
   await page.goto('./#/trip/__ornek__/day/0/stop/2');
   await expect(page.getByTestId('look-for')).toContainText('Kadrandaki on iki kabartma');
-  await page.getByTestId('play-short').click();
+  await page.getByTestId('narr-short').click();
+  await page.getByTestId('play').click();
   await expect.poll(async () => (await spoken(page)).join(' ')).toContain('uzak limanlardan dönen');
+  await page.getByTestId('narr-long').click();
   await page.getByTestId('play').click();
   await expect.poll(async () => (await spoken(page)).join(' ')).toContain('Kule önce ahşaptan yapılmış');
   await expect(page.getByTestId('video-search')).toHaveAttribute('href', /youtube\.com\/results\?search_query=saat%20kulesi/);
@@ -113,7 +115,7 @@ test('B: kısa ve uzun dinle; anahtar yokken "YouTube’da ara"; anahtarla Türk
   await page.getByTestId('video-thumb').click();
   expect(await page.evaluate(() => (window as unknown as { __cancels: number }).__cancels)).toBeGreaterThan(cancels);
   await expect(page.getByTestId('video-frame')).toHaveAttribute('src', /youtube-nocookie\.com\/embed\/AAAAAAAAAA2\?autoplay=1&playsinline=1/);
-  await expect(page.getByTestId('play')).toBeVisible();
+  await expect(page.getByTestId('player')).not.toHaveAttribute('data-state', 'playing');
   // sabitle; yeniden yüklenince arama yapılmaz (önbellek), sabitlenen kalır
   await page.getByTestId('video-pin').click();
   await expect(page.getByTestId('video-unpin')).toBeVisible();

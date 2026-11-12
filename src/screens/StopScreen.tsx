@@ -11,6 +11,10 @@ import { stopKey, updateUserState } from '../lib/userState';
 import { cachedWeather } from '../lib/weather';
 import { isoDate } from '../lib/today';
 import { SpeechPlayer } from '../components/SpeechPlayer';
+import { NarrationToggle } from '../components/NarrationToggle';
+import { narrationFor } from '../lib/narration';
+import { useSettings } from '../lib/settings';
+import { useOnline } from '../lib/online';
 import { VideoCard } from '../components/VideoCard';
 import { Gallery } from '../components/Gallery';
 import { ActionButtons, BookedBadge, BookingMark, NoteBox, OpenBadge, useNow } from '../components/v2';
@@ -29,6 +33,9 @@ export function StopScreen({ tripKey, dayIndex, order }: { tripKey: string; dayI
   const { rec, us } = useTrip(tripKey);
   const now = useNow();
   const tz = useTripTz(tripKey);
+  const settings = useSettings();
+  const online = useOnline();
+  const [length, setLength] = useState<'short' | 'long'>(settings.narrationLength);
   const warnings = useMemo(() => (rec ? checkPlan(rec.trip).filter((w) => w.day === dayIndex && w.stopOrder === order) : []), [rec, dayIndex, order]);
   if (rec === undefined) return <Loading />;
   const day = rec?.trip.days[dayIndex];
@@ -54,6 +61,7 @@ export function StopScreen({ tripKey, dayIndex, order }: { tripKey: string; dayI
   ];
   const city = rec.trip.destinations[0] ?? '';
   const booking = !!(s.ticketUrl || s.ticketOrBooking);
+  const chosen = narrationFor(s, length);
   return (
     <div className="page">
       <Header
@@ -84,17 +92,30 @@ export function StopScreen({ tripKey, dayIndex, order }: { tripKey: string; dayI
             </ul>
           </section>
         )}
-        <SpeechPlayer text={s.narration} short={s.narrationShort} />
+        {!online && (
+          <p className="note small" data-testid="offline-first">
+            {tr.player.offlineFirst}
+          </p>
+        )}
+        <NarrationToggle stop={s} value={length} onChange={setLength} rate={settings.rate} />
+        <SpeechPlayer text={chosen.text} pronunciations={rec.trip.pronunciations} />
         <section>
           <h2 className="section-title">{tr.stop.narration}</h2>
-          <div className="narration" data-testid="narration">
-            {s.narration.split(/\n+/).map((p, i) => (
+          {chosen.abridged && (
+            <p className="note small" data-testid="abridged">
+              {tr.player.abridged}
+            </p>
+          )}
+          <div className="narration" data-testid="narration" data-length={length}>
+            {chosen.text.split(/\n+/).map((p, i) => (
               <p key={i}>{p}</p>
             ))}
           </div>
         </section>
-        <VideoCard tripId={tripKey} stop={s} city={city} us={us} />
+        {/* Çevrimdışıyken anlatım öne, video sona alınır */}
+        {online && <VideoCard tripId={tripKey} stop={s} city={city} us={us} />}
         <Gallery tripId={tripKey} stop={s} us={us} allowSearch={!rec.isSample} />
+        {!online && <VideoCard tripId={tripKey} stop={s} city={city} us={us} />}
         <Warnings items={warnings} title={tr.day.warnings} />
         <dl className="facts">
           {info

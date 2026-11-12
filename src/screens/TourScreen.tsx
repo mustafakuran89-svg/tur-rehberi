@@ -9,6 +9,7 @@ import { formatDistance } from '../lib/format';
 import { href, paths } from '../lib/router';
 import { useSettings } from '../lib/settings';
 import { speak, stopSpeaking, unlockSpeech } from '../lib/speech';
+import { tourSpeech, tourStartSpeech } from '../tour/guideScript';
 import { releaseWakeLock, requestWakeLock } from '../lib/wakelock';
 import { addLog } from '../lib/log';
 import { setLastKnownPosition } from '../lib/links';
@@ -38,6 +39,7 @@ export function TourScreen({ tripKey, dayIndex }: { tripKey: string; dayIndex: n
   const [wakeFail, setWakeFail] = useState(false);
   const [paused, setPaused] = useState(false);
   const [lastTriggered, setLastTriggered] = useState<Stop | null>(null);
+  const [spokenLength, setSpokenLength] = useState<'short' | 'long'>(settings.narrationLength);
   const [cachedVideo, setCachedVideo] = useState<Set<string>>(new Set());
   useEffect(() => {
     // Tur modunda video kendiliğinden başlamaz; önbellekte adayı olan durak için öneri kartı çıkar.
@@ -60,7 +62,13 @@ export function TourScreen({ tripKey, dayIndex }: { tripKey: string; dayIndex: n
   const lastPos = useRef<LatLng | null>(null);
   const autoTimer = useRef<number | null>(null);
 
-  const narrate = useCallback((s: Stop, auto: boolean) => {
+  const dayRef = useRef(day);
+  dayRef.current = day;
+  const pronRef = useRef(rec?.trip.pronunciations);
+  pronRef.current = rec?.trip.pronunciations;
+
+  // Varışta varsayılan uzunluk okunur (Ayarlar); diğeri "… dinle" düğmesiyle tek dokunuşla.
+  const narrate = useCallback((s: Stop, auto: boolean, length?: 'short' | 'long') => {
     if (autoTimer.current) window.clearTimeout(autoTimer.current);
     if (auto && !settingsRef.current.autoNarrate) {
       setListenStop(s);
@@ -68,7 +76,11 @@ export function TourScreen({ tripKey, dayIndex }: { tripKey: string; dayIndex: n
     }
     let started = false;
     setSpeakingStop(s.order);
-    speak(s.narration, 'tr-TR', settingsRef.current.rate, {
+    const len = length ?? settingsRef.current.narrationLength;
+    setSpokenLength(len);
+    const done = new Set([...progressRef.current.triggered, ...progressRef.current.passed, s.order]);
+    const text = dayRef.current ? tourSpeech(dayRef.current, s, len, done).text : s.narration;
+    speak(text, 'tr-TR', { pronunciations: pronRef.current }, {
       onStart: () => {
         started = true;
         setListenStop(null);
@@ -143,7 +155,7 @@ export function TourScreen({ tripKey, dayIndex }: { tripKey: string; dayIndex: n
 
   const start = async () => {
     // Bu fonksiyon kullanıcı dokunuşunun içinde çalışır: ses kilidi burada açılır.
-    unlockSpeech(tr.tour.started, settingsRef.current.rate);
+    unlockSpeech(day ? tourStartSpeech(day, dayIndex + 1) : tr.tour.started);
     runningRef.current = true;
     setRunning(true);
     setBanner(tr.tour.started);
@@ -217,6 +229,12 @@ export function TourScreen({ tripKey, dayIndex }: { tripKey: string; dayIndex: n
             🔊 {tr.tour.listen}
             <span className="small">{tr.tour.inside(listenStop.order, listenStop.name)}</span>
             <span className="small">{tr.tour.listenHint}</span>
+          </button>
+        )}
+
+        {lastTriggered && !listenStop && (
+          <button className="btn btn-block" data-testid="other-length" onClick={() => narrate(lastTriggered, false, spokenLength === 'short' ? 'long' : 'short')}>
+            🔊 {spokenLength === 'short' ? tr.player.long : tr.player.short}: {lastTriggered.name}
           </button>
         )}
 

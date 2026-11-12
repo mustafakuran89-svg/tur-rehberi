@@ -1,11 +1,13 @@
 import { useEffect, useState, useSyncExternalStore } from 'react';
 import { tr } from '../i18n/tr';
-import { RADIUS_OPTIONS, RATE_OPTIONS, resetSettings, setSettings, useSettings } from '../lib/settings';
+import { RADIUS_OPTIONS, resetSettings, setSettings, useSettings } from '../lib/settings';
+import { VoiceSettings } from '../components/VoiceSettings';
+import { ChannelSettings } from '../components/ChannelSettings';
 import { clearLog, readLog, subscribeLog } from '../lib/log';
 import { deleteAll, downloadJson, ensureSample, getTrip, isPersisted, makeBackup, putTrip, requestPersist, sampleTrip, SAMPLE_KEY } from '../lib/store';
-import { findVoice, onVoicesChanged, speak, speechSupported, voicesKnown } from '../lib/speech';
+import { findVoice, onVoicesChanged, speechSupported, voicesKnown } from '../lib/speech';
 import { moveTripNear } from '../sample/move';
-import { formatDate, formatNumber } from '../lib/format';
+import { formatDate } from '../lib/format';
 import { href, paths } from '../lib/router';
 import { getYoutubeKey, setYoutubeKey } from '../lib/youtube';
 import { forgetUserState } from '../lib/userState';
@@ -124,16 +126,6 @@ export function SettingsScreen() {
       <main className="content">
         <section className="settings-group">
           <h2 className="section-title">{tr.settings.speech}</h2>
-          <label className="field">
-            <span>{tr.settings.rate}</span>
-            <select value={s.rate} onChange={(e) => setSettings({ rate: Number(e.target.value) })}>
-              {RATE_OPTIONS.map((r) => (
-                <option key={r} value={r}>
-                  {formatNumber(r)}×
-                </option>
-              ))}
-            </select>
-          </label>
           <label className="field check">
             <input type="checkbox" checked={s.autoNarrate} onChange={(e) => setSettings({ autoNarrate: e.target.checked })} />
             <span>{tr.settings.autoNarrate}</span>
@@ -152,10 +144,10 @@ export function SettingsScreen() {
             {!speechSupported() ? tr.player.unsupported : voiceName === null ? '' : voiceName ? tr.settings.voiceOk(voiceName) : tr.settings.voiceMissing}
           </p>
           {voiceName === '' && <p className="note small">{tr.player.noVoice}</p>}
-          <button className="btn" onClick={() => speak(tr.settings.testSentence, 'tr-TR', s.rate)} disabled={!speechSupported()}>
-            🔊 {tr.settings.testVoice}
-          </button>
         </section>
+
+        <VoiceSettings />
+        <ChannelSettings />
 
         <section className="settings-group">
           <h2 className="section-title">{tr.theme.title}</h2>

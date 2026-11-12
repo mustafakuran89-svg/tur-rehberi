@@ -96,7 +96,7 @@ export function matchesAnyName(text: string, names: string[]): boolean {
 
 /** Durağın aday adları: plandaki ad ("ÖRNEK" etiketi ayıklanır) ve diğer adlar. */
 export function stopNames(stop: { name: string; altNames?: string[] }): string[] {
-  return [stop.name, ...(stop.altNames ?? [])].map((n) => n.replace(/\bÖRNEK\b/g, '').trim()).filter(Boolean);
+  return [stop.name, ...(stop.altNames ?? [])].map((n) => n.replace(/ÖRNEK\s*/g, '').trim()).filter(Boolean);
 }
 
 /** Durakla eşleşen ilk bölüm. */

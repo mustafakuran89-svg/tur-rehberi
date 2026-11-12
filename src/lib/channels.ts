@@ -99,8 +99,9 @@ export async function buildIndex(c: PriorityChannel, key: string, fetchFn: typeo
   } while (page && ids.length < max);
   const videos: IndexedVideo[] = [];
   const num = (x: string | undefined) => (x === undefined ? null : Number(x));
-  for (let i = 0; i < Math.min(ids.length, max); i += 50) {
-    const vp = new URLSearchParams({ part: 'snippet,contentDetails,statistics', id: ids.slice(i, i + 50).join(','), key });
+  const list = ids.slice(0, max); // en yeni videolar önce gelir
+  for (let i = 0; i < list.length; i += 50) {
+    const vp = new URLSearchParams({ part: 'snippet,contentDetails,statistics', id: list.slice(i, i + 50).join(','), key });
     const vj = await getJson(`${API}/videos?${vp}`, fetchFn);
     calls++;
     for (const v of (vj.items as VideoItem[] | undefined) ?? []) {
