@@ -356,6 +356,7 @@ test('F: koyu tema, paylaşım dosyasında anahtar yok ve içe aktarılır, sür
 
 for (const theme of ['light', 'dark'] as const) {
   test(`F: erişilebilirlik denetimi (${theme}) — kritik hata yok`, async ({ page }) => {
+    test.setTimeout(180_000); // 16 ekran × erişilebilirlik taraması
     await page.emulateMedia({ colorScheme: theme });
     const routes = ['./', './#/trip/__ornek__', './#/trip/__ornek__/day/0', './#/trip/__ornek__/day/0/stop/2', './#/trip/__ornek__/day/0/food', './#/trip/__ornek__/phrases', './#/trip/__ornek__/arrival', './#/trip/__ornek__/checklist', './#/trip/__ornek__/prepare', './#/settings', './#/trip/__ornek__/tips', './#/trip/__ornek__/events', './#/trip/__ornek__/discover', './#/trip/__ornek__/saved', './#/trip/__ornek__/nearby', './#/request'];
     const problems: string[] = [];

@@ -87,7 +87,7 @@ Tarayıcının ve Node'un yerleşik Web Crypto arayüzü kullanıldı; ek kitapl
 | **Tur modunda eklenen yer:** keşfet yerinde tanıtım, ansiklopedi yerinde "Vikipedi'ye göre: …", kendi yerinizde yalnız ad ve not okunur. | Otomatik testle doğrulandı |
 | **Plancıya gönder:** kaydedilen ve rotaya eklenen yerlerin listesi (ad, koordinat, gün, not) metin olarak paylaşılır. | Otomatik testle doğrulandı (panoya kopyalama yolu). **Paylaşım menüsü yalnızca gerçek iPhone'da doğrulanabilir.** |
 
-Test sayıları: tip kontrolü geçti · birim 146/146 · uçtan uca TOPLAM (iPhone 13 boyutunda Chromium ve WebKit) · yayına karşı duman testi CANLI.
+Test sayıları: tip kontrolü geçti · birim 146/146 · uçtan uca 102/102 (51 test × iPhone 13 boyutunda Chromium ve WebKit; erişilebilirlik denetimi yeni ekranları da kapsıyor) · yayına karşı duman testi 10/10.
 
 ## 4. iPhone kontrol listesi 4
 

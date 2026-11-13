@@ -1,6 +1,6 @@
 # İlerleme
 
-Son güncelleme: 12.11.2026 (Geliştirme 3 tamam)
+Son güncelleme: 13.11.2026 (Geliştirme 4 tamam)
 
 | Aşama | Durum | Not |
 |---|---|---|
@@ -97,3 +97,16 @@ Gerçek iPhone'da `TESLIM-3.md` bölüm 8'deki 8 madde.
 | C — İpuçları | Tamam | İpucu kartları (soru başlığı, işaretlenebilir ve kalıcı adımlar, bağlantı, dinle); bilet ipucu "Bilet al"ın altında; gezi ipuçları sayfası (türe göre, arama durak ipuçlarını da kapsar); `before-trip` Hazırlık listesinde, `on-arrival` Varış'ta, `on-site` tur modunda varınca; tanıtım kartları (kapat, Ayarlar'dan yeniden aç). |
 | D — Etkinlikler | Tamam | Etkinlikler sekmesi (gün, tür, ücretsiz, rehberin seçimi, gündüz/akşam süzgeçleri; gezi boyunca başlığı), genişletilmiş kart (görsel, tanıtım, süre, bilet durumu, ipuçları, kaydet), çakışma denetimi (SABİT satır, rezervasyon, seçili etkinlik), Bugün'de "Bu akşam" ve etkinlik sonrası "Otele dön", haritada etkinlik katmanı. |
 | E — Keşfet, kaydet, rotama ekle | Tamam | Keşfet (sekmeler, liste/harita, yakınlık, açık-kapalı, dinle, ipuçları, puanım, Google Haritalar), kaydet ve Kaydettiklerim (not, harita), Yakınımda (Vikipedi GeoData, kaynak ve lisans, çevrimdışı "internet gerekli"), kendi yerim (haritaya dokun, bağlantı, Nominatim ile adla arama), Rotama ekle (en az yürüyüş, SABİT, açılış saati, önizleme ve uyarılar), kişisel rota katmanı (numara, harita, tur, Bugün; yukarı/aşağı, kaldır, özgün plana dön; plan güncellemesinde korunur, bağı kopan yer sona), tur modunda kaynağa göre okuma, plancıya gönder. Erişilebilirlik denetimi yeni ekranları da kapsıyor (koyu temada rozet kontrastı düzeltildi). Birim 146/146, uçtan uca 104/104. |
+| F — Teslim | Tamam | Yayın: https://mustafakuran89-svg.github.io/tur-rehberi/ (kutu dizini sitede) · yayına karşı duman testi 10/10 · `v4.0` etiketi · `teslim/` yenilendi · `TESLIM-4.md`, `KUTU.md`. |
+
+### Test durumu (Geliştirme 4)
+
+- Tip kontrolü: geçti.
+- Birim testleri: 146/146.
+- Uçtan uca: 102/102 (51 test × Chromium ve WebKit, iPhone 13 boyutu). Not: yavaşlamış makinede bir tam koşuda altı test zaman aşımına düştü, tek başına geçti; erişilebilirlik testinin süresi 16 ekran için 180 sn'ye çıkarıldı; son tam koşu temiz.
+- Yayına karşı duman testi: 10/10.
+
+## Sırada (Geliştirme 4 sonrası)
+
+- Kullanıcının cihaz anahtarı `kutu/anahtarlar.txt`'ye eklenecek (kullanıcı Ayarlar › Plan kutusu › Kopyala ile verecek).
+- Gerçek iPhone'da `TESLIM-4.md` bölüm 4'teki 8 madde.
