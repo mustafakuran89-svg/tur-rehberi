@@ -20,6 +20,9 @@ import { WhatsNewScreen } from './screens/WhatsNewScreen';
 import { RequestScreen } from './screens/RequestScreen';
 import { TipsScreen } from './screens/TipsScreen';
 import { EventsScreen } from './screens/EventsScreen';
+import { DiscoverScreen } from './screens/DiscoverScreen';
+import { SavedScreen } from './screens/SavedScreen';
+import { NearbyScreen } from './screens/NearbyScreen';
 import { Missing } from './components/ui';
 import { tr } from './i18n/tr';
 import { rememberTrip } from './lib/lastTrip';
@@ -75,6 +78,12 @@ export function App() {
       return <TipsScreen tripKey={r.key} />;
     case 'events':
       return <EventsScreen tripKey={r.key} />;
+    case 'discover':
+      return <DiscoverScreen tripKey={r.key} />;
+    case 'saved':
+      return <SavedScreen tripKey={r.key} />;
+    case 'nearby':
+      return <NearbyScreen tripKey={r.key} />;
     default:
       return <Missing text={tr.notFound} />;
   }

@@ -51,7 +51,7 @@ export function dayMapData(
   const stops = stopsInOrder(day);
   stops.forEach((s, i) => {
     if (hasCoord(s)) {
-      points.push({ id: `s${s.order}`, lat: s.lat, lng: s.lng, label: String(s.order), kind: 'stop', title: `${s.order}. ${s.name}`, href: href(paths.stop(tripKey, dayIndex, s.order)) });
+      points.push({ id: `s${s.order}`, lat: s.lat, lng: s.lng, label: String(s.order), kind: 'stop', title: `${s.order}. ${s.name}`, href: href(paths.stop(tripKey, dayIndex, s.order)), added: !!s.personal });
     }
     const next = stops[i + 1];
     if (next && s.legToNext && hasCoord(s) && hasCoord(next)) {

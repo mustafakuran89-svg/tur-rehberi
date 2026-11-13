@@ -59,6 +59,22 @@ test('yayın: sürüm 3 — anlatım anahtarı, ses ve kanal ayarları, bölge l
   expect(font.status()).toBe(200);
 });
 
+test('yayın: sürüm 4 — plan kutusu, ipuçları, etkinlikler, keşfet', async ({ page, request, baseURL }) => {
+  const ix = await request.get(new URL('kutu/index.json', baseURL).toString());
+  expect(ix.status()).toBe(200);
+  expect((await ix.json()).bicim).toBe('tur-rehberi-kutu-dizin');
+  await page.goto('./#/settings');
+  await expect(page.getByTestId('box-key')).toHaveValue(/^tur-rehberi-anahtar:v1:/);
+  await page.goto('./#/trip/__ornek__/day/0/stop/2');
+  await expect(page.getByTestId('tips-ticket')).toContainText('Bileti nasıl alırım?');
+  await page.goto('./#/trip/__ornek__/events');
+  await expect(page.getByTestId('events-multi')).toBeVisible();
+  await page.goto('./#/trip/__ornek__/discover');
+  await expect(page.getByTestId('place').first()).toBeVisible();
+  await page.goto('./#/whatsnew');
+  await expect(page.getByTestId('whatsnew')).toContainText('Plan kutusu');
+});
+
 test('yayın: manifest ve service worker dosyaları', async ({ request, baseURL }) => {
   const m = await request.get(new URL('manifest.webmanifest', baseURL).toString());
   expect(m.status()).toBe(200);

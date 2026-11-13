@@ -274,7 +274,7 @@ test('D: otel kartı, şoföre göster, akşam etkinliği "gidiyorum" akışa, B
   await expect(page.getByTestId('to-lodging')).toContainText('Otele dönüş');
   const map = page.getByTestId('map');
   await expect(map).not.toHaveAttribute('data-renderer', 'loading');
-  await expect(map.locator('.mk-event')).toHaveCount(2);
+  await expect(map.locator('.mk-event')).toHaveCount(3); // E1, E2 ve gezi boyunca süren H1 (sürüm 4)
   await expect(map.locator('.mk-lodging')).toHaveCount(1);
   await expect(map).toHaveAttribute('data-legs', '4'); // etkinlikler rotaya girmez
   await expect(page.getByTestId('tl-event')).toHaveCount(0);
@@ -357,7 +357,7 @@ test('F: koyu tema, paylaşım dosyasında anahtar yok ve içe aktarılır, sür
 for (const theme of ['light', 'dark'] as const) {
   test(`F: erişilebilirlik denetimi (${theme}) — kritik hata yok`, async ({ page }) => {
     await page.emulateMedia({ colorScheme: theme });
-    const routes = ['./', './#/trip/__ornek__', './#/trip/__ornek__/day/0', './#/trip/__ornek__/day/0/stop/2', './#/trip/__ornek__/day/0/food', './#/trip/__ornek__/phrases', './#/trip/__ornek__/arrival', './#/trip/__ornek__/checklist', './#/trip/__ornek__/prepare', './#/settings'];
+    const routes = ['./', './#/trip/__ornek__', './#/trip/__ornek__/day/0', './#/trip/__ornek__/day/0/stop/2', './#/trip/__ornek__/day/0/food', './#/trip/__ornek__/phrases', './#/trip/__ornek__/arrival', './#/trip/__ornek__/checklist', './#/trip/__ornek__/prepare', './#/settings', './#/trip/__ornek__/tips', './#/trip/__ornek__/events', './#/trip/__ornek__/discover', './#/trip/__ornek__/saved', './#/trip/__ornek__/nearby', './#/request'];
     const problems: string[] = [];
     for (const r of routes) {
       await page.goto(r);

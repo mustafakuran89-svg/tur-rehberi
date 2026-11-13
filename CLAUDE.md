@@ -111,6 +111,7 @@ Node.js ve gh bu makinede taşınabilir kuruludur: `%LOCALAPPDATA%\Programs\devt
 | Çevrimdışı harita bölgelerini üret (iş akışı yapar; elle denemek için) | `node scripts/make-regions.mjs dist` (girdi `haritalar/bolgeler.json`) |
 | Tek bölge çıkar (test verisi) | `node scripts/make-regions.mjs --bbox=batı,güney,doğu,kuzey --out=dosya.pmtiles --minzoom=12 --maxzoom=15` |
 | Harita yazı tiplerini ve simgelerini yenile | `node scripts/fetch-map-assets.mjs` (çıktı `public/haritalar/`, depoya girer) |
+| Plan kutusuna gezi koy / çıkar | `node araclar/kutuya-koy.mjs <plan.json>` · `node araclar/kutuya-koy.mjs --kaldir <gezi-kimliği>` (ayrıntı `KUTU.md`; açık metin plan depoya konmaz) |
 | Yayımla | `git push` (main dalı; GitHub Actions derler, test eder ve Pages'e koyar) |
 
 Notlar:

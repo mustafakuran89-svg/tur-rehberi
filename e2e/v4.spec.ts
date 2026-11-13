@@ -301,3 +301,140 @@ test('D: "Bu akşam" kartı 16:00 sonrası, geri sayım; etkinlik bitince otele 
   await page.getByTestId('event-layer').uncheck();
   await expect.poll(async () => Number(await map.getAttribute('data-points'))).toBe(withEvents - 3); // E1, E2, H1
 });
+
+// ---------------------------------------------------------------- Aşama E: keşfet, kaydet, rotama ekle
+test('E: keşfet yeri kaydedilir, güne eklenir; numaralar, harita ve tur modu yeni sırayı izler; plan güncellenince korunur; özgün plana dön', async ({ page, context }) => {
+  const p = { ...sample(), id: 'rota-gezi', title: 'ÖRNEK Rota Gezisi' };
+  await importPlan(page, p);
+  await page.goto('./#/trip/rota-gezi/discover');
+  await expect(page.getByTestId('place')).toHaveCount(5);
+  await page.getByTestId('cat-shop').click();
+  const kitapci = page.getByTestId('place');
+  await expect(kitapci).toHaveCount(1);
+  await kitapci.getByTestId('save').click();
+  await expect(kitapci.getByTestId('save')).toHaveAttribute('aria-pressed', 'true');
+  await kitapci.getByTestId('place-add').click();
+  const dlg = page.getByTestId('add-route');
+  await expect(dlg.getByTestId('add-day')).toHaveValue('0'); // önerilen gün
+  await expect(dlg.getByTestId('add-between')).toContainText('ÖRNEK Kent Müzesi ile ÖRNEK Çeşme Sokağı arasına girer.');
+  await expect(dlg.getByTestId('add-walk')).toContainText('Ek yürüyüş yaklaşık');
+  await dlg.getByTestId('add-confirm').click();
+  await expect(page.getByText('ÖRNEK Kitapçı Avlusu 1. güne eklendi.')).toBeVisible();
+
+  await page.goto('./#/trip/rota-gezi/day/0');
+  const map = page.getByTestId('map');
+  await expect(map).not.toHaveAttribute('data-renderer', 'loading');
+  await expect(map.locator('.mk-stop')).toHaveCount(6);
+  await expect(map.locator('.mk-added')).toHaveCount(1);
+  await expect(map.locator('.mk-added')).toHaveText('4');
+  await expect(page.getByTestId('stop-link').nth(3)).toContainText('ÖRNEK Kitapçı Avlusu');
+  await expect(page.getByTestId('stop-link').nth(4)).toContainText('ÖRNEK Çeşme Sokağı');
+  await page.goto('./#/trip/rota-gezi/day/0/stop/4');
+  await expect(page.getByTestId('added-badge')).toBeVisible();
+  await expect(page.getByTestId('narration')).toContainText('üç küçük kitapçının');
+  await page.goto('./#/trip/rota-gezi/day/0/tour');
+  await expect(page.getByTestId('tour-stop')).toHaveCount(6);
+  await expect(page.getByTestId('tour-stop').nth(3)).toContainText('ÖRNEK Kitapçı Avlusu');
+
+  // Kaydettiklerim: liste, not, rotada rozeti
+  await page.goto('./#/trip/rota-gezi/saved');
+  await expect(page.getByTestId('saved-item')).toHaveCount(1);
+  await expect(page.getByTestId('saved-item')).toContainText('1. günün rotasında');
+
+  // plan güncellenir: ekleme korunur
+  const up = { ...p, days: p.days.map((d: Record<string, unknown>, i: number) => (i === 0 ? { ...d, title: 'Yeni başlık' } : d)) };
+  await importPlan(page, up, true);
+  await page.goto('./#/trip/rota-gezi/day/0');
+  await expect(page.getByTestId('stop-link')).toHaveCount(6);
+  // bağlandığı durak (Kent Müzesi) plandan çıkarsa günün sonuna alınır ve bildirilir
+  const cut = structuredClone(p);
+  cut.days[0].stops = cut.days[0].stops.filter((s: { id: string }) => s.id !== 'ornek-kent-muzesi').map((s: Record<string, unknown>, i: number) => ({ ...s, order: i + 1 }));
+  cut.days[0].timeline = cut.days[0].timeline.filter((x: { stopOrder: number | null }) => x.stopOrder !== 3).map((x: { stopOrder: number | null }) => ({ ...x, stopOrder: x.stopOrder && x.stopOrder > 3 ? x.stopOrder - 1 : x.stopOrder }));
+  await importPlan(page, cut, true);
+  await page.goto('./#/trip/rota-gezi/day/0');
+  await expect(page.getByTestId('route-orphaned')).toContainText('ÖRNEK Kitapçı Avlusu');
+  await expect(page.getByTestId('stop-link').last()).toContainText('ÖRNEK Kitapçı Avlusu');
+  await importPlan(page, p, true);
+
+  // elle sıralama ve kaldırma, özgün plana dön
+  await page.goto('./#/trip/rota-gezi/day/0');
+  await page.getByTestId('route-edit').click();
+  await page.getByTestId('route-item').nth(3).getByTestId('route-up').click();
+  await expect(page.getByTestId('stop-link').nth(2)).toContainText('ÖRNEK Kitapçı Avlusu');
+  await page.getByTestId('route-reset').click();
+  await page.getByTestId('confirm-ok').click();
+  await expect(page.getByTestId('stop-link')).toHaveCount(5);
+  await expect(page.getByTestId('stop-link').nth(1)).toContainText('ÖRNEK Saat Kulesi');
+  void context;
+});
+
+test('E: kendi yerim bağlantıyla eklenir ve rotaya girer; tur modunda adı ve notu okunur; plancıya gönder', async ({ page, context }) => {
+  await page.addInitScript(() => Object.defineProperty(navigator, 'share', { value: undefined, configurable: true }));
+  await page.goto('./#/trip/__ornek__/saved');
+  await page.getByTestId('own-open').click();
+  // 5. durağın (Manastır Bahçesi) hemen yanı
+  await page.getByTestId('own-link').fill('https://maps.apple.com/?ll=44.50324,11.34720&q=Pin');
+  await expect(page.getByTestId('own-picked')).toContainText('44.50324, 11.34720');
+  await page.getByTestId('own-name').fill('Benim kafem');
+  await page.getByTestId('own-note').fill('Limonlu kek');
+  await page.getByTestId('own-save').click();
+  const dlg = page.getByTestId('add-route');
+  await dlg.getByTestId('add-day').selectOption('0');
+  await expect(dlg.getByTestId('add-between')).toContainText('ÖRNEK Manastır Bahçesi');
+  await dlg.getByTestId('add-confirm').click();
+  await page.goto('./#/trip/__ornek__/day/0');
+  await expect(page.getByTestId('stop-link')).toHaveCount(6);
+  await expect(page.getByTestId('stop-link').last()).toContainText('Benim kafem');
+  // tur modunda yalnız ad ve not okunur
+  await context.grantPermissions(['geolocation']);
+  await context.setGeolocation({ latitude: 44.50324 + 100 / 111320, longitude: 11.3472 });
+  await page.goto('./#/trip/__ornek__/day/0/tour');
+  await page.getByRole('button', { name: '↺ Turu baştan al' }).click();
+  await page.getByTestId('start-tour').click();
+  await context.setGeolocation({ latitude: 44.50324, longitude: 11.3472 });
+  await expect.poll(async () => (await spoken(page)).join(' ')).toContain('Benim kafem. Limonlu kek');
+  // plancıya gönder: liste panoya
+  await page.goto('./#/trip/__ornek__/saved');
+  await page.getByTestId('planner-share').click();
+  await expect(page.getByText('Panoya kopyalandı.')).toBeVisible();
+});
+
+test('E: Yakınımda Vikipedi maddelerini kaynağıyla gösterir, kaydedilir; ağ kapalıyken Keşfet ve Kaydettiklerim açılır, Yakınımda "internet gerekli"', async ({ page, context }) => {
+  await context.grantPermissions(['geolocation']);
+  await context.setGeolocation({ latitude: 44.4938, longitude: 11.3426 });
+  await context.route('**/tr.wikipedia.org/w/api.php**', (r) => {
+    const u = new URL(r.request().url());
+    if (u.searchParams.get('generator') !== 'geosearch') return r.abort();
+    return r.fulfill({
+      json: {
+        query: {
+          pages: {
+            1: { pageid: 1, title: 'Örnek Madde Bir', extract: 'Birinci maddenin özeti.', coordinates: [{ lat: 44.4941, lon: 11.3426 }] },
+            2: { pageid: 2, title: 'Örnek Madde İki', extract: 'İkinci madde.', coordinates: [{ lat: 44.4938, lon: 11.3436 }] },
+            3: { pageid: 3, title: 'Örnek Madde Üç', extract: 'Üçüncü.', coordinates: [{ lat: 44.4958, lon: 11.3426 }] },
+          },
+        },
+      },
+    });
+  });
+  await page.goto('./#/trip/__ornek__/nearby');
+  await page.getByTestId('nearby-find').click();
+  const items = page.getByTestId('wiki-item');
+  await expect(items).toHaveCount(3);
+  await expect(items.first()).toContainText('Örnek Madde Bir');
+  await expect(items.first()).toContainText(/3[0-9] m uzakta/);
+  await expect(items.first().getByTestId('wiki-source')).toHaveText('Kaynak: Vikipedi (TR), “Örnek Madde Bir”, CC BY-SA 4.0');
+  await expect(page.getByText('Rehber anlatımı değildir')).toBeVisible();
+  await items.first().getByTestId('save').click();
+  await page.goto('./#/trip/__ornek__/saved');
+  await expect(page.getByTestId('saved-item')).toContainText('CC BY-SA 4.0');
+
+  await context.setOffline(true);
+  await page.goto('./#/trip/__ornek__/discover');
+  await expect(page.getByTestId('place')).toHaveCount(5);
+  await page.goto('./#/trip/__ornek__/saved');
+  await expect(page.getByTestId('saved-item')).toHaveCount(1);
+  await page.goto('./#/trip/__ornek__/nearby');
+  await expect(page.getByTestId('nearby-offline')).toContainText('İnternet gerekli');
+  await context.setOffline(false);
+});

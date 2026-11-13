@@ -370,7 +370,7 @@ details > summary { cursor: pointer; }
 :focus-visible { outline: 3px solid var(--accent2); outline-offset: 2px; }
 
 /* Geliştirme 3: video kartı */
-.badge-guide { background: var(--accent); color: var(--on-color); }
+.badge-guide { background: var(--accent); color: var(--accent-ink); }
 .video-wrap { display: grid; gap: 8px; }
 .video-thumb:disabled { cursor: default; }
 .video-offline { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); padding: 8px 14px; border-radius: 999px; background: rgba(0,0,0,.72); color: #fff; font: 700 .95rem var(--sans); white-space: nowrap; }
@@ -390,3 +390,19 @@ input[type="range"] { width: 100%; accent-color: var(--accent); min-height: var(
 .badge-offline-none { background: transparent; color: var(--muted); border: 1px solid var(--line); }
 .prep-warn .prep-icon { color: var(--warn); }
 .prep-info .prep-icon { color: var(--muted); }
+
+/* Geliştirme 4: keşfet yeri işareti, eklenen durak, ipucu ve kutu kartları */
+.mk-place { background: var(--accent); color: var(--accent-ink); width: 28px; height: 28px; border-radius: 50%; font-size: .74rem; }
+.mk-stop.mk-added { outline: 3px dashed var(--accent2); outline-offset: 2px; }
+.tip-card .tip-title { margin: 0 0 4px; font-size: 1.05rem; }
+.tip-steps { padding-left: 1.4em; }
+.tip-steps li.done span { text-decoration: line-through; color: var(--muted); }
+.key-text { font-size: .8rem; word-break: break-all; }
+.route-list { padding: 0; list-style: none; }
+.route-list li { display: flex; flex-wrap: wrap; align-items: center; gap: var(--sp-2); padding: var(--sp-2) 0; border-bottom: 1px solid var(--line); }
+.route-list .route-name { flex: 1; }
+.filters { display: grid; gap: var(--sp-2); margin-bottom: var(--sp-3); }
+.event-img { width: 100%; aspect-ratio: 16 / 9; object-fit: cover; border-radius: var(--radius-sm); }
+.place-thumb { width: 100%; aspect-ratio: 16 / 9; object-fit: cover; border-radius: var(--radius-sm); }
+.row.between { justify-content: space-between; align-items: center; }
+.tabs { display: flex; gap: 6px; overflow-x: auto; padding-bottom: 4px; }

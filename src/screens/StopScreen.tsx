@@ -1,6 +1,8 @@
 import { useEffect, useMemo, useState } from 'react';
 import { tr } from '../i18n/tr';
 import { TipCards } from '../components/TipCards';
+import { SaveButton } from '../components/Save';
+import { googleMapsUrl, stopToSaved } from '../lib/places';
 import { stopsInOrder } from '../plan/normalize';
 import { checkPlan } from '../plan/rules';
 import { formatMinutes } from '../lib/format';
@@ -76,7 +78,8 @@ export function StopScreen({ tripKey, dayIndex, order }: { tripKey: string; dayI
       />
       <main className="content">
         <div className="row badges">
-          {isUnverified(s) && <UnverifiedBadge />}
+          {isUnverified(s) && !s.personal && <UnverifiedBadge />}
+          {s.personal && <span className="badge badge-guide" data-testid="added-badge">{tr.route.addedBadge}</span>}
           {isToday && <OpenBadge hours={s.hours} now={now} />}
           {us?.booked[k]?.done && <BookedBadge />}
         </div>
@@ -157,6 +160,19 @@ export function StopScreen({ tripKey, dayIndex, order }: { tripKey: string; dayI
           />
           <span>{tr.today.seen}</span>
         </label>
+        {s.personal?.attribution && (
+          <p className="small muted" data-testid="personal-source">
+            {s.personal.attribution} · {tr.nearby.notGuide}
+          </p>
+        )}
+        <div className="row">
+          {!s.personal && <SaveButton tripId={tripKey} us={us} place={stopToSaved(s)} />}
+          {hasCoord(s) && (
+            <a className="btn btn-small btn-ghost" href={googleMapsUrl(s)} target="_blank" rel="noopener noreferrer">
+              {tr.discover.gmaps}
+            </a>
+          )}
+        </div>
         <NoteBox tripId={tripKey} k={k} us={us} />
         <SourceList sources={s.sources} verifiedAt={s.verifiedAt} />
         <p className="note small">{tr.checkBeforeGo}</p>

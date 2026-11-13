@@ -715,6 +715,11 @@ export const tr = {
   whatsnew: {
     title: 'Bu sürümde neler yeni',
     items: [
+      'Sürüm 4 · Plan kutusu: yeni geziniz dosya göndermeden, şifreli olarak uygulamaya kendiliğinden gelir. Ayarlar › Plan kutusu’ndaki cihaz anahtarını bir kez plan üreticisine verin.',
+      'Sürüm 4 · İpuçları: “Bileti nasıl alırım?” gibi soru başlıklı kartlar, işaretlenebilir adımlar; gezi ipuçları sayfasında arama; doğru anda öne çıkanlar (yola çıkmadan, varınca, durakta).',
+      'Sürüm 4 · Etkinlikler sekmesi: süzgeçler, rehberin seçimi, gezi boyunca süren sergi ve festivaller, çakışma uyarısı; Bugün ekranında “Bu akşam”.',
+      'Sürüm 4 · Keşfet, Kaydettiklerim ve Yakınımda (Vikipedi): yerleri kaydedin, “Rotama ekle” ile güne ekleyin; uygulama en az yürüyüşlü sırayı önerir. Kendi yerinizi haritadan ya da bağlantıdan ekleyin; “Özgün plana dön” her şeyi geri alır.',
+      'Sürüm 4 · Plancıya gönder ve Yeni gezi iste: kaydettiğiniz yerleri ve yeni gezi isteğinizi metin olarak paylaşın.',
       'Sürüm 3 · Tam çevrimdışı harita: “Geziyi hazırla” gezi bölgesinin harita dosyasını indirir; uçak modunda harita sokak adlarıyla açılır. Hazırlığın sonunda uygulama internete çıkmadan kendini sınar; gezi kartında “Çevrimdışı hazır” rozeti.',
       'Sürüm 3 · Rehber kanalı videosu: önce öncelikli rehber kanallarına (başlangıçta Ayrıcalıklı Rotalar) bakılır; uzun videoda durağın bölümü bulunursa video o bölümden başlar ve bölüm bitince durur. “Başlangıcı ayarla”, “Videonun tamamını izle”, “Sonra izle”.',
       'Sürüm 3 · Her durakta “Kısa anlatım” ve “Uzun anlatım”; cümle cümle, soluklu okuma; önceki ve sonraki cümle.',

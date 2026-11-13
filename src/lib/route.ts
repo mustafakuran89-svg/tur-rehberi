@@ -187,7 +187,12 @@ export function planInsert(day: Day, place: SavedPlace): InsertPreview {
     // varış saati: önceki durağın saati + ziyaret + yürüyüş
     const p = stops[i - 1];
     const pc = p ? stopClock(day, p.order) : null;
-    const arrive = pc !== null && p ? pc + (p.visitMinutes ?? 0) + (P && hasCoord(p) ? walk(p, P) : 0) : null;
+    let arrive = pc !== null && p ? pc + (p.visitMinutes ?? 0) + (P && hasCoord(p) ? walk(p, P) : 0) : null;
+    if (!p && stops[0]) {
+      // günün başı: ilk durağın saatinden geriye (ziyaret + yürüyüş)
+      const fc = stopClock(day, stops[0].order);
+      if (fc !== null) arrive = fc - visit - (P && hasCoord(stops[0]) ? walk(P, stops[0]) : 0);
+    }
     const open = openAt(place, wd, arrive);
     if (open !== 'open') warnings.push(open);
     // sıradaki SABİT saat kaçırılıyor mu
