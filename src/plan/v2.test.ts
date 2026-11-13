@@ -22,7 +22,7 @@ describe('şema sürüm 2', () => {
   it('sürüm 2 örneği geçer ve yeni alanları taşır', () => {
     expect(validatePlan(sample).ok).toBe(true);
     const t = clone();
-    expect(t.schemaVersion).toBe(3);
+    expect(t.schemaVersion).toBe(4);
     expect(t.lodging?.name).toContain('ÖRNEK');
     expect(t.arrival?.steps.length).toBeGreaterThan(0);
     expect(t.departure?.leaveBy).toBeTruthy();
@@ -43,9 +43,9 @@ describe('şema sürüm 2', () => {
     expect(t.arrival?.flight).toContain('ÖRNEK');
     expect(t.departure?.flight).toContain('ÖRNEK');
   });
-  it('sürüm 4 reddedilir', () => {
+  it('sürüm 5 reddedilir', () => {
     const t = clone() as unknown as { schemaVersion: number };
-    t.schemaVersion = 4;
+    t.schemaVersion = 5;
     expect(validatePlan(t).ok).toBe(false);
   });
 });

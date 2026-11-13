@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://tur-rehberi.local/plan.schema.json",
   "title": "Tur Rehberi gezi planı",
-  "description": "Uygulamanın içe aktardığı gezi planı dosyasının sözleşmesi. Sürüm 2 ve sürüm 3, öncekilere yalnızca isteğe bağlı alanlar ekler; eski sürüm dosyaları değişmeden geçerlidir. Şema yapıyı denetler; içerik kalitesini uygulamadaki kural denetimi uyarı olarak bildirir.",
+  "description": "Uygulamanın içe aktardığı gezi planı dosyasının sözleşmesi. Sürüm 2, 3 ve 4, öncekilere yalnızca isteğe bağlı alanlar ekler; eski sürüm dosyaları değişmeden geçerlidir. Şema yapıyı denetler; içerik kalitesini uygulamadaki kural denetimi uyarı olarak bildirir.",
   "type": "object",
   "additionalProperties": false,
   "required": [
@@ -28,9 +28,10 @@
       "enum": [
         1,
         2,
-        3
+        3,
+        4
       ],
-      "description": "1: ilk sürüm. 2: video, fotoğraf galerisi, yapılandırılmış saat, iletişim, hızlı bakış, rezervasyon bağlantısı, Michelin, akşam etkinliği, konaklama ve havalimanı yol tarifi alanlarını içerebilir. 3: videoda bölüm başlangıcı ve bitişi, durakta diğer adlar ve okunuş sözlüğü eklenir."
+      "description": "1: ilk sürüm. 2: video, fotoğraf galerisi, yapılandırılmış saat, iletişim, hızlı bakış, rezervasyon bağlantısı, Michelin, akşam etkinliği, konaklama ve havalimanı yol tarifi alanlarını içerebilir. 3: videoda bölüm başlangıcı ve bitişi, durakta diğer adlar ve okunuş sözlüğü eklenir. 4: ipuçları, keşfet listesi, gezi boyunca süren etkinlikler ve kalıcı kimlikler eklenir."
     },
     "id": {
       "type": "string",
@@ -326,6 +327,27 @@
           }
         }
       }
+    },
+    "tips": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/tip"
+      },
+      "description": "Gezinin geneli için ipuçları: ulaşım bileti, para ve bahşiş, vergi iadesi, kapalı günler, güvenlik."
+    },
+    "discover": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/place"
+      },
+      "description": "Keşfet listesi: rotada olmayan ama görülmeye değer yerler. Kullanıcı bunları kaydedip rotasına ekleyebilir."
+    },
+    "happenings": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/event"
+      },
+      "description": "Gezi tarihlerinde birden çok gün süren etkinlikler: sergi, pazar, festival. date başlangıç, endDate bitiş günüdür."
     }
   },
   "$defs": {
@@ -790,6 +812,17 @@
           },
           "description": "Durağın diğer adları: Türkçe adı, yerel dildeki adı, yaygın kısa adı. Video bölümü eşleştirmesinde kullanılır. Örnek: Belvedere, Schloss Belvedere, Oberes Belvedere."
         },
+        "id": {
+          "$ref": "#/$defs/slug"
+        },
+        "tips": {
+          "type": "array",
+          "maxItems": 8,
+          "items": {
+            "$ref": "#/$defs/tip"
+          },
+          "description": "Durağa özgü ipuçları. Biletli durakta ilk ipucu biletin nasıl alınacağıdır."
+        },
         "videoQuery": {
           "type": [
             "string",
@@ -994,6 +1027,16 @@
               "$ref": "#/$defs/michelin"
             }
           ]
+        },
+        "id": {
+          "$ref": "#/$defs/slug"
+        },
+        "tips": {
+          "type": "array",
+          "maxItems": 4,
+          "items": {
+            "$ref": "#/$defs/tip"
+          }
         }
       }
     },
@@ -1610,6 +1653,11 @@
             "tour",
             "sport",
             "nightlife",
+            "exhibition",
+            "festival",
+            "show",
+            "food",
+            "family",
             "other"
           ]
         },
@@ -1702,7 +1750,123 @@
               "$ref": "#/$defs/date"
             }
           ]
+        },
+        "id": {
+          "$ref": "#/$defs/slug"
+        },
+        "description": {
+          "type": ["string", "null"],
+          "description": "İki ila dört cümle, rehber ağzıyla: ne izlenecek, neden gidilir."
+        },
+        "endDate": {
+          "oneOf": [{"type": "null"}, {"$ref": "#/$defs/date"}],
+          "description": "Birden çok gün süren etkinlikte son gün."
+        },
+        "durationMinutes": {
+          "type": ["integer", "null"],
+          "minimum": 0
+        },
+        "recommended": {
+          "type": "boolean",
+          "description": "Rehberin o akşam için seçimi."
+        },
+        "availabilityNote": {
+          "type": ["string", "null"],
+          "description": "Bilet durumu: tükenmek üzere, yalnızca ayakta, kapıda satılır gibi."
+        },
+        "images": {
+          "type": "array",
+          "maxItems": 6,
+          "items": {"$ref": "#/$defs/image"}
+        },
+        "tips": {
+          "type": "array",
+          "maxItems": 6,
+          "items": {"$ref": "#/$defs/tip"}
         }
+      }
+    },
+    "slug": {
+      "type": "string",
+      "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$",
+      "description": "Kalıcı kimlik: küçük harf, rakam ve tire. Plan güncellense de değişmez; kullanıcının işaretleri bu kimliğe bağlanır."
+    },
+    "tip": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["title", "text"],
+      "description": "Pratik ipucu. Uygulama ipucu üretmez; yalnızca planla geleni gösterir.",
+      "properties": {
+        "title": {
+          "type": "string",
+          "minLength": 3,
+          "description": "Soru ya da kısa başlık. Örnek: Bileti nasıl alırım?"
+        },
+        "text": {
+          "type": "string",
+          "minLength": 3,
+          "description": "Bir iki cümlelik yanıt."
+        },
+        "kind": {
+          "enum": ["ticket", "transport", "money", "timing", "etiquette", "safety", "food", "shopping", "photo", "other"]
+        },
+        "steps": {
+          "type": "array",
+          "maxItems": 8,
+          "items": {"type": "string"},
+          "description": "Adım adım yapılacak işlerde sırayla; her adım tek cümle."
+        },
+        "url": {
+          "type": ["string", "null"],
+          "pattern": "^https?://"
+        },
+        "when": {
+          "enum": ["before-trip", "on-arrival", "on-site", "any"],
+          "description": "İpucunun işe yaradığı an; uygulama doğru zamanda öne çıkarır."
+        }
+      }
+    },
+    "place": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "name", "category", "lat", "lng", "description", "sources", "verifiedAt"],
+      "description": "Keşfet listesindeki yer. Durak ve mekanla aynı doğrulama ölçütlerine tabidir.",
+      "properties": {
+        "id": {"$ref": "#/$defs/slug"},
+        "name": {"type": "string", "minLength": 1},
+        "category": {
+          "enum": ["sight", "museum", "viewpoint", "park", "market", "shop", "cafe", "restaurant", "bar", "experience", "neighborhood", "other"]
+        },
+        "lat": {"type": "number"},
+        "lng": {"type": "number"},
+        "coordSource": {"$ref": "#/$defs/coordSource"},
+        "address": {"type": ["string", "null"]},
+        "area": {"type": ["string", "null"], "description": "Semt ya da bölge."},
+        "description": {"type": "string", "description": "Rehber ağzıyla kısa tanıtım, 40-80 kelime; sesli de okunur."},
+        "visitMinutes": {"type": ["integer", "null"], "minimum": 0},
+        "openHours": {"type": ["string", "null"]},
+        "hours": {"oneOf": [{"type": "null"}, {"$ref": "#/$defs/weeklyHours"}]},
+        "closedWeekdays": {
+          "type": "array",
+          "items": {"enum": ["mon", "tue", "wed", "thu", "fri", "sat", "sun"]}
+        },
+        "fee": {"type": ["string", "null"]},
+        "phone": {"type": ["string", "null"]},
+        "website": {"type": ["string", "null"], "pattern": "^https?://"},
+        "ticketUrl": {"type": ["string", "null"], "pattern": "^https?://"},
+        "bookingUrl": {"type": ["string", "null"], "pattern": "^https?://"},
+        "michelin": {"oneOf": [{"type": "null"}, {"$ref": "#/$defs/michelin"}]},
+        "suggestedDate": {
+          "oneOf": [{"type": "null"}, {"$ref": "#/$defs/date"}],
+          "description": "Hangi günün rotasına yakışır; uygulama rotaya eklerken bu günü önerir."
+        },
+        "altNames": {"type": "array", "maxItems": 8, "items": {"type": "string", "minLength": 2}},
+        "wikipediaTr": {"type": ["string", "null"]},
+        "videoQuery": {"type": ["string", "null"]},
+        "images": {"type": "array", "maxItems": 8, "items": {"$ref": "#/$defs/image"}},
+        "tips": {"type": "array", "maxItems": 6, "items": {"$ref": "#/$defs/tip"}},
+        "sources": {"type": "array", "items": {"$ref": "#/$defs/source"}},
+        "verifiedAt": {"oneOf": [{"type": "null"}, {"$ref": "#/$defs/date"}]}
       }
     }
   }

@@ -28,7 +28,11 @@ export type RuleId =
   | 'narration-short-missing'
   | 'narration-short-length'
   | 'narration-length'
-  | 'video-range';
+  | 'video-range'
+  | 'dup-id'
+  | 'ticket-tip'
+  | 'happening-dates'
+  | 'discover-short';
 
 export interface RuleWarning {
   rule: RuleId;
@@ -291,6 +295,34 @@ export function checkPlan(trip: Trip): RuleWarning[] {
         if (v.endSeconds != null && v.endSeconds <= (v.startSeconds ?? 0)) out.push({ rule: 'video-range', day: d, stopOrder: s.order, message: W.videoRange(dayNo, label, v.title) });
       });
     });
+  });
+
+  // Sürüm 4 uyarıları
+  const W4 = tr.rules4;
+  const ids: string[] = [];
+  trip.days.forEach((d) => {
+    d.stops.forEach((s) => s.id && ids.push(s.id));
+    allVenues(d).forEach(({ venue }) => venue.id && ids.push(venue.id));
+    (d.eveningEvents ?? []).forEach((e) => e.id && ids.push(e.id));
+  });
+  (trip.happenings ?? []).forEach((e) => e.id && ids.push(e.id));
+  (trip.discover ?? []).forEach((p) => ids.push(p.id));
+  const counts = new Map<string, number>();
+  ids.forEach((x) => counts.set(x, (counts.get(x) ?? 0) + 1));
+  counts.forEach((n, id) => n > 1 && out.push({ rule: 'dup-id', message: W4.dupId(id, n) }));
+  trip.days.forEach((d, di) =>
+    d.stops.forEach((s) => {
+      const ticketed = !!(s.ticketUrl || s.ticketOrBooking);
+      if (ticketed && !(s.tips ?? []).some((t) => t.kind === 'ticket')) out.push({ rule: 'ticket-tip', day: di, stopOrder: s.order, message: W4.ticketTip(di + 1, W.stopLabel(s.order, s.name)) });
+    }),
+  );
+  (trip.happenings ?? []).forEach((e) => {
+    const end = e.endDate ?? e.date;
+    if (end < trip.startDate || e.date > trip.endDate) out.push({ rule: 'happening-dates', message: W4.happeningDates(e.title) });
+  });
+  (trip.discover ?? []).forEach((p) => {
+    const n = wordCount(p.description);
+    if (n < 20) out.push({ rule: 'discover-short', message: W4.discoverShort(p.name, n) });
   });
 
   // İfadeler

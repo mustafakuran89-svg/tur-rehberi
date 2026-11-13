@@ -23,9 +23,11 @@ Piri'nin adı, logosu, metinleri, ses kayıtları ve ekran tasarımı kopyalanma
 | `ADIMLAR.md` | İş emri: özerk çalışma kuralları, aşamalar, teslim | Her aşamanın başında |
 | `GELISTIRME-2.md` | İkinci tur iş emri (profesyonel sürüm, Aşama A–G) | Geliştirme 2 işlerinde |
 | `GELISTIRME-3.md` | Üçüncü tur iş emri (rehber anlatımı, bölüm videosu, tam çevrimdışı; Aşama A–E) | Geliştirme 3 işlerinde |
-| `plan.schema.json` | Plan dosyasının sözleşmesi (sürüm 3; sürüm 1 ve 2 dosyaları da geçerli); değiştirilmez | Plan modeline dokunmadan önce |
+| `GELISTIRME-4.md` | Dördüncü tur iş emri (plan kutusu, ipuçları, etkinlikler, keşfet ve rotama ekle; Aşama A–F) | Geliştirme 4 işlerinde |
+| `KUTU.md` | Plan üreticisinin plan kutusuna gezi koyma adımları | Plan kutusuna dokunmadan önce |
+| `plan.schema.json` | Plan dosyasının sözleşmesi (sürüm 4; sürüm 1, 2 ve 3 dosyaları da geçerli); değiştirilmez | Plan modeline dokunmadan önce |
 
-İş sırasında üretilen dosyalar: `ILERLEME.md` (hangi aşama bitti, sırada ne var), `TESLIM.md` (ilk sürüm teslim notu) ve `TESLIM-2.md` (Geliştirme 2 teslim notu), `TESLIM-3.md` (Geliştirme 3 teslim notu).
+İş sırasında üretilen dosyalar: `ILERLEME.md` (hangi aşama bitti, sırada ne var), `TESLIM.md` (ilk sürüm teslim notu) ve `TESLIM-2.md` (Geliştirme 2 teslim notu), `TESLIM-3.md` (Geliştirme 3 teslim notu), `TESLIM-4.md` (Geliştirme 4 teslim notu).
 
 ## Ortam
 
@@ -63,13 +65,13 @@ Kütüphane sürümlerini, tarayıcı desteğini ve servis koşullarını ezberd
    - Ücretsizdir ve kullanıcı kendi cihazında Ayarlar'a girer.
    - Anahtar depoya, derlemeye, yedek ve paylaşım dosyasına, önbelleğe ve hata günlüğüne girmez; yalnızca o cihazda saklanır.
    - Anahtar yokken uygulamanın her özelliği çalışır; anahtarlı özelliğin yerine sade bir yedek gösterilir.
-2. Depo ve site herkese açık olabilir: depoya kişisel veri, gerçek gezi planı ve gizli bilgi konmaz. Planlar yalnızca cihazda durur.
+2. Depo ve site herkese açık olabilir: depoya kişisel veri ve gizli bilgi konmaz. Gerçek gezi planı depoya yalnızca şifreli kutu dosyası olarak girer (`kutu/`, Geliştirme 4). Açık metin plan, cihazın özel anahtarı ve kişisel veri depoya girmez.
 3. Koordinat uydurulmaz. Koordinatı olmayan yer haritaya konmaz, adresiyle listelenir.
 4. Kaynağı ve doğrulama tarihi olmayan mekan uyarı işaretiyle gösterilir; doğrulanmış gibi sunulmaz.
 5. Durak numarasının tek kaynağı `Stop.order` alanıdır. Akış, anlatım ve harita numarayı buradan alır. Sıra değişince numaralar, etap süreleri ve rota bağlantıları birlikte güncellenir.
 6. Saatler esnektir. Yalnızca `fixed: true` olan satırlar SABİT rozeti taşır.
 7. Örnek veri "ÖRNEK" etiketi taşır; gerçek mekan gibi sunulmaz.
-8. Konum izni yalnızca tur modu başlatılırken istenir.
+8. Konum izni yalnızca kullanıcı konum isteyen bir düğmeye dokununca istenir: tur modunu başlatma, Keşfet'te "Yakınıma göre sırala", "Yakınımda" (Geliştirme 4).
 9. Arayüz Türkçedir; ekrandaki tüm metinler tek bir çeviri dosyasında tutulur. Kod, değişken adları ve commit mesajları İngilizce olabilir.
 10. Sayı ve tarih biçimi Türkçedir: 1.234,50 TL, 14.05.2027, %20.
 11. Uygulama bilgi uydurmaz. Yol tarifi, bilet ve ücret bilgisi, Michelin derecesi, etkinlik ve rezervasyon bağlantısı için uygulama yalnızca planla geleni gösterir; bunları kendisi üretmez ve tahmin etmez. Canlı yön için kullanıcı Haritalar'a devredilir.
@@ -77,6 +79,8 @@ Kütüphane sürümlerini, tarayıcı desteğini ve servis koşullarını ezberd
 13. Gerçek bir kişinin sesi taklit edilmez. Uygulama yalnızca cihazın hazır seslerini kullanır.
 14. Harita verisi yalnızca sağlayıcısının koşullarının izin verdiği yoldan indirilir. Çevrimdışı harita bölge dosyaları depodaki iş akışında açık lisanslı arşivden çıkarılır ve siteyle yayımlanır (`haritalar/bolgeler.json`).
 15. Ücretli servis yasağı ve anahtar kuralı (kural 1) sürer.
+16. Başka uygulamaların adı, logosu, metni, puanı, yorumu ve tasarımı kopyalanmaz. Bu kural bütün gezi ve yer keşif uygulamaları için geçerlidir (Geliştirme 4).
+17. Uygulama ipucu, etkinlik ve yer bilgisi uydurmaz; planla geleni ya da kaynağı açıkça belirtilen açık içeriği (ör. Vikipedi, kaynak ve lisansıyla) gösterir.
 
 ## Çalışma biçimi
 

@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 import sample from '../sample/ornek-plan.json';
 import v1 from '../../e2e/fixtures/plan-v1.json';
 import v2 from '../../e2e/fixtures/plan-v2.json';
+import v3 from '../../e2e/fixtures/plan-v3.json';
 import { validatePlan } from './validate';
 import { checkPlan, wordCount, type RuleId } from './rules';
 import { processImportText } from './importPlan';
@@ -13,8 +14,8 @@ const rulesOf = (t: Trip): RuleId[] => checkPlan(t).map((w) => w.rule);
 const words = (n: number) => Array.from({ length: n }, (_, i) => `sözcük${i}`).join(' ');
 
 describe('şema sürüm 3', () => {
-  it('üç sürümün örnekleri değişmeden içe aktarılır', () => {
-    for (const [p, ver] of [[v1, 1], [v2, 2], [sample, 3]] as const) {
+  it('dört sürümün örnekleri değişmeden içe aktarılır', () => {
+    for (const [p, ver] of [[v1, 1], [v2, 2], [v3, 3], [sample, 4]] as const) {
       expect((p as { schemaVersion: number }).schemaVersion).toBe(ver);
       expect(validatePlan(p).ok).toBe(true);
       const r = processImportText(JSON.stringify(p));

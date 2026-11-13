@@ -84,3 +84,12 @@ Düzeltme bu nedenlere göre: harita stil, kaynak, karo, yazı tipi ve simgeleri
 ## Sırada (Geliştirme 3 sonrası)
 
 Gerçek iPhone'da `TESLIM-3.md` bölüm 8'deki 8 madde.
+
+## Geliştirme 4
+
+İş emri: `GELISTIRME-4.md`. Başlangıç noktası: `v3.0` etiketi (var). Şema sürüm 4'e geçti (yalnız isteğe bağlı alanlar). Çevrimdışı harita yolu: depoda üretilen bölge paketi (`haritalar/bolgeler.json`, TESLIM-3 bölüm 4); plan kutusu aracı yeni gezinin alanını bu listeye ekler, Keşfet ve rotaya eklenen yer bu alana göre denetlenir.
+
+| Aşama | Durum | Not |
+|---|---|---|
+| Başlamadan | Tamam | `v3.0` var; testler geçiyordu (117 birim, 80 uçtan uca). |
+| A — Veri katmanı | Tamam | Şema 4 tipleri (ipucu, keşfet, gezi boyunca etkinlikler, kalıcı kimlik); kimlikli kayıtta işaretler kimliğe bağlanır, eski (ada bağlı) veri kayıpsız taşınır (`migrateKeys`); 4 yeni uyarı; örnek gezi sürüm 4. Kişisel rota katmanı ve kutu şifrelemesi de bu aşamada kodlandı (testleri B ve E'de). Birim 130/130, uçtan uca 80/80 + 2. |

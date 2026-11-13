@@ -4,7 +4,7 @@
 // içe aktarılınca bu kayıt değişmez; anahtarlar durak/mekan ADINDAN türetildiği için durak sırası
 // değişse de işaretler yerinde kalır.
 import { useEffect, useSyncExternalStore } from 'react';
-import type { EveningEvent, Stop, Trip, Venue, Video } from '../plan/types';
+import type { EveningEvent, Place, Stop, Trip, Venue, Video, WeeklyHours, Weekday } from '../plan/types';
 import type { LatLng } from './geo';
 import { db } from './store';
 
@@ -26,16 +26,45 @@ export interface UserState {
   transferDone: { arrival: number[]; departure: number[] };
   // sürüm 3: "Başlangıcı ayarla" ile elle seçilen video başlangıcı (durak anahtarı → video ve saniye)
   videoStarts: Record<string, { youtubeId: string; start: number }>;
+  // sürüm 4
+  tipSteps: Record<string, number[]>; // ipucu anahtarı → işaretlenen adımlar
+  saved: Record<string, SavedPlace>; // kaydettiklerim (anahtar → yer)
+  route: Record<string, DayRoute>; // gün tarihi → kişisel rota katmanı
+  hiddenOnboarding?: boolean;
+}
+
+/** Kaydedilen ya da rotaya eklenen yer: plandaki kaydın anlık görüntüsü (plan değişse de görünür). */
+export interface SavedPlace {
+  key: string;
+  source: 'discover' | 'stop' | 'venue' | 'event' | 'wiki' | 'own';
+  name: string;
+  lat: number | null;
+  lng: number | null;
+  note?: string;
+  description?: string | null; // keşfet tanıtımı ya da ansiklopedi özeti
+  attribution?: string | null; // ansiklopedi kaynağı ve lisansı
+  url?: string | null;
+  visitMinutes?: number | null;
+  hours?: WeeklyHours | null;
+  closedWeekdays?: Weekday[];
+  category?: string | null;
+  savedAt: string;
+}
+
+/** Günün kişisel rotası: eklenen yerler (hangi duraktan sonra) ve elle verilen sıra. */
+export interface DayRoute {
+  added: { place: SavedPlace; after: string | null }[]; // after: önceki durağın anahtarı; null = günün başı
+  order: string[] | null; // elle sıralandıysa durak anahtarları
 }
 
 export function emptyUserState(tripId: string): UserState {
-  return { tripId, visited: {}, notes: {}, ratings: {}, pins: {}, videos: {}, hiddenImages: {}, booked: {}, going: {}, transferDone: { arrival: [], departure: [] }, videoStarts: {} };
+  return { tripId, visited: {}, notes: {}, ratings: {}, pins: {}, videos: {}, hiddenImages: {}, booked: {}, going: {}, transferDone: { arrival: [], departure: [] }, videoStarts: {}, tipSteps: {}, saved: {}, route: {} };
 }
 
 /** Eksik alanları tamamlar (eski ya da paylaşımla gelen kayıtlar için). */
 export function normalizeUserState(x: Partial<UserState> & { tripId: string }): UserState {
   const e = emptyUserState(x.tripId);
-  return { ...e, ...x, transferDone: { ...e.transferDone, ...(x.transferDone ?? {}) } };
+  return { ...e, ...x, transferDone: { ...e.transferDone, ...(x.transferDone ?? {}) }, tipSteps: x.tipSteps ?? {}, saved: x.saved ?? {}, route: x.route ?? {} };
 }
 
 export function slug(s: string): string {
@@ -48,9 +77,67 @@ export function slug(s: string): string {
     .replace(/^-+|-+$/g, '');
 }
 
-export const stopKey = (s: Pick<Stop, 'name'>) => `s:${slug(s.name)}`;
-export const venueKey = (v: Pick<Venue, 'name'>) => `v:${slug(v.name)}`;
-export const eventKey = (e: Pick<EveningEvent, 'date' | 'title'>) => `e:${e.date}:${slug(e.title)}`;
+// Kalıcı kimlik (şema 4, `id`) varsa anahtar ona bağlanır; yoksa addan türetilir (önceki yöntem).
+// Kişisel rotaya eklenen yer kendi anahtarını taşır.
+type Keyed<T> = T & { id?: string; personal?: { key: string } };
+export const stopKey = (s: Keyed<Pick<Stop, 'name'>>) => s.personal?.key ?? (s.id ? `s#${s.id}` : `s:${slug(s.name)}`);
+export const venueKey = (v: Keyed<Pick<Venue, 'name'>>) => (v.id ? `v#${v.id}` : `v:${slug(v.name)}`);
+export const eventKey = (e: Keyed<Pick<EveningEvent, 'date' | 'title'>>) => (e.id ? `e#${e.id}` : `e:${e.date}:${slug(e.title)}`);
+export const placeKey = (p: Pick<Place, 'id'>) => `p#${p.id}`;
+const legacyStopKey = (s: Pick<Stop, 'name'>) => `s:${slug(s.name)}`;
+const legacyVenueKey = (v: Pick<Venue, 'name'>) => `v:${slug(v.name)}`;
+const legacyEventKey = (e: Pick<EveningEvent, 'date' | 'title'>) => `e:${e.date}:${slug(e.title)}`;
+
+const KEYED_MAPS = ['visited', 'notes', 'ratings', 'pins', 'videos', 'hiddenImages', 'booked', 'going', 'videoStarts', 'saved'] as const;
+
+/**
+ * Plan kimlik kazanınca (şema 4) addan türetilmiş anahtarlardaki kullanıcı verisi kimlik anahtarına
+ * taşınır; hiçbir kayıt silinmez. Değişiklik yoksa null döner.
+ */
+export function migrateKeys(trip: Trip, us: UserState): UserState | null {
+  const moves: [string, string][] = [];
+  trip.days.forEach((d) => {
+    d.stops.forEach((x) => x.id && moves.push([legacyStopKey(x), stopKey(x)]));
+    [...d.breakfast, ...d.dinner, ...d.snacks, ...(d.lunch ? [d.lunch.main, ...(d.lunch.backup ? [d.lunch.backup] : [])] : [])].forEach((x) => x.id && moves.push([legacyVenueKey(x), venueKey(x)]));
+    (d.eveningEvents ?? []).forEach((x) => x.id && moves.push([legacyEventKey(x), eventKey(x)]));
+  });
+  let changed = false;
+  const next: UserState = { ...us };
+  for (const m of KEYED_MAPS) {
+    const map = { ...((us[m] ?? {}) as Record<string, unknown>) };
+    let mc = false;
+    for (const [from, to] of moves) {
+      if (from in map && !(to in map)) {
+        map[to] = map[from];
+        delete map[from];
+        mc = true;
+      }
+    }
+    if (mc) {
+      (next as unknown as Record<string, unknown>)[m] = map;
+      changed = true;
+    }
+  }
+  // ipucu adımları ve rota bağlantıları da anahtara bağlıdır
+  const tipSteps = { ...us.tipSteps };
+  for (const [from, to] of moves)
+    for (const k of Object.keys(tipSteps))
+      if (k.startsWith(from + '|')) {
+        tipSteps[to + k.slice(from.length)] = tipSteps[k];
+        delete tipSteps[k];
+        changed = true;
+      }
+  next.tipSteps = tipSteps;
+  const route: Record<string, DayRoute> = {};
+  for (const [date, r] of Object.entries(us.route ?? {})) {
+    const ren = (k: string | null) => (k ? (moves.find(([a]) => a === k)?.[1] ?? k) : k);
+    const nr = { added: r.added.map((a) => ({ ...a, after: ren(a.after) })), order: r.order ? r.order.map((k) => ren(k)!) : null };
+    if (JSON.stringify(nr) !== JSON.stringify(r)) changed = true;
+    route[date] = nr;
+  }
+  next.route = route;
+  return changed ? next : null;
+}
 export const LODGING_KEY = 'lodging';
 
 const listeners = new Set<() => void>();

@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState, useSyncExternalStore, type ReactNode } from 'react';
-import { applyPins, useUserState, type UserState } from '../lib/userState';
+import { applyPins, migrateKeys, updateUserState, useUserState, type UserState } from '../lib/userState';
+import { applyRoute } from '../lib/route';
 import { tr } from '../i18n/tr';
 import { getTrip, subscribeTrips, type TripRecord } from '../lib/store';
 import type { RuleWarning } from '../plan/rules';
@@ -122,7 +123,13 @@ export function useTrip(key: string): { rec: TripRecord | null | undefined; us: 
       alive = false;
     };
   }, [key, v]);
-  const rec = useMemo(() => (raw && us ? { ...raw, trip: applyPins(raw.trip, us) } : raw && us === undefined ? undefined : raw), [raw, us]);
+  // Plan kimlik kazanınca eski (ada bağlı) işaretler kimlik anahtarına taşınır
+  useEffect(() => {
+    if (!raw || !us) return;
+    const m = migrateKeys(raw.trip, us);
+    if (m) void updateUserState(key, () => m);
+  }, [raw, us, key]);
+  const rec = useMemo(() => (raw && us ? { ...raw, trip: applyRoute(applyPins(raw.trip, us), us).trip } : raw && us === undefined ? undefined : raw), [raw, us]);
   return { rec, us, raw };
 }
 

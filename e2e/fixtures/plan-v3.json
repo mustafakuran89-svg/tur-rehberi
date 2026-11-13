@@ -1,0 +1,2171 @@
+{
+  "schemaVersion": 3,
+  "id": "ornek-gezi",
+  "title": "ÖRNEK Gezi: İki Günde ÖRNEK Kent",
+  "destinations": [
+    "ÖRNEK Kent"
+  ],
+  "startDate": "2027-05-14",
+  "endDate": "2027-05-15",
+  "summary": "Uygulamayı tanımak için hazırlanmış, uydurma mekanlardan oluşan iki günlük örnek gezi.",
+  "assumptions": [
+    "Bu gezi örnektir: bütün mekan ve durak adları uydurmadır, gerçek bir yeri göstermez.",
+    "Koordinatlar bir merkez noktanın çevresine yapay olarak yerleştirildi.",
+    "Yürüyerek gezilir; ikinci gün tepeye araçla çıkılır.",
+    "ÖRNEK yeme içme kısıtı: domuz eti yenmiyor.",
+    "Uçuş, otel, Michelin derecesi ve etkinlikler örnektir; bağlantılar example.com adresine gider."
+  ],
+  "weatherNote": "ÖRNEK: mayıs ortası ılık; gündüz 22 °C civarı. Gün doğumu 05:40, gün batımı 20:30 civarı.",
+  "reservations": [
+    {
+      "what": "ÖRNEK Saat Kulesi çıkışı",
+      "when": "1. gün 10:30",
+      "note": "Saatli bilet; bir gün önceden alın.",
+      "url": "https://example.com/ornek/bilet"
+    },
+    {
+      "what": "ÖRNEK Teras Lokantası (A2)",
+      "when": "1. ve 2. gün akşam",
+      "note": "Rezervasyon gerekli.",
+      "url": null
+    }
+  ],
+  "cuisine": [
+    {
+      "name": "ÖRNEK yöre makarnası",
+      "description": "El açması, kalın şerit makarna; tereyağı ve adaçayıyla.",
+      "where": "A1 Usta Lokantası"
+    },
+    {
+      "name": "ÖRNEK kızarmış hamsi",
+      "description": "Mısır ununa bulanıp kızartılan küçük balık.",
+      "where": "2. gün O1 Balıkçı Tezgahı"
+    },
+    {
+      "name": "ÖRNEK fıstıklı dondurma",
+      "description": "Kentin yaz klasiği.",
+      "where": "1. gün S1 Köprü Dondurmacısı"
+    }
+  ],
+  "days": [
+    {
+      "date": "2027-05-14",
+      "title": "Meydan ve kule",
+      "theme": "Kentin kalbi: pazar meydanından manastır bahçesine",
+      "area": "ÖRNEK Eski Kent",
+      "timeline": [
+        {
+          "time": "08:30 civarı",
+          "title": "Kahvaltı",
+          "kind": "breakfast",
+          "stopOrder": null,
+          "venueCodes": [
+            "K1",
+            "K2",
+            "K3"
+          ],
+          "fixed": false,
+          "note": null
+        },
+        {
+          "time": "09:30",
+          "title": "Pazar Meydanı",
+          "kind": "stop",
+          "stopOrder": 1,
+          "venueCodes": [],
+          "fixed": false,
+          "note": null
+        },
+        {
+          "time": "10:30–11:00",
+          "title": "Saat Kulesi",
+          "kind": "stop",
+          "stopOrder": 2,
+          "venueCodes": [],
+          "fixed": true,
+          "note": "Kuleye çıkış biletli ve saatlidir."
+        },
+        {
+          "time": "11:30 civarı",
+          "title": "Kent Müzesi",
+          "kind": "stop",
+          "stopOrder": 3,
+          "venueCodes": [],
+          "fixed": false,
+          "note": null
+        },
+        {
+          "time": "13:00 civarı",
+          "title": "Öğle yemeği",
+          "kind": "lunch",
+          "stopOrder": null,
+          "venueCodes": [
+            "O1",
+            "O2"
+          ],
+          "fixed": false,
+          "note": null
+        },
+        {
+          "time": "14:30–15:30",
+          "title": "Dinlenme ve serbest dolaşma",
+          "kind": "free",
+          "stopOrder": null,
+          "venueCodes": [],
+          "fixed": false,
+          "note": null
+        },
+        {
+          "time": "15:30 civarı",
+          "title": "Çeşme Sokağı",
+          "kind": "stop",
+          "stopOrder": 4,
+          "venueCodes": [],
+          "fixed": false,
+          "note": null
+        },
+        {
+          "time": "16:00 civarı",
+          "title": "Dondurma molası",
+          "kind": "snack",
+          "stopOrder": null,
+          "venueCodes": [
+            "S1"
+          ],
+          "fixed": false,
+          "note": null
+        },
+        {
+          "time": "16:30 civarı",
+          "title": "Manastır Bahçesi",
+          "kind": "stop",
+          "stopOrder": 5,
+          "venueCodes": [],
+          "fixed": false,
+          "note": null
+        },
+        {
+          "time": "19:30 civarı",
+          "title": "Akşam yemeği",
+          "kind": "dinner",
+          "stopOrder": null,
+          "venueCodes": [
+            "A1",
+            "A2",
+            "A3"
+          ],
+          "fixed": false,
+          "note": null
+        }
+      ],
+      "stops": [
+        {
+          "order": 1,
+          "name": "ÖRNEK Pazar Meydanı",
+          "kind": "main",
+          "lat": 44.4938,
+          "lng": 11.3426,
+          "coordSource": "other",
+          "address": "ÖRNEK Pazar Meydanı Sokağı No: 1, ÖRNEK Kent",
+          "visitMinutes": 60,
+          "openHours": "Her saat açık",
+          "closedDays": null,
+          "closedWeekdays": [],
+          "fee": "Ücretsiz",
+          "ticketOrBooking": null,
+          "bestTime": "Sabah erken",
+          "sources": [
+            {
+              "title": "ÖRNEK kaynak A",
+              "url": "https://example.com/ornek/durak-1-pazar-meydan-"
+            },
+            {
+              "title": "ÖRNEK kaynak B",
+              "url": "https://example.org/ornek/durak-1-pazar-meydan-"
+            }
+          ],
+          "verifiedAt": "2026-11-11",
+          "altNames": [
+            "ÖRNEK Pazar Alanı",
+            "ÖRNEK Piazza del Mercato"
+          ],
+          "narrationShort": "Bu meydan uydurma bir kentin uydurma kalbidir. Kent, iki dere arasındaki düzlükte kurulan haftalık pazarla doğdu; ortadaki taş çeşmenin pazarın ilk günlerinden kaldığı anlatılır. Kemerli revaklara, yerdeki koyu taşlara ve saat kulesinin altındaki küçük kapıya bakın. Sonraki durağa o kapının önünden geçeceğiz. Bu anlatım örnektir.",
+          "lookFor": [
+            "Ortadaki taş çeşme",
+            "Yerdeki koyu renkli taşlar: eski tezgahların yeri",
+            "Saat kulesinin altındaki küçük kapı"
+          ],
+          "videoQuery": "tarihi pazar meydanı belgesel",
+          "narration": "Bu meydan uydurma bir kentin uydurma kalbidir; burada anlatılan her şey uygulamayı denemeniz için yazıldı. Hikayeye göre kent, iki dere arasındaki bu düzlükte kurulan haftalık pazarla doğdu. Köylüler buğdaylarını, çömlekçiler testilerini buraya getirdi; pazar büyüdükçe çevresine evler, evlerin arasına sokaklar eklendi. Meydanın ortasındaki taş çeşme pazarın ilk günlerinden kalmadır derler, ama bu bir rivayettir. Şimdi çevrenize bakın. Kemerli revakların altında gölge arayan insanları göreceksiniz. Yerdeki taşların bazıları ötekilerden daha koyudur; eski pazar tezgahlarının yerini gösterir. Saat kulesine doğru dönün ve kulenin altındaki küçük kapıya dikkat edin. Bir sonraki durağa o kapının önünden geçerek gideceğiz. Acele etmeyin, çeşmenin suyundan bir yudum alın ve meydanın sesini dinleyin.\n\nŞimdi biraz da meydanın gündelik hayatına bakalım. Sabah erkenden fırının kepengi açılır, revakların altına masalar dizilir ve meydan yavaş yavaş dolar. Öğleye doğru gölge daralır, insanlar çeşmenin çevresine toplanır. Burada acele eden kimseyi görmezsiniz. Siz de bir süre durun, sesleri ayırmaya çalışın: su, adımlar, uzaktan bir çan.",
+          "practicalLine": "En iyi sabah dokuzdan önce; çeşmenin suyu içilebilir.",
+          "legToNext": {
+            "mode": "walk",
+            "minutes": 6,
+            "approx": false
+          }
+        },
+        {
+          "order": 2,
+          "name": "ÖRNEK Saat Kulesi",
+          "kind": "main",
+          "lat": 44.496675,
+          "lng": 11.344867,
+          "coordSource": "other",
+          "address": "ÖRNEK Saat Kulesi Sokağı No: 2, ÖRNEK Kent",
+          "visitMinutes": 60,
+          "openHours": "09:00-18:00",
+          "closedDays": "Pazartesi",
+          "closedWeekdays": [
+            "mon"
+          ],
+          "fee": "10 Avro",
+          "ticketOrBooking": "Saatli bilet; ÖRNEK bilet sayfasından alınır.",
+          "bestTime": "Sabah erken",
+          "sources": [
+            {
+              "title": "ÖRNEK kaynak A",
+              "url": "https://example.com/ornek/durak-2-saat-kulesi"
+            },
+            {
+              "title": "ÖRNEK kaynak B",
+              "url": "https://example.org/ornek/durak-2-saat-kulesi"
+            }
+          ],
+          "verifiedAt": "2026-11-11",
+          "altNames": [
+            "ÖRNEK Torre dell Orologio",
+            "ÖRNEK Kule"
+          ],
+          "hours": {
+            "tue": [
+              [
+                "09:00",
+                "18:00"
+              ]
+            ],
+            "wed": [
+              [
+                "09:00",
+                "18:00"
+              ]
+            ],
+            "thu": [
+              [
+                "09:00",
+                "18:00"
+              ]
+            ],
+            "fri": [
+              [
+                "09:00",
+                "18:00"
+              ]
+            ],
+            "sat": [
+              [
+                "09:00",
+                "18:00"
+              ]
+            ],
+            "sun": [
+              [
+                "09:00",
+                "18:00"
+              ]
+            ]
+          },
+          "ticketUrl": "https://example.com/ornek/kule-bileti",
+          "website": "https://example.com/ornek/saat-kulesi",
+          "narrationShort": "Saat kulesi, rivayete göre uzak limanlardan dönen bir tüccarın kente armağanıdır. Önce ahşaptan yapılmış, yangından sonra taşla yeniden kurulmuş. Kadranda rakam yerine on iki ayın işini anlatan kabartmalar vardır. Merdiven dar; tırabzana tutunun. Tepeye çıkınca kırmızı çatılara ve iki derenin izine bakın. Bu anlatım örnektir.",
+          "lookFor": [
+            "Kadrandaki on iki kabartma",
+            "Tepeden kırmızı kiremitli çatılar",
+            "Çatılar arasında iki derenin izi"
+          ],
+          "videoQuery": "saat kulesi tarihi belgesel",
+          "wikipediaTr": "Saat kulesi",
+          "images": [
+            {
+              "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/3/3f/Krakow_2024_068_Old_Town_Hall_Tower.jpg/960px-Krakow_2024_068_Old_Town_Hall_Tower.jpg",
+              "credit": "Scotch Mist",
+              "license": "CC BY-SA 4.0",
+              "sourceUrl": "https://commons.wikimedia.org/wiki/File:Krakow_2024_068_Old_Town_Hall_Tower.jpg"
+            }
+          ],
+          "narration": "Saat kulesi, rivayete göre, bir tüccarın kente armağanıdır. Tüccar uzak limanlardan döndüğünde herkesin aynı saati bilmesini istemiş, çünkü pazarın ne zaman açılıp kapanacağı her gün tartışma konusu olurmuş. Kule önce ahşaptan yapılmış, yangından sonra taşla yeniden kurulmuş. Bu bilgiler örnek içindir; gerçek bir kuleye ait değildir. Kulenin dibinde durun ve yukarı bakın. Saatin kadranında rakam yerine on iki küçük kabartma göreceksiniz. Her biri bir ayı ve o ayın işini anlatır: hasat, bağbozumu, odun kesimi. Merdivenler dar ve diktir, yukarı çıkarsanız tırabzana tutunun. Tepeden bakınca kırmızı kiremitli çatıların arasında iki derenin izini sürebilirsiniz. Kent hala onların çizdiği yolu izler.\n\nKulenin bir de saatçisi varmış. Her sabah merdivenleri tırmanıp saati kurar, sonra pencereden meydana bakıp herkese günaydın dermiş. Kent onu öyle sevmiş ki ölünce kadranın altına küçük bir anahtar oydurmuşlar. Kadranın hemen altındaki anahtar biçimindeki oyuğu arayın; bulursanız bu hikayenin geri kalanını siz tamamlayabilirsiniz.",
+          "practicalLine": "Merdiven dar; 20 dakika ayırın, çantayı aşağıda bırakın.",
+          "legToNext": {
+            "mode": "walk",
+            "minutes": null,
+            "approx": false
+          }
+        },
+        {
+          "order": 3,
+          "name": "ÖRNEK Kent Müzesi",
+          "kind": "main",
+          "lat": 44.498831,
+          "lng": 11.341089,
+          "coordSource": "other",
+          "address": "ÖRNEK Kent Müzesi Sokağı No: 3, ÖRNEK Kent",
+          "visitMinutes": 60,
+          "openHours": "09:00-18:00",
+          "closedDays": "Pazartesi",
+          "closedWeekdays": [
+            "mon"
+          ],
+          "fee": "10 Avro",
+          "ticketOrBooking": null,
+          "bestTime": "Sabah erken",
+          "sources": [
+            {
+              "title": "ÖRNEK kaynak A",
+              "url": "https://example.com/ornek/durak-3-kent-m-zesi"
+            },
+            {
+              "title": "ÖRNEK kaynak B",
+              "url": "https://example.org/ornek/durak-3-kent-m-zesi"
+            }
+          ],
+          "verifiedAt": "2026-11-11",
+          "narrationShort": "Bu küçük müze uydurma kentin hikayesini eşyalarla anlatır. İlk salonda pazar günlerinden kalan tartılar ve resmi ölçü kapları durur; tüccarlar birbirine güvenmediği için ölçüler burada saklanırmış. İkinci salondaki büyük haritada kent iki derenin arasında küçük bir adaya benzer. Köşedeki imzanın yanında küçük bir balık resmi var, onu bulmaya çalışın. Bu anlatım örnektir.",
+          "hours": {
+            "tue": [
+              [
+                "10:00",
+                "17:30"
+              ]
+            ],
+            "wed": [
+              [
+                "10:00",
+                "17:30"
+              ]
+            ],
+            "thu": [
+              [
+                "10:00",
+                "17:30"
+              ]
+            ],
+            "fri": [
+              [
+                "10:00",
+                "17:30"
+              ]
+            ],
+            "sat": [
+              [
+                "10:00",
+                "17:30"
+              ]
+            ],
+            "sun": [
+              [
+                "10:00",
+                "17:30"
+              ]
+            ]
+          },
+          "website": "https://example.com/ornek/kent-muzesi",
+          "phone": "+00 000 000 0000",
+          "lookFor": [
+            "İlk salondaki ölçü kapları",
+            "Büyük haritadaki imza ve balık resmi"
+          ],
+          "narration": "Bu küçük müze, kentin uydurma tarihini anlatan eşyaları bir araya getirir. Anlatım uygulamayı denemek için yazıldı; burada sözü geçen eşyalar gerçek değildir. İlk salonda pazar günlerinden kalan tartılar ve ölçü kapları durur. Tüccarlar birbirine güvenmezmiş, bu yüzden kentin resmi ölçüleri bu salonda saklanırmış. İkinci salona geçince duvardaki büyük haritaya bakın. Haritada kent bugünkünden çok küçüktür ve iki derenin arasında bir ada gibi durur. Haritanın köşesindeki imzayı bulmaya çalışın. Kimin çizdiği bilinmez, ama imzanın yanında küçük bir balık resmi vardır. Son salonda pencerenin önüne oturup biraz dinlenin. Avlunun ortasındaki limon ağacı müzenin en yaşlı sakinidir, en azından öyle anlatılır.\n\nMüzeden çıkmadan önce kapının yanındaki konuk defterine bir göz atın. Yüzlerce el yazısı, yüzlerce dilde aynı şeyi söyler: buraya küçük bir yer sanarak girip daha büyük bir hikayeyle çıkmışlar. Siz de bir satır yazabilirsiniz. Sonra avluya dönüp limon ağacının gölgesinde bir dakika soluklanın; sıradaki durak birkaç dakika uzakta.",
+          "practicalLine": "Bilet girişte alınır; müze pazartesi kapalı.",
+          "legToNext": {
+            "mode": "walk",
+            "minutes": null,
+            "approx": false
+          }
+        },
+        {
+          "order": 4,
+          "name": "ÖRNEK Çeşme Sokağı",
+          "kind": "minor",
+          "lat": 44.500986,
+          "lng": 11.343356,
+          "coordSource": "other",
+          "address": "ÖRNEK Çeşme Sokağı Sokağı No: 4, ÖRNEK Kent",
+          "visitMinutes": 15,
+          "openHours": "09:00-18:00",
+          "closedDays": null,
+          "closedWeekdays": [],
+          "fee": null,
+          "ticketOrBooking": null,
+          "bestTime": "Sabah erken",
+          "sources": [
+            {
+              "title": "ÖRNEK kaynak A",
+              "url": "https://example.com/ornek/durak-4--e-me-soka-"
+            },
+            {
+              "title": "ÖRNEK kaynak B",
+              "url": "https://example.org/ornek/durak-4--e-me-soka-"
+            }
+          ],
+          "verifiedAt": "2026-11-11",
+          "narration": "Bu dar sokak, adını sokağın başındaki küçük çeşmeden alır. Örnek bir duraktır. Çeşmenin üstündeki aslan başına dikkat edin, ağzından değil kulağından su akar.",
+          "practicalLine": "Fotoğraf için öğleden önce gelin.",
+          "legToNext": {
+            "mode": "walk",
+            "minutes": null,
+            "approx": false
+          }
+        },
+        {
+          "order": 5,
+          "name": "ÖRNEK Manastır Bahçesi",
+          "kind": "main",
+          "lat": 44.503232,
+          "lng": 11.34663,
+          "coordSource": "other",
+          "address": "ÖRNEK Manastır Bahçesi Sokağı No: 5, ÖRNEK Kent",
+          "visitMinutes": 60,
+          "openHours": "09:00-18:00",
+          "closedDays": "Pazartesi",
+          "closedWeekdays": [
+            "mon"
+          ],
+          "fee": "10 Avro",
+          "ticketOrBooking": null,
+          "bestTime": "Sabah erken",
+          "sources": [
+            {
+              "title": "ÖRNEK kaynak A",
+              "url": "https://example.com/ornek/durak-5-manast-r-bah-esi"
+            },
+            {
+              "title": "ÖRNEK kaynak B",
+              "url": "https://example.org/ornek/durak-5-manast-r-bah-esi"
+            }
+          ],
+          "verifiedAt": "2026-11-11",
+          "narrationShort": "Burası bir zamanlar manastırın sebze bahçesiymiş. Keşişler pazara satılacak otları burada yetiştirirmiş; fesleğen ve kekik hala kenarlarda kendiliğinden büyür. Yolu izleyip ilk kavşakta sola dönün, taş havuza varacaksınız. Kenar taşlarındaki harfler bahçede çalışan ailelerin baş harfleridir. Bir banka oturun ve kentin uğultusunun ne kadar uzaktan geldiğini dinleyin. Bu anlatım örnektir.",
+          "narration": "Bu bahçe bir zamanlar bir manastırın sebze bahçesiymiş. Bu da örnek bir hikayedir. Keşişler burada kent pazarına satılacak otları yetiştirirmiş; fesleğen, adaçayı ve kekik hala bahçenin kenarlarında kendiliğinden büyür. Yürüyüş yolunu izleyin ve ilk kavşakta sola dönün. Taş bir havuzun başına varacaksınız. Havuzun suyu yukarıdaki dereden gelir ve hiç kurumadığı söylenir. Kenardaki taşlara oyulmuş harfleri görebilirsiniz; her biri bahçede çalışan bir ailenin baş harfidir. Öğleden sonra güneş havuzun suyuna vurunca bahçenin bütün renkleri değişir. Burası yürüyüşe ara vermek için iyi bir yerdir. Bankların birine oturun, kentin uğultusunun ne kadar uzaktan geldiğine dikkat edin.\n\nBahçenin en sessiz köşesi havuzun arkasındaki küçük çardaktır. Keşişler orada dua eder, kitap okur, bazen de yalnızca kuşları dinlermiş. Çardağın direklerine sarılan asma her yaz yeniden yeşerir. Oradan bakınca manastırın eski çan kulesini ağaçların arasından seçebilirsiniz. Günün ilk bölümü burada biter; dinlenip suyunuzu tazeleyin.",
+          "practicalLine": "Gölgelik az; şapka ve su alın.",
+          "legToNext": null
+        }
+      ],
+      "breakfast": [
+        {
+          "code": "K1",
+          "name": "ÖRNEK Fırın Kahvaltısı",
+          "lat": 44.493081,
+          "lng": 11.341844,
+          "coordSource": "other",
+          "address": "ÖRNEK Fırın Kahvaltısı Caddesi, ÖRNEK Kent",
+          "whatToEat": [
+            "ÖRNEK sıcak çörek",
+            "ÖRNEK kaymaklı tost"
+          ],
+          "priceLevel": 1,
+          "reservation": "none",
+          "reservationNote": null,
+          "closedDays": null,
+          "closedWeekdays": [],
+          "queueNote": null,
+          "suitsWhom": "Hızlı ve ekonomik başlamak isteyenlere.",
+          "sources": [
+            {
+              "title": "ÖRNEK kaynak A",
+              "url": "https://example.com/ornek/mekan-k1"
+            },
+            {
+              "title": "ÖRNEK kaynak B",
+              "url": "https://example.org/ornek/mekan-k1"
+            }
+          ],
+          "verifiedAt": "2026-11-11",
+          "hours": {
+            "mon": [
+              [
+                "07:00",
+                "11:30"
+              ]
+            ],
+            "tue": [
+              [
+                "07:00",
+                "11:30"
+              ]
+            ],
+            "wed": [
+              [
+                "07:00",
+                "11:30"
+              ]
+            ],
+            "thu": [
+              [
+                "07:00",
+                "11:30"
+              ]
+            ],
+            "fri": [
+              [
+                "07:00",
+                "11:30"
+              ]
+            ],
+            "sat": [
+              [
+                "07:00",
+                "11:30"
+              ]
+            ],
+            "sun": [
+              [
+                "07:00",
+                "11:30"
+              ]
+            ]
+          }
+        },
+        {
+          "code": "K2",
+          "name": "ÖRNEK Avlu Kahvesi",
+          "lat": 44.494339,
+          "lng": 11.340837,
+          "coordSource": "other",
+          "address": "ÖRNEK Avlu Kahvesi Caddesi, ÖRNEK Kent",
+          "whatToEat": [
+            "ÖRNEK yumurtalı tava",
+            "ÖRNEK reçel tabağı"
+          ],
+          "priceLevel": 2,
+          "reservation": "none",
+          "reservationNote": null,
+          "closedDays": null,
+          "closedWeekdays": [],
+          "queueNote": null,
+          "suitsWhom": "Sakin, oturarak kahvaltı isteyenlere.",
+          "sources": [
+            {
+              "title": "ÖRNEK kaynak A",
+              "url": "https://example.com/ornek/mekan-k2"
+            },
+            {
+              "title": "ÖRNEK kaynak B",
+              "url": "https://example.org/ornek/mekan-k2"
+            }
+          ],
+          "verifiedAt": "2026-11-11"
+        },
+        {
+          "code": "K3",
+          "name": "ÖRNEK Pazar Tezgahı",
+          "lat": 44.492453,
+          "lng": 11.343733,
+          "coordSource": "other",
+          "address": "ÖRNEK Pazar Tezgahı Caddesi, ÖRNEK Kent",
+          "whatToEat": [
+            "ÖRNEK peynirli ekmek",
+            "ÖRNEK taze sıkma meyve suyu"
+          ],
+          "priceLevel": 1,
+          "reservation": "none",
+          "reservationNote": null,
+          "closedDays": null,
+          "closedWeekdays": [],
+          "queueNote": "Sabah 9 civarı kuyruk olur.",
+          "suitsWhom": "Yerlilerin arasında ayakta kahvaltı edenlere.",
+          "sources": [
+            {
+              "title": "ÖRNEK kaynak A",
+              "url": "https://example.com/ornek/mekan-k3"
+            },
+            {
+              "title": "ÖRNEK kaynak B",
+              "url": "https://example.org/ornek/mekan-k3"
+            }
+          ],
+          "verifiedAt": "2026-11-11"
+        }
+      ],
+      "lunch": {
+        "main": {
+          "code": "O1",
+          "name": "ÖRNEK Esnaf Lokantası",
+          "lat": 44.49937,
+          "lng": 11.343104,
+          "coordSource": "other",
+          "address": "ÖRNEK Esnaf Lokantası Caddesi, ÖRNEK Kent",
+          "whatToEat": [
+            "ÖRNEK günün tenceresi",
+            "ÖRNEK pilav"
+          ],
+          "priceLevel": 1,
+          "reservation": "none",
+          "reservationNote": null,
+          "closedDays": null,
+          "closedWeekdays": [],
+          "queueNote": null,
+          "suitsWhom": "Yerlilerle birlikte hızlı öğle yemeği isteyenlere.",
+          "sources": [
+            {
+              "title": "ÖRNEK kaynak A",
+              "url": "https://example.com/ornek/mekan-o1"
+            },
+            {
+              "title": "ÖRNEK kaynak B",
+              "url": "https://example.org/ornek/mekan-o1"
+            }
+          ],
+          "verifiedAt": "2026-11-11"
+        },
+        "backup": {
+          "code": "O2",
+          "name": "ÖRNEK Bahçe Kafe",
+          "lat": 44.500088,
+          "lng": 11.340081,
+          "coordSource": "other",
+          "address": "ÖRNEK Bahçe Kafe Caddesi, ÖRNEK Kent",
+          "whatToEat": [
+            "ÖRNEK sebzeli tart",
+            "ÖRNEK limonata"
+          ],
+          "priceLevel": 2,
+          "reservation": "none",
+          "reservationNote": null,
+          "closedDays": null,
+          "closedWeekdays": [],
+          "queueNote": null,
+          "suitsWhom": "Gölgede oturup dinlenmek isteyenlere.",
+          "sources": [
+            {
+              "title": "ÖRNEK kaynak A",
+              "url": "https://example.com/ornek/mekan-o2"
+            },
+            {
+              "title": "ÖRNEK kaynak B",
+              "url": "https://example.org/ornek/mekan-o2"
+            }
+          ],
+          "verifiedAt": "2026-11-11"
+        }
+      },
+      "dinner": [
+        {
+          "code": "A1",
+          "name": "ÖRNEK Usta Lokantası",
+          "lat": 44.497393,
+          "lng": 11.345371,
+          "coordSource": "other",
+          "address": "ÖRNEK Usta Lokantası Caddesi, ÖRNEK Kent",
+          "whatToEat": [
+            "ÖRNEK yöre makarnası",
+            "ÖRNEK fırın sebze"
+          ],
+          "priceLevel": 2,
+          "reservation": "recommended",
+          "reservationNote": "Hafta sonu bir gün önceden arayın.",
+          "closedDays": null,
+          "closedWeekdays": [],
+          "queueNote": null,
+          "suitsWhom": "Yörenin klasik yemeklerini tatmak isteyenlere.",
+          "sources": [
+            {
+              "title": "ÖRNEK kaynak A",
+              "url": "https://example.com/ornek/mekan-a1"
+            },
+            {
+              "title": "ÖRNEK kaynak B",
+              "url": "https://example.org/ornek/mekan-a1"
+            }
+          ],
+          "verifiedAt": "2026-11-11",
+          "hours": {
+            "mon": [
+              [
+                "18:30",
+                "23:30"
+              ]
+            ],
+            "tue": [
+              [
+                "18:30",
+                "23:30"
+              ]
+            ],
+            "wed": [
+              [
+                "18:30",
+                "23:30"
+              ]
+            ],
+            "thu": [
+              [
+                "18:30",
+                "23:30"
+              ]
+            ],
+            "fri": [
+              [
+                "18:30",
+                "23:30"
+              ]
+            ],
+            "sat": [
+              [
+                "18:30",
+                "23:30"
+              ]
+            ],
+            "sun": [
+              [
+                "18:30",
+                "23:30"
+              ]
+            ]
+          },
+          "phone": "+00 000 000 0000",
+          "michelin": {
+            "distinction": "bib-gourmand",
+            "greenStar": false,
+            "year": 2026,
+            "url": "https://example.com/ornek/michelin-usta"
+          }
+        },
+        {
+          "code": "A2",
+          "name": "ÖRNEK Teras Lokantası",
+          "lat": 44.498651,
+          "lng": 11.342852,
+          "coordSource": "other",
+          "address": "ÖRNEK Teras Lokantası Caddesi, ÖRNEK Kent",
+          "whatToEat": [
+            "ÖRNEK ızgara balık",
+            "ÖRNEK limonlu tatlı"
+          ],
+          "priceLevel": 3,
+          "reservation": "required",
+          "reservationNote": null,
+          "closedDays": null,
+          "closedWeekdays": [],
+          "queueNote": null,
+          "suitsWhom": "Manzaralı ve sakin bir akşam isteyenlere.",
+          "sources": [
+            {
+              "title": "ÖRNEK kaynak A",
+              "url": "https://example.com/ornek/mekan-a2"
+            },
+            {
+              "title": "ÖRNEK kaynak B",
+              "url": "https://example.org/ornek/mekan-a2"
+            }
+          ],
+          "verifiedAt": "2026-11-11",
+          "hours": {
+            "mon": [
+              [
+                "19:00",
+                "23:00"
+              ]
+            ],
+            "tue": [
+              [
+                "19:00",
+                "23:00"
+              ]
+            ],
+            "wed": [
+              [
+                "19:00",
+                "23:00"
+              ]
+            ],
+            "thu": [
+              [
+                "19:00",
+                "23:00"
+              ]
+            ],
+            "fri": [
+              [
+                "19:00",
+                "23:00"
+              ]
+            ],
+            "sat": [
+              [
+                "19:00",
+                "23:00"
+              ]
+            ],
+            "sun": [
+              [
+                "19:00",
+                "23:00"
+              ]
+            ]
+          },
+          "bookingUrl": "https://example.com/ornek/rezervasyon",
+          "website": "https://example.com/ornek/teras",
+          "images": [
+            {
+              "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/c/c0/Table_set_on_terrace_over_water%2C_Venice.jpg/960px-Table_set_on_terrace_over_water%2C_Venice.jpg",
+              "credit": "Gerda Arendt",
+              "license": "CC0",
+              "sourceUrl": "https://commons.wikimedia.org/wiki/File:Table_set_on_terrace_over_water,_Venice.jpg"
+            }
+          ],
+          "michelin": {
+            "distinction": "1-star",
+            "greenStar": true,
+            "year": 2026,
+            "url": "https://example.com/ornek/michelin-teras"
+          }
+        },
+        {
+          "code": "A3",
+          "name": "ÖRNEK Köşe Dürümcüsü",
+          "lat": 44.495956,
+          "lng": 11.346378,
+          "coordSource": "other",
+          "address": "ÖRNEK Köşe Dürümcüsü Caddesi, ÖRNEK Kent",
+          "whatToEat": [
+            "ÖRNEK sıcak dürüm",
+            "ÖRNEK ayran"
+          ],
+          "priceLevel": 1,
+          "reservation": "none",
+          "reservationNote": null,
+          "closedDays": null,
+          "closedWeekdays": [],
+          "queueNote": null,
+          "suitsWhom": "Yorgun, hızlı ve ekonomik yemek isteyenlere; gece 02:00’ye kadar açık.",
+          "sources": [
+            {
+              "title": "ÖRNEK kaynak A",
+              "url": "https://example.com/ornek/mekan-a3"
+            },
+            {
+              "title": "ÖRNEK kaynak B",
+              "url": "https://example.org/ornek/mekan-a3"
+            }
+          ],
+          "verifiedAt": "2026-11-11",
+          "hours": {
+            "mon": [
+              [
+                "17:00",
+                "26:00"
+              ]
+            ],
+            "tue": [
+              [
+                "17:00",
+                "26:00"
+              ]
+            ],
+            "wed": [
+              [
+                "17:00",
+                "26:00"
+              ]
+            ],
+            "thu": [
+              [
+                "17:00",
+                "26:00"
+              ]
+            ],
+            "fri": [
+              [
+                "17:00",
+                "26:00"
+              ]
+            ],
+            "sat": [
+              [
+                "17:00",
+                "26:00"
+              ]
+            ],
+            "sun": [
+              [
+                "17:00",
+                "26:00"
+              ]
+            ]
+          }
+        }
+      ],
+      "snacks": [
+        {
+          "code": "S1",
+          "name": "ÖRNEK Köprü Dondurmacısı",
+          "lat": 44.501885,
+          "lng": 11.345119,
+          "coordSource": "other",
+          "address": "ÖRNEK Köprü Dondurmacısı Caddesi, ÖRNEK Kent",
+          "whatToEat": [
+            "ÖRNEK fıstıklı dondurma",
+            "ÖRNEK limonlu dondurma"
+          ],
+          "priceLevel": 1,
+          "reservation": "none",
+          "reservationNote": null,
+          "closedDays": null,
+          "closedWeekdays": [],
+          "queueNote": null,
+          "suitsWhom": "Öğleden sonra serinlemek isteyenlere.",
+          "sources": [
+            {
+              "title": "ÖRNEK kaynak A",
+              "url": "https://example.com/ornek/mekan-s1"
+            },
+            {
+              "title": "ÖRNEK kaynak B",
+              "url": "https://example.org/ornek/mekan-s1"
+            }
+          ],
+          "verifiedAt": "2026-11-11"
+        }
+      ],
+      "flex": {
+        "swappable": "Müze ile Saat Kulesi yer değiştirebilir; kule bileti saatlidir, ona göre ayarlayın.",
+        "skipIfTired": "Çeşme Sokağı atlanabilir.",
+        "ifExtraTime": "Manastır Bahçesi’nden sonra köprüye kadar yürüyün.",
+        "ifRain": "Bahçe yerine müzede daha uzun kalın."
+      },
+      "notes": null,
+      "fromLodging": {
+        "mode": "walk",
+        "minutes": 6,
+        "instruction": "ÖRNEK: otelden çıkıp sola dönün, revakların altından meydana yürüyün."
+      },
+      "toLodging": {
+        "mode": "walk",
+        "minutes": 15,
+        "instruction": "ÖRNEK: bahçe kapısından çıkıp dere boyunca güneye yürüyün; köprüyü geçince otel sağda."
+      },
+      "eveningEvents": [
+        {
+          "title": "ÖRNEK Avlu Konseri",
+          "kind": "concert",
+          "venueName": "ÖRNEK Müze Avlusu",
+          "address": "ÖRNEK Müze Sokağı, ÖRNEK Kent",
+          "lat": 44.49901,
+          "lng": 11.341341,
+          "coordSource": "other",
+          "date": "2027-05-14",
+          "startTime": "21:00",
+          "endTime": "22:30",
+          "priceText": "ÖRNEK 15 Avro",
+          "bookingUrl": "https://example.com/ornek/konser",
+          "website": null,
+          "note": "Bu etkinlik örnektir; gerçek değildir.",
+          "suitsWhom": "Akşam yemeğinden sonra sakin bir müzik isteyenlere.",
+          "sources": [
+            {
+              "title": "ÖRNEK kaynak A",
+              "url": "https://example.com/ornek/etkinlik-konser"
+            },
+            {
+              "title": "ÖRNEK kaynak B",
+              "url": "https://example.org/ornek/etkinlik-konser"
+            }
+          ],
+          "verifiedAt": "2026-11-11"
+        },
+        {
+          "title": "ÖRNEK Fener Yürüyüşü",
+          "kind": "tour",
+          "venueName": "ÖRNEK Saat Kulesi önü",
+          "address": null,
+          "lat": 44.496764,
+          "lng": 11.344993,
+          "coordSource": "other",
+          "date": "2027-05-14",
+          "startTime": "22:00",
+          "endTime": null,
+          "priceText": "Ücretsiz",
+          "bookingUrl": null,
+          "website": "https://example.com/ornek/fener",
+          "note": "Bu etkinlik örnektir; gerçek değildir.",
+          "suitsWhom": "Gece yürümeyi sevenlere.",
+          "sources": [
+            {
+              "title": "ÖRNEK kaynak A",
+              "url": "https://example.com/ornek/etkinlik-fener"
+            },
+            {
+              "title": "ÖRNEK kaynak B",
+              "url": "https://example.org/ornek/etkinlik-fener"
+            }
+          ],
+          "verifiedAt": "2026-11-11"
+        }
+      ]
+    },
+    {
+      "date": "2027-05-15",
+      "title": "Köprüden tepeye",
+      "theme": "Dere kıyısı, kapalı pazar ve gün batımı",
+      "area": "ÖRNEK Dere Kıyısı",
+      "timeline": [
+        {
+          "time": "08:30 civarı",
+          "title": "Kahvaltı",
+          "kind": "breakfast",
+          "stopOrder": null,
+          "venueCodes": [
+            "K1",
+            "K2",
+            "K3"
+          ],
+          "fixed": false,
+          "note": null
+        },
+        {
+          "time": "09:30",
+          "title": "Eski Köprü",
+          "kind": "stop",
+          "stopOrder": 1,
+          "venueCodes": [],
+          "fixed": false,
+          "note": null
+        },
+        {
+          "time": "10:30 civarı",
+          "title": "Kapalı Pazar",
+          "kind": "stop",
+          "stopOrder": 2,
+          "venueCodes": [],
+          "fixed": false,
+          "note": null
+        },
+        {
+          "time": "11:30 civarı",
+          "title": "Gizli Avlu",
+          "kind": "stop",
+          "stopOrder": 3,
+          "venueCodes": [],
+          "fixed": false,
+          "note": null
+        },
+        {
+          "time": "13:00 civarı",
+          "title": "Öğle yemeği",
+          "kind": "lunch",
+          "stopOrder": null,
+          "venueCodes": [
+            "O1",
+            "O2"
+          ],
+          "fixed": false,
+          "note": null
+        },
+        {
+          "time": "14:30–16:30",
+          "title": "Dinlenme",
+          "kind": "free",
+          "stopOrder": null,
+          "venueCodes": [],
+          "fixed": false,
+          "note": null
+        },
+        {
+          "time": "17:00 civarı",
+          "title": "Sur Kapısı",
+          "kind": "stop",
+          "stopOrder": 4,
+          "venueCodes": [],
+          "fixed": false,
+          "note": null
+        },
+        {
+          "time": "19:40",
+          "title": "Tepe Terası, gün batımı",
+          "kind": "stop",
+          "stopOrder": 5,
+          "venueCodes": [],
+          "fixed": true,
+          "note": "Gün batımı ÖRNEK saat 20:30."
+        },
+        {
+          "time": "21:00 civarı",
+          "title": "Akşam yemeği",
+          "kind": "dinner",
+          "stopOrder": null,
+          "venueCodes": [
+            "A1",
+            "A2",
+            "A3"
+          ],
+          "fixed": false,
+          "note": null
+        }
+      ],
+      "stops": [
+        {
+          "order": 1,
+          "name": "ÖRNEK Eski Köprü",
+          "kind": "main",
+          "lat": 44.491105,
+          "lng": 11.339452,
+          "coordSource": "other",
+          "address": "ÖRNEK Eski Köprü Sokağı No: 1, ÖRNEK Kent",
+          "visitMinutes": 60,
+          "openHours": "09:00-18:00",
+          "closedDays": null,
+          "closedWeekdays": [],
+          "fee": "Ücretsiz",
+          "ticketOrBooking": null,
+          "bestTime": "Sabah erken",
+          "sources": [
+            {
+              "title": "ÖRNEK kaynak A",
+              "url": "https://example.com/ornek/durak-1-eski-k-pr-"
+            },
+            {
+              "title": "ÖRNEK kaynak B",
+              "url": "https://example.org/ornek/durak-1-eski-k-pr-"
+            }
+          ],
+          "verifiedAt": "2026-11-11",
+          "narrationShort": "Eski köprü iki dereden büyüğünün üzerinden geçer. Hikayeye göre köprüden önce dereyi salla geçerlermiş; işsiz kalan salcıya köprünün ortasındaki küçük ev verilmiş, bugün orası bir dondurmacı. Korkuluklardaki çentikler her yıl ilk selin yüksekliğini gösterir. En yüksek çentiği bulun; o yıl suyun köprünün üstünden aştığı anlatılır. Bu anlatım örnektir.",
+          "altNames": [
+            "ÖRNEK Ponte Vecchio di Esempio"
+          ],
+          "videos": [
+            {
+              "youtubeId": "ORNEKvideo1",
+              "title": "ÖRNEK video: ÖRNEK Kent gezisi (gerçek bir video değildir)",
+              "channel": "ÖRNEK Rehber Kanalı",
+              "channelId": null,
+              "language": "tr",
+              "durationSeconds": 2460,
+              "likeCount": null,
+              "viewCount": null,
+              "checkedAt": "2026-11-11",
+              "source": "plan",
+              "startSeconds": 754,
+              "endSeconds": 1032,
+              "chapterTitle": "ÖRNEK Eski Köprü"
+            }
+          ],
+          "narration": "Eski köprü iki dereden büyüğünün üzerinden geçer. Örnek hikayeye göre köprü yapılmadan önce dereyi bir salla geçerlermiş ve salcı, kentin en zengin adamıymış. Köprü yapılınca salcı işsiz kalmış, ama kent ona köprünün ortasındaki küçük evi vermiş. O ev hala oradadır; şimdi bir dondurmacıdır. Köprünün ortasına gelince durun ve akıntı yönüne bakın. Suyun içinde eski sal iskelesinin taşlarını görebilirsiniz. Köprünün korkuluklarında yüzlerce küçük çentik vardır. Her yıl ilk sel geldiğinde suyun yüksekliği buraya işaretlenirmiş. En yüksek çentiği bulun; o yıl suyun köprünün üstünden aştığı anlatılır. Bu anlatım uygulamayı denemek için yazıldı.\n\nKöprünün iki ucunda birer taş aslan bekler. Biri suya, öteki kente bakar. Kentliler suya bakan aslanın selleri, kente bakanın da hırsızları gözlediğini söyler. Köprüden inerken aslanlardan birinin pençesine dokunun; buranın geleneğine göre dokunan kişi bu kente bir gün yeniden gelir. Bu da örnek hikayenin bir parçasıdır.",
+          "practicalLine": "Köprü her saat açık; sabah erken sakin.",
+          "legToNext": {
+            "mode": "walk",
+            "minutes": 7,
+            "approx": false
+          }
+        },
+        {
+          "order": 2,
+          "name": "ÖRNEK Kapalı Pazar",
+          "kind": "main",
+          "lat": 44.489129,
+          "lng": 11.342978,
+          "coordSource": "other",
+          "address": "ÖRNEK Kapalı Pazar Sokağı No: 2, ÖRNEK Kent",
+          "visitMinutes": 60,
+          "openHours": "09:00-18:00",
+          "closedDays": "Pazar",
+          "closedWeekdays": [
+            "sun"
+          ],
+          "fee": "Ücretsiz",
+          "ticketOrBooking": null,
+          "bestTime": "Sabah erken",
+          "sources": [
+            {
+              "title": "ÖRNEK kaynak A",
+              "url": "https://example.com/ornek/durak-2-kapal-pazar"
+            },
+            {
+              "title": "ÖRNEK kaynak B",
+              "url": "https://example.org/ornek/durak-2-kapal-pazar"
+            }
+          ],
+          "verifiedAt": "2026-11-11",
+          "narrationShort": "Kapalı pazar, meydandaki açık pazarın çatı altına girmiş halidir. Sabah balıkçılar, öğleye doğru peynirciler ve fırıncılar tezgah açar. Her koridorun kendi kokusu vardır: sağda taze ekmek, solda olgun peynir. Ortadaki tezgahta yerel zeytinyağlarını tadabilirsiniz. Tavandaki eski fenerlere bakmayı unutmayın, çıkışta ayakta bir kahve için. Bu anlatım örnektir.",
+          "altNames": [
+            "ÖRNEK Mercato Coperto"
+          ],
+          "narration": "Kapalı pazar, meydandaki açık pazarın büyüyüp çatı altına girmiş halidir. Bu bir örnek anlatımdır. Sabahları balıkçılar, öğleye doğru peynirciler ve fırıncılar tezgah açar. İçeri girince önce kokuya dikkat edin; her koridorun kendine ait bir kokusu vardır. Sağdaki koridor taze ekmek, soldaki olgun peynir kokar. Ortadaki büyük tezgahta yerel zeytinyağları sıralanır ve satıcılar tatmanız için ekmek dilimleri uzatır. Tavana bakın; demir kirişlerin arasında eski pazar fenerleri asılıdır. Pazarın çıkışında küçük bir kahve tezgahı vardır, ayakta içilen sert bir kahveyle yola devam edebilirsiniz. Akşamüstü pazar erken kapanır, alışverişi öğleden önce yapın.\n\nPazarın asıl ruhunu satıcılarla konuşunca anlarsınız. Yerliler buraya Mercato der ve her tezgahın bir ailenin adını taşıdığını bilir. Bir peynirciye hangi köyden geldiğini sorun; büyük olasılıkla size bir dilim tattırıp uzun bir hikaye anlatacaktır. Fiyat sormaktan çekinmeyin, ama pazarlık burada pek alışılmış değildir.",
+          "practicalLine": "Öğleden önce gelin; nakit getirin.",
+          "legToNext": {
+            "mode": "walk",
+            "minutes": null,
+            "approx": false
+          }
+        },
+        {
+          "order": 3,
+          "name": "ÖRNEK Gizli Avlu",
+          "kind": "minor",
+          "lat": null,
+          "lng": null,
+          "coordSource": null,
+          "address": "ÖRNEK Gizli Avlu Sokağı No: 3, ÖRNEK Kent",
+          "visitMinutes": 15,
+          "openHours": "09:00-18:00",
+          "closedDays": null,
+          "closedWeekdays": [],
+          "fee": null,
+          "ticketOrBooking": null,
+          "bestTime": "Sabah erken",
+          "sources": [
+            {
+              "title": "ÖRNEK kaynak A",
+              "url": "https://example.com/ornek/durak-3-gizli-avlu"
+            },
+            {
+              "title": "ÖRNEK kaynak B",
+              "url": "https://example.org/ornek/durak-3-gizli-avlu"
+            }
+          ],
+          "verifiedAt": "2026-11-11",
+          "narration": "Bu avlunun koordinatı bilerek boş bırakıldı; uygulama onu haritaya koymaz, adresiyle listeler. Örnek bir duraktır.",
+          "practicalLine": "Koordinatı olmayan yerlerin nasıl göründüğünü gösterir.",
+          "legToNext": {
+            "mode": "walk",
+            "minutes": 8,
+            "approx": false
+          }
+        },
+        {
+          "order": 4,
+          "name": "ÖRNEK Sur Kapısı",
+          "kind": "main",
+          "lat": 44.485715,
+          "lng": 11.347008,
+          "coordSource": "other",
+          "address": "ÖRNEK Sur Kapısı Sokağı No: 4, ÖRNEK Kent",
+          "visitMinutes": 60,
+          "openHours": "09:00-18:00",
+          "closedDays": "Pazartesi",
+          "closedWeekdays": [
+            "mon"
+          ],
+          "fee": "10 Avro",
+          "ticketOrBooking": null,
+          "bestTime": "Sabah erken",
+          "sources": [
+            {
+              "title": "ÖRNEK kaynak A",
+              "url": "https://example.com/ornek/durak-4-sur-kap-s-"
+            },
+            {
+              "title": "ÖRNEK kaynak B",
+              "url": "https://example.org/ornek/durak-4-sur-kap-s-"
+            }
+          ],
+          "verifiedAt": "2026-11-11",
+          "narrationShort": "Surların bu bölümü örnek hikayede kentin en eski parçasıdır. Surlar hiç büyük bir kuşatma görmemiş, kentliler bu yüzden onlara gülümseyerek bakar. Yürüyüş yolunda her yüz adımda bir gözetleme kulesi var; duvarlarda nöbetçilerin kazıdığı gemi, at ve kocaman bir peynir resmi görülür. Batıya bakan kulede durup gün batımını bekleyin. Bu anlatım örnektir.",
+          "narration": "Kent surlarının bu bölümü, örnek hikayede kentin en eski parçasıdır. Surlar pazarı ve evleri korumak için yapılmış, ama hiçbir zaman büyük bir kuşatma görmemiş. Kentliler bu yüzden surlara biraz da gülümseyerek bakar. Surun üstündeki yürüyüş yolunu izleyin. Her yüz adımda bir küçük gözetleme kulesi göreceksiniz. Kulelerin duvarlarında nöbetçilerin can sıkıntısından kazıdığı resimler vardır: gemiler, atlar ve bir tanesinde de çok büyük bir peynir. Batıya dönük kulede durun. Gün batımında güneş tam karşıdaki tepenin ardına iner ve surların taşları kızıla boyanır. Bu anlatım uygulamayı denemek içindir; burada anlatılanlar gerçek bir yere ait değildir.\n\nSur kapısının kemerine yakından bakın. Taşların bazılarında küçük işaretler vardır: bir çekiç, bir yıldız, bir anahtar. Bunlar taşı yontan ustaların imzasıdır. Her usta yonttuğu taşa kendi işaretini kazır, ödemesini de işaret sayısına göre alırmış. Kaç farklı işaret bulabileceğinize bakın; sonra yolumuza tepeye doğru devam edeceğiz.",
+          "practicalLine": "Surun üstü rüzgarlı; kaygan taşlara dikkat.",
+          "legToNext": {
+            "mode": "drive",
+            "minutes": null,
+            "approx": false
+          }
+        },
+        {
+          "order": 5,
+          "name": "ÖRNEK Tepe Terası",
+          "kind": "main",
+          "lat": 44.476732,
+          "lng": 11.360231,
+          "coordSource": "other",
+          "address": "ÖRNEK Tepe Terası Sokağı No: 5, ÖRNEK Kent",
+          "visitMinutes": 60,
+          "openHours": "09:00-18:00",
+          "closedDays": null,
+          "closedWeekdays": [],
+          "fee": "Ücretsiz",
+          "ticketOrBooking": null,
+          "bestTime": "Gün batımı",
+          "sources": [
+            {
+              "title": "ÖRNEK kaynak A",
+              "url": "https://example.com/ornek/durak-5-tepe-teras-"
+            },
+            {
+              "title": "ÖRNEK kaynak B",
+              "url": "https://example.org/ornek/durak-5-tepe-teras-"
+            }
+          ],
+          "verifiedAt": "2026-11-11",
+          "narrationShort": "Bu teras kentin en yüksek noktası ve günü bitirmek için seçildi. Burada eskiden bir rüzgar değirmeni varmış; değirmenin yuvarlak taşı bugün terasın duvarına örülü durur. Buradan gün boyu gezdiğiniz yerleri tek tek seçebilirsiniz: meydan, kule, köprü ve surlar. Rüzgar serttir, bir hırka alın ve akşam ışıklarının yanışını izleyin. Bu anlatım örnektir.",
+          "narration": "Bu teras kentin en yüksek noktasıdır ve günü bitirmek için seçildi. Örnek hikayeye göre burada bir zamanlar rüzgar değirmeni varmış; pazarın unu burada öğütülürmüş. Değirmen yıkılmış ama taşları terasın duvarına örülmüş. Duvarın üstündeki yuvarlak taşı bulun; değirmenin eski taşıdır. Buradan bakınca gün boyunca gezdiğiniz yerleri tek tek seçebilirsiniz: meydan, saat kulesi, köprü ve surlar. Akşam ışıkları yanmaya başlayınca kentin iki derenin arasına nasıl sıkıştığını daha iyi görürsünüz. Rüzgar sert eser, yanınıza bir hırka alın. Bu anlatım örnektir; uygulamanın sesli anlatımını denemeniz için yazıldı.\n\nGünün sonunda buraya gelmek bir gelenektir. Kentliler gün batımını izlemek için yanlarında küçük bir şişe ve bir parça peynirle gelir, kimse konuşmaz. Güneş tepenin ardında kaybolunca biri alkışlamaya başlar, ötekiler de katılır. Siz de bu sessiz törene katılın. Yarın başka bir kentte olsanız bile bu alkışı hatırlayacaksınız.",
+          "practicalLine": "Gün batımından yarım saat önce orada olun.",
+          "legToNext": null
+        }
+      ],
+      "breakfast": [
+        {
+          "code": "K1",
+          "name": "ÖRNEK Fırın Kahvaltısı",
+          "lat": 44.490836,
+          "lng": 11.338066,
+          "coordSource": "other",
+          "address": "ÖRNEK Fırın Kahvaltısı Caddesi, ÖRNEK Kent",
+          "whatToEat": [
+            "ÖRNEK sıcak çörek",
+            "ÖRNEK kaymaklı tost"
+          ],
+          "priceLevel": 1,
+          "reservation": "none",
+          "reservationNote": null,
+          "closedDays": null,
+          "closedWeekdays": [],
+          "queueNote": null,
+          "suitsWhom": "Hızlı ve ekonomik başlamak isteyenlere.",
+          "sources": [
+            {
+              "title": "ÖRNEK kaynak A",
+              "url": "https://example.com/ornek/mekan-k1"
+            },
+            {
+              "title": "ÖRNEK kaynak B",
+              "url": "https://example.org/ornek/mekan-k1"
+            }
+          ],
+          "verifiedAt": "2026-11-11",
+          "hours": {
+            "mon": [
+              [
+                "07:00",
+                "11:30"
+              ]
+            ],
+            "tue": [
+              [
+                "07:00",
+                "11:30"
+              ]
+            ],
+            "wed": [
+              [
+                "07:00",
+                "11:30"
+              ]
+            ],
+            "thu": [
+              [
+                "07:00",
+                "11:30"
+              ]
+            ],
+            "fri": [
+              [
+                "07:00",
+                "11:30"
+              ]
+            ],
+            "sat": [
+              [
+                "07:00",
+                "11:30"
+              ]
+            ],
+            "sun": [
+              [
+                "07:00",
+                "11:30"
+              ]
+            ]
+          }
+        },
+        {
+          "code": "K2",
+          "name": "ÖRNEK Avlu Kahvesi",
+          "lat": 44.492093,
+          "lng": 11.337059,
+          "coordSource": "other",
+          "address": "ÖRNEK Avlu Kahvesi Caddesi, ÖRNEK Kent",
+          "whatToEat": [
+            "ÖRNEK yumurtalı tava",
+            "ÖRNEK reçel tabağı"
+          ],
+          "priceLevel": 2,
+          "reservation": "none",
+          "reservationNote": null,
+          "closedDays": null,
+          "closedWeekdays": [],
+          "queueNote": null,
+          "suitsWhom": "Sakin, oturarak kahvaltı isteyenlere.",
+          "sources": [
+            {
+              "title": "ÖRNEK kaynak A",
+              "url": "https://example.com/ornek/mekan-k2"
+            },
+            {
+              "title": "ÖRNEK kaynak B",
+              "url": "https://example.org/ornek/mekan-k2"
+            }
+          ],
+          "verifiedAt": "2026-11-11"
+        },
+        {
+          "code": "K3",
+          "name": "ÖRNEK Pazar Tezgahı",
+          "lat": 44.490207,
+          "lng": 11.339955,
+          "coordSource": "other",
+          "address": "ÖRNEK Pazar Tezgahı Caddesi, ÖRNEK Kent",
+          "whatToEat": [
+            "ÖRNEK peynirli ekmek",
+            "ÖRNEK taze sıkma meyve suyu"
+          ],
+          "priceLevel": 1,
+          "reservation": "none",
+          "reservationNote": null,
+          "closedDays": null,
+          "closedWeekdays": [],
+          "queueNote": "Sabah 9 civarı kuyruk olur.",
+          "suitsWhom": "Yerlilerin arasında ayakta kahvaltı edenlere.",
+          "sources": [
+            {
+              "title": "ÖRNEK kaynak A",
+              "url": "https://example.com/ornek/mekan-k3"
+            },
+            {
+              "title": "ÖRNEK kaynak B",
+              "url": "https://example.org/ornek/mekan-k3"
+            }
+          ],
+          "verifiedAt": "2026-11-11"
+        }
+      ],
+      "lunch": {
+        "main": {
+          "code": "O1",
+          "name": "ÖRNEK Balıkçı Tezgahı",
+          "lat": 44.488769,
+          "lng": 11.343607,
+          "coordSource": "other",
+          "address": "ÖRNEK Balıkçı Tezgahı Caddesi, ÖRNEK Kent",
+          "whatToEat": [
+            "ÖRNEK kızarmış hamsi",
+            "ÖRNEK balık çorbası"
+          ],
+          "priceLevel": 2,
+          "reservation": "none",
+          "reservationNote": null,
+          "closedDays": "Pazartesi",
+          "closedWeekdays": [
+            "mon"
+          ],
+          "queueNote": null,
+          "suitsWhom": "Pazarın içinde taze balık isteyenlere.",
+          "sources": [
+            {
+              "title": "ÖRNEK kaynak A",
+              "url": "https://example.com/ornek/mekan-o1"
+            },
+            {
+              "title": "ÖRNEK kaynak B",
+              "url": "https://example.org/ornek/mekan-o1"
+            }
+          ],
+          "verifiedAt": "2026-11-11"
+        },
+        "backup": {
+          "code": "O2",
+          "name": "ÖRNEK Pazar Börekçisi",
+          "lat": 44.489488,
+          "lng": 11.341844,
+          "coordSource": "other",
+          "address": "ÖRNEK Pazar Börekçisi Caddesi, ÖRNEK Kent",
+          "whatToEat": [
+            "ÖRNEK peynirli börek",
+            "ÖRNEK çay"
+          ],
+          "priceLevel": 1,
+          "reservation": "none",
+          "reservationNote": null,
+          "closedDays": null,
+          "closedWeekdays": [],
+          "queueNote": null,
+          "suitsWhom": "Ayakta, hızlı bir şey isteyenlere.",
+          "sources": [
+            {
+              "title": "ÖRNEK kaynak A",
+              "url": "https://example.com/ornek/mekan-o2"
+            },
+            {
+              "title": "ÖRNEK kaynak B",
+              "url": "https://example.org/ornek/mekan-o2"
+            }
+          ],
+          "verifiedAt": "2026-11-11"
+        }
+      },
+      "dinner": [
+        {
+          "code": "A1",
+          "name": "ÖRNEK Usta Lokantası",
+          "lat": 44.479427,
+          "lng": 11.360482,
+          "coordSource": "other",
+          "address": "ÖRNEK Usta Lokantası Caddesi, ÖRNEK Kent",
+          "whatToEat": [
+            "ÖRNEK yöre makarnası",
+            "ÖRNEK fırın sebze"
+          ],
+          "priceLevel": 2,
+          "reservation": "recommended",
+          "reservationNote": "Hafta sonu bir gün önceden arayın.",
+          "closedDays": null,
+          "closedWeekdays": [],
+          "queueNote": null,
+          "suitsWhom": "Yörenin klasik yemeklerini tatmak isteyenlere.",
+          "sources": [
+            {
+              "title": "ÖRNEK kaynak A",
+              "url": "https://example.com/ornek/mekan-a1"
+            },
+            {
+              "title": "ÖRNEK kaynak B",
+              "url": "https://example.org/ornek/mekan-a1"
+            }
+          ],
+          "verifiedAt": "2026-11-11",
+          "hours": {
+            "mon": [
+              [
+                "18:30",
+                "23:30"
+              ]
+            ],
+            "tue": [
+              [
+                "18:30",
+                "23:30"
+              ]
+            ],
+            "wed": [
+              [
+                "18:30",
+                "23:30"
+              ]
+            ],
+            "thu": [
+              [
+                "18:30",
+                "23:30"
+              ]
+            ],
+            "fri": [
+              [
+                "18:30",
+                "23:30"
+              ]
+            ],
+            "sat": [
+              [
+                "18:30",
+                "23:30"
+              ]
+            ],
+            "sun": [
+              [
+                "18:30",
+                "23:30"
+              ]
+            ]
+          },
+          "phone": "+00 000 000 0000",
+          "michelin": {
+            "distinction": "bib-gourmand",
+            "greenStar": false,
+            "year": 2026,
+            "url": "https://example.com/ornek/michelin-usta"
+          }
+        },
+        {
+          "code": "A2",
+          "name": "ÖRNEK Teras Lokantası",
+          "lat": 44.480685,
+          "lng": 11.357964,
+          "coordSource": "other",
+          "address": "ÖRNEK Teras Lokantası Caddesi, ÖRNEK Kent",
+          "whatToEat": [
+            "ÖRNEK ızgara balık",
+            "ÖRNEK limonlu tatlı"
+          ],
+          "priceLevel": 3,
+          "reservation": "required",
+          "reservationNote": null,
+          "closedDays": null,
+          "closedWeekdays": [],
+          "queueNote": null,
+          "suitsWhom": "Manzaralı ve sakin bir akşam isteyenlere.",
+          "sources": [
+            {
+              "title": "ÖRNEK kaynak A",
+              "url": "https://example.com/ornek/mekan-a2"
+            },
+            {
+              "title": "ÖRNEK kaynak B",
+              "url": "https://example.org/ornek/mekan-a2"
+            }
+          ],
+          "verifiedAt": "2026-11-11",
+          "hours": {
+            "mon": [
+              [
+                "19:00",
+                "23:00"
+              ]
+            ],
+            "tue": [
+              [
+                "19:00",
+                "23:00"
+              ]
+            ],
+            "wed": [
+              [
+                "19:00",
+                "23:00"
+              ]
+            ],
+            "thu": [
+              [
+                "19:00",
+                "23:00"
+              ]
+            ],
+            "fri": [
+              [
+                "19:00",
+                "23:00"
+              ]
+            ],
+            "sat": [
+              [
+                "19:00",
+                "23:00"
+              ]
+            ],
+            "sun": [
+              [
+                "19:00",
+                "23:00"
+              ]
+            ]
+          },
+          "bookingUrl": "https://example.com/ornek/rezervasyon",
+          "website": "https://example.com/ornek/teras",
+          "images": [
+            {
+              "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/c/c0/Table_set_on_terrace_over_water%2C_Venice.jpg/960px-Table_set_on_terrace_over_water%2C_Venice.jpg",
+              "credit": "Gerda Arendt",
+              "license": "CC0",
+              "sourceUrl": "https://commons.wikimedia.org/wiki/File:Table_set_on_terrace_over_water,_Venice.jpg"
+            }
+          ],
+          "michelin": {
+            "distinction": "1-star",
+            "greenStar": true,
+            "year": 2026,
+            "url": "https://example.com/ornek/michelin-teras"
+          }
+        },
+        {
+          "code": "A3",
+          "name": "ÖRNEK Köşe Dürümcüsü",
+          "lat": 44.47799,
+          "lng": 11.36149,
+          "coordSource": "other",
+          "address": "ÖRNEK Köşe Dürümcüsü Caddesi, ÖRNEK Kent",
+          "whatToEat": [
+            "ÖRNEK sıcak dürüm",
+            "ÖRNEK ayran"
+          ],
+          "priceLevel": 1,
+          "reservation": "none",
+          "reservationNote": null,
+          "closedDays": null,
+          "closedWeekdays": [],
+          "queueNote": null,
+          "suitsWhom": "Yorgun, hızlı ve ekonomik yemek isteyenlere; gece 02:00’ye kadar açık.",
+          "sources": [
+            {
+              "title": "ÖRNEK kaynak A",
+              "url": "https://example.com/ornek/mekan-a3"
+            },
+            {
+              "title": "ÖRNEK kaynak B",
+              "url": "https://example.org/ornek/mekan-a3"
+            }
+          ],
+          "verifiedAt": "2026-11-11",
+          "hours": {
+            "mon": [
+              [
+                "17:00",
+                "26:00"
+              ]
+            ],
+            "tue": [
+              [
+                "17:00",
+                "26:00"
+              ]
+            ],
+            "wed": [
+              [
+                "17:00",
+                "26:00"
+              ]
+            ],
+            "thu": [
+              [
+                "17:00",
+                "26:00"
+              ]
+            ],
+            "fri": [
+              [
+                "17:00",
+                "26:00"
+              ]
+            ],
+            "sat": [
+              [
+                "17:00",
+                "26:00"
+              ]
+            ],
+            "sun": [
+              [
+                "17:00",
+                "26:00"
+              ]
+            ]
+          }
+        }
+      ],
+      "snacks": [
+        {
+          "code": "S1",
+          "name": "ÖRNEK Pazar Kahvecisi",
+          "lat": 44.488949,
+          "lng": 11.3426,
+          "coordSource": "other",
+          "address": "ÖRNEK Pazar Kahvecisi Caddesi, ÖRNEK Kent",
+          "whatToEat": [
+            "ÖRNEK sert kahve",
+            "ÖRNEK bademli kurabiye"
+          ],
+          "priceLevel": 1,
+          "reservation": "none",
+          "reservationNote": null,
+          "closedDays": null,
+          "closedWeekdays": [],
+          "queueNote": null,
+          "suitsWhom": "Ayakta kısa bir kahve molası isteyenlere.",
+          "sources": [
+            {
+              "title": "ÖRNEK kaynak A",
+              "url": "https://example.com/ornek/mekan-s1"
+            },
+            {
+              "title": "ÖRNEK kaynak B",
+              "url": "https://example.org/ornek/mekan-s1"
+            }
+          ],
+          "verifiedAt": "2026-11-11"
+        }
+      ],
+      "flex": {
+        "swappable": "Kapalı Pazar ile Eski Köprü yer değiştirebilir.",
+        "skipIfTired": "Gizli Avlu atlanabilir.",
+        "ifExtraTime": "Surun üstünde bir kule daha yürüyün.",
+        "ifRain": "Kapalı Pazar’da daha uzun kalın; teras yerine pazar kahvecisinde oturun."
+      },
+      "notes": null,
+      "fromLodging": {
+        "mode": "walk",
+        "minutes": 8,
+        "instruction": "ÖRNEK: otelin önünden dere boyunca kuzeye yürüyün; köprü karşınıza çıkar."
+      },
+      "toLodging": {
+        "mode": "drive",
+        "minutes": 12,
+        "instruction": "ÖRNEK: terastan taksiyle otele dönün."
+      },
+      "eveningEvents": [
+        {
+          "title": "ÖRNEK Gece Pazarı",
+          "kind": "market",
+          "venueName": "ÖRNEK Kapalı Pazar",
+          "address": "ÖRNEK Pazar Caddesi, ÖRNEK Kent",
+          "lat": 44.489129,
+          "lng": 11.342978,
+          "coordSource": "other",
+          "date": "2027-05-15",
+          "startTime": "21:30",
+          "endTime": "23:30",
+          "priceText": "Ücretsiz",
+          "bookingUrl": null,
+          "website": null,
+          "note": "Bu etkinlik örnektir; gerçek değildir.",
+          "suitsWhom": "Gece atıştırmak isteyenlere.",
+          "sources": [
+            {
+              "title": "ÖRNEK kaynak A",
+              "url": "https://example.com/ornek/etkinlik-pazar"
+            },
+            {
+              "title": "ÖRNEK kaynak B",
+              "url": "https://example.org/ornek/etkinlik-pazar"
+            }
+          ],
+          "verifiedAt": "2026-11-11"
+        }
+      ]
+    }
+  ],
+  "phrases": [
+    {
+      "language": "İtalyanca",
+      "langCode": "it-IT",
+      "items": [
+        {
+          "original": "Buongiorno",
+          "script": null,
+          "pronunciationTr": "Bon curno",
+          "meaning": "Günaydın / iyi günler",
+          "context": "Öğleye kadar selamlaşırken"
+        },
+        {
+          "original": "Buonasera",
+          "script": null,
+          "pronunciationTr": "Bonasera",
+          "meaning": "İyi akşamlar",
+          "context": "Öğleden sonra ve akşam"
+        },
+        {
+          "original": "Grazie",
+          "script": null,
+          "pronunciationTr": "Gratsiye",
+          "meaning": "Teşekkürler",
+          "context": null
+        },
+        {
+          "original": "Per favore",
+          "script": null,
+          "pronunciationTr": "Per favore",
+          "meaning": "Lütfen",
+          "context": null
+        },
+        {
+          "original": "Scusi",
+          "script": null,
+          "pronunciationTr": "Skuzi",
+          "meaning": "Affedersiniz",
+          "context": "Birine seslenirken"
+        },
+        {
+          "original": "Arrivederci",
+          "script": null,
+          "pronunciationTr": "Arrivederçi",
+          "meaning": "Hoşça kalın",
+          "context": "Ayrılırken"
+        },
+        {
+          "original": "Sì / No",
+          "script": null,
+          "pronunciationTr": "Si / No",
+          "meaning": "Evet / Hayır",
+          "context": null
+        },
+        {
+          "original": "Quanto costa?",
+          "script": null,
+          "pronunciationTr": "Kuanto kosta?",
+          "meaning": "Ne kadar?",
+          "context": "Alışverişte"
+        },
+        {
+          "original": "Il conto, per favore",
+          "script": null,
+          "pronunciationTr": "İl konto per favore",
+          "meaning": "Hesap lütfen",
+          "context": "Masada"
+        },
+        {
+          "original": "Vorrei questo",
+          "script": null,
+          "pronunciationTr": "Vorrey kuesto",
+          "meaning": "Bunu istiyorum",
+          "context": "Sipariş verirken gösterip"
+        },
+        {
+          "original": "Un altro, per favore",
+          "script": null,
+          "pronunciationTr": "Un altro per favore",
+          "meaning": "Bir tane daha, lütfen",
+          "context": "Sipariş verirken"
+        },
+        {
+          "original": "È buonissimo!",
+          "script": null,
+          "pronunciationTr": "E buonissimo!",
+          "meaning": "Çok lezzetli!",
+          "context": "Yemekten sonra"
+        },
+        {
+          "original": "Non piccante, per favore",
+          "script": null,
+          "pronunciationTr": "Non pikkante per favore",
+          "meaning": "Acısız olsun, lütfen",
+          "context": "Sipariş verirken"
+        },
+        {
+          "original": "Un tavolo per due",
+          "script": null,
+          "pronunciationTr": "Un tavolo per due",
+          "meaning": "İki kişilik bir masa",
+          "context": "Lokantaya girince"
+        },
+        {
+          "original": "Acqua naturale",
+          "script": null,
+          "pronunciationTr": "Akkua naturale",
+          "meaning": "Sade su",
+          "context": "Su isterken"
+        },
+        {
+          "original": "Dov’è il bagno?",
+          "script": null,
+          "pronunciationTr": "Dove il banyo?",
+          "meaning": "Tuvalet nerede?",
+          "context": null
+        },
+        {
+          "original": "Parla inglese?",
+          "script": null,
+          "pronunciationTr": "Parla inglese?",
+          "meaning": "İngilizce konuşuyor musunuz?",
+          "context": null
+        },
+        {
+          "original": "Senza carne di maiale, per favore",
+          "script": null,
+          "pronunciationTr": "Senza karne di mayale, per favore",
+          "meaning": "Domuz eti olmasın, lütfen",
+          "context": "Sipariş verirken; yeme içme kısıtı"
+        }
+      ]
+    }
+  ],
+  "practical": {
+    "transport": "ÖRNEK: eski kent yürüyerek gezilir. Tepeye taksiyle 10 dakika.",
+    "moneyAndTipping": "ÖRNEK: kart çoğu yerde geçer; pazarda nakit gerekir. Bahşiş zorunlu değil, %5-10 yaygın.",
+    "closedDays": "ÖRNEK: müzeler pazartesi, kapalı pazar pazar günü kapalı.",
+    "emergency": [
+      {
+        "label": "Genel acil (Avrupa)",
+        "number": "112"
+      },
+      {
+        "label": "ÖRNEK turizm polisi",
+        "number": "000 000 00 00"
+      }
+    ],
+    "notes": [
+      "Bu bilgiler örnektir; gerçek bir gezide planı Claude’da üretin."
+    ]
+  },
+  "sources": [
+    {
+      "title": "ÖRNEK genel kaynak",
+      "url": "https://example.com/ornek"
+    }
+  ],
+  "verifiedAt": "2026-11-11",
+  "notes": "ÖRNEK veri. Gerçek mekan değildir.",
+  "pronunciations": [
+    {
+      "text": "Mercato",
+      "say": "Merkato"
+    },
+    {
+      "text": "Piazza",
+      "say": "Piyatsa"
+    }
+  ],
+  "lodging": {
+    "name": "ÖRNEK Dere Oteli",
+    "address": "ÖRNEK Dere Caddesi No: 7, ÖRNEK Kent",
+    "lat": 44.492453,
+    "lng": 11.345748,
+    "coordSource": "other",
+    "phone": "+00 000 000 0000",
+    "website": "https://example.com/ornek/otel",
+    "checkIn": "14:00",
+    "checkOut": "11:00",
+    "note": "ÖRNEK konaklama; gerçek bir otel değildir."
+  },
+  "arrival": {
+    "title": "ÖRNEK Havalimanından otele",
+    "date": "2027-05-14",
+    "flight": "ÖRNEK uçuş XX 0000",
+    "flightTime": "06:40",
+    "hubName": "ÖRNEK Havalimanı, gelen yolcu çıkışı",
+    "hubLat": 44.439901,
+    "hubLng": 11.292227,
+    "leaveBy": null,
+    "steps": [
+      {
+        "mode": "walk",
+        "instruction": "Bagajı alıp “Tren” tabelasını izleyin; istasyon terminalin altında.",
+        "from": "Gelen yolcu çıkışı",
+        "to": "Havalimanı istasyonu",
+        "line": null,
+        "direction": null,
+        "stopsCount": null,
+        "durationMinutes": 5,
+        "ticket": null,
+        "costText": null,
+        "lat": 44.439901,
+        "lng": 11.292227
+      },
+      {
+        "mode": "train",
+        "instruction": "ÖRNEK hafif raylıya binin, “Merkez” yönünde gidin; “Dere Köprüsü” durağında inin.",
+        "from": "Havalimanı istasyonu",
+        "to": "Dere Köprüsü",
+        "line": "ÖRNEK H1",
+        "direction": "Merkez",
+        "stopsCount": 6,
+        "durationMinutes": 22,
+        "ticket": "Tek yön bilet, istasyondaki makineden; kartla ödenir.",
+        "costText": "ÖRNEK 4 Avro",
+        "lat": null,
+        "lng": null
+      },
+      {
+        "mode": "walk",
+        "instruction": "Duraktan çıkınca köprüyü geçin; otel dere caddesinin sağ tarafında.",
+        "from": "Dere Köprüsü",
+        "to": "ÖRNEK Dere Oteli",
+        "line": null,
+        "direction": null,
+        "stopsCount": null,
+        "durationMinutes": 6,
+        "ticket": null,
+        "costText": null,
+        "lat": 44.491105,
+        "lng": 11.339452
+      }
+    ],
+    "totalMinutes": 33,
+    "costText": "ÖRNEK 4 Avro",
+    "alternatives": [
+      {
+        "title": "Taksi",
+        "summary": "ÖRNEK: çıkıştaki resmi taksi durağından.",
+        "minutes": 20,
+        "costText": "ÖRNEK 35 Avro"
+      },
+      {
+        "title": "Servis otobüsü",
+        "summary": "ÖRNEK: yarım saatte bir, merkez garına.",
+        "minutes": 35,
+        "costText": "ÖRNEK 6 Avro"
+      }
+    ],
+    "note": "Bu yol tarifi örnektir.",
+    "sources": [
+      {
+        "title": "ÖRNEK kaynak A",
+        "url": "https://example.com/ornek/varis"
+      },
+      {
+        "title": "ÖRNEK kaynak B",
+        "url": "https://example.org/ornek/varis"
+      }
+    ],
+    "verifiedAt": "2026-11-11"
+  },
+  "departure": {
+    "title": "ÖRNEK Otelden havalimanına",
+    "date": "2027-05-15",
+    "flight": "ÖRNEK uçuş XX 0001",
+    "flightTime": "23:59",
+    "hubName": "ÖRNEK Havalimanı, giden yolcu",
+    "hubLat": 44.439901,
+    "hubLng": 11.292227,
+    "leaveBy": "21:00",
+    "steps": [
+      {
+        "mode": "walk",
+        "instruction": "Otelden çıkıp köprüyü geçin; “Dere Köprüsü” durağına yürüyün.",
+        "from": "ÖRNEK Dere Oteli",
+        "to": "Dere Köprüsü",
+        "line": null,
+        "direction": null,
+        "stopsCount": null,
+        "durationMinutes": 6,
+        "ticket": null,
+        "costText": null,
+        "lat": null,
+        "lng": null
+      },
+      {
+        "mode": "train",
+        "instruction": "ÖRNEK hafif raylıya “Havalimanı” yönünde binin; son durakta inin.",
+        "from": "Dere Köprüsü",
+        "to": "Havalimanı istasyonu",
+        "line": "ÖRNEK H1",
+        "direction": "Havalimanı",
+        "stopsCount": 6,
+        "durationMinutes": 22,
+        "ticket": "Tek yön bilet, makineden.",
+        "costText": "ÖRNEK 4 Avro",
+        "lat": null,
+        "lng": null
+      },
+      {
+        "mode": "walk",
+        "instruction": "İstasyondan yürüyen merdivenle giden yolcu katına çıkın.",
+        "from": "Havalimanı istasyonu",
+        "to": "Giden yolcu",
+        "line": null,
+        "direction": null,
+        "stopsCount": null,
+        "durationMinutes": 5,
+        "ticket": null,
+        "costText": null,
+        "lat": null,
+        "lng": null
+      }
+    ],
+    "totalMinutes": 33,
+    "costText": "ÖRNEK 4 Avro",
+    "alternatives": [
+      {
+        "title": "Taksi",
+        "summary": "ÖRNEK: otel resepsiyonundan çağrılır.",
+        "minutes": 20,
+        "costText": "ÖRNEK 35 Avro"
+      }
+    ],
+    "note": "Bu yol tarifi örnektir.",
+    "sources": [
+      {
+        "title": "ÖRNEK kaynak A",
+        "url": "https://example.com/ornek/donus"
+      },
+      {
+        "title": "ÖRNEK kaynak B",
+        "url": "https://example.org/ornek/donus"
+      }
+    ],
+    "verifiedAt": "2026-11-11"
+  }
+}

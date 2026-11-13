@@ -25,12 +25,14 @@ let dbp: Promise<IDBPDatabase> | null = null;
 // Sürüm 3: 'regions' (çevrimdışı harita bölge dosyaları, bayt dizisi olarak).
 export function db(): Promise<IDBPDatabase> {
   if (!dbp) {
-    dbp = openDB(DB_NAME, 3, {
+    dbp = openDB(DB_NAME, 4, {
       upgrade(d) {
         if (!d.objectStoreNames.contains('trips')) d.createObjectStore('trips', { keyPath: 'key' });
         if (!d.objectStoreNames.contains('user')) d.createObjectStore('user', { keyPath: 'tripId' });
         if (!d.objectStoreNames.contains('cache')) d.createObjectStore('cache', { keyPath: 'key' });
         if (!d.objectStoreNames.contains('regions')) d.createObjectStore('regions', { keyPath: 'id' });
+        // Sürüm 4: 'keys' (plan kutusu cihaz anahtarı; özel anahtar dışa aktarılamaz, yedeğe girmez)
+        if (!d.objectStoreNames.contains('keys')) d.createObjectStore('keys', { keyPath: 'id' });
       },
     });
   }

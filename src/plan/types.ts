@@ -112,6 +112,61 @@ export interface Stop {
   images?: PlanImage[];
   // sürüm 3
   altNames?: string[];
+  // sürüm 4
+  id?: string;
+  tips?: Tip[];
+  /** Uygulama katmanı (şemada yok): kişisel rotaya kullanıcının eklediği yer. */
+  personal?: PersonalMark;
+}
+
+/** Kişisel rotaya eklenen yerin kaynağı ve tur modunda okunacak metnin türü. */
+export interface PersonalMark {
+  key: string; // kullanıcı durumundaki rota ögesinin anahtarı
+  source: 'discover' | 'stop' | 'venue' | 'event' | 'wiki' | 'own';
+  note?: string | null;
+  attribution?: string | null; // ansiklopedi kaynağı ve lisansı
+}
+
+export type TipKind = 'ticket' | 'transport' | 'money' | 'timing' | 'etiquette' | 'safety' | 'food' | 'shopping' | 'photo' | 'other';
+export type TipWhen = 'before-trip' | 'on-arrival' | 'on-site' | 'any';
+export interface Tip {
+  title: string;
+  text: string;
+  kind?: TipKind;
+  steps?: string[];
+  url?: string | null;
+  when?: TipWhen;
+}
+
+export type PlaceCategory = 'sight' | 'museum' | 'viewpoint' | 'park' | 'market' | 'shop' | 'cafe' | 'restaurant' | 'bar' | 'experience' | 'neighborhood' | 'other';
+export interface Place {
+  id: string;
+  name: string;
+  category: PlaceCategory;
+  lat: number;
+  lng: number;
+  coordSource?: CoordSource;
+  address?: string | null;
+  area?: string | null;
+  description: string;
+  visitMinutes?: number | null;
+  openHours?: string | null;
+  hours?: WeeklyHours | null;
+  closedWeekdays?: Weekday[];
+  fee?: string | null;
+  phone?: string | null;
+  website?: string | null;
+  ticketUrl?: string | null;
+  bookingUrl?: string | null;
+  michelin?: Michelin | null;
+  suggestedDate?: ISODate | null;
+  altNames?: string[];
+  wikipediaTr?: string | null;
+  videoQuery?: string | null;
+  images?: PlanImage[];
+  tips?: Tip[];
+  sources: Source[];
+  verifiedAt: ISODate | null;
 }
 
 /** SS:DD; gece yarısından sonraki kapanış 24:00-29:59. */
@@ -210,7 +265,7 @@ export interface DayLeg {
   instruction: string;
 }
 
-export type EventKind = 'concert' | 'opera' | 'theatre' | 'dance' | 'market' | 'tour' | 'sport' | 'nightlife' | 'other';
+export type EventKind = 'concert' | 'opera' | 'theatre' | 'dance' | 'market' | 'tour' | 'sport' | 'nightlife' | 'exhibition' | 'festival' | 'show' | 'food' | 'family' | 'other';
 
 export interface EveningEvent {
   title: string;
@@ -230,6 +285,15 @@ export interface EveningEvent {
   suitsWhom?: string | null;
   sources: Source[];
   verifiedAt: ISODate | null;
+  // sürüm 4
+  id?: string;
+  description?: string | null;
+  endDate?: ISODate | null;
+  durationMinutes?: number | null;
+  recommended?: boolean;
+  availabilityNote?: string | null;
+  images?: PlanImage[];
+  tips?: Tip[];
 }
 
 export interface Venue {
@@ -257,6 +321,9 @@ export interface Venue {
   images?: PlanImage[];
   bookingUrl?: string | null;
   michelin?: Michelin | null;
+  // sürüm 4
+  id?: string;
+  tips?: Tip[];
 }
 
 export interface Lunch {
@@ -290,7 +357,7 @@ export interface Day {
 }
 
 export interface Trip {
-  schemaVersion: 1 | 2 | 3;
+  schemaVersion: 1 | 2 | 3 | 4;
   id: string;
   title: string;
   destinations: string[];
@@ -313,4 +380,8 @@ export interface Trip {
   departure?: Transfer | null;
   // sürüm 3
   pronunciations?: Pronunciation[];
+  // sürüm 4
+  tips?: Tip[];
+  discover?: Place[];
+  happenings?: EveningEvent[];
 }

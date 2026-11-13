@@ -1,4 +1,4 @@
-// Örnek gezi üreticisi (şema sürüm 3). Çıktı: src/sample/ornek-plan.json
+// Örnek gezi üreticisi (şema sürüm 4). Çıktı: src/sample/ornek-plan.json
 // Sürüm 2 alanlarında da uydurma bilgi gerçek gibi sunulmaz: Michelin derecesi, etkinlik, uçuş,
 // otel ve rezervasyon bağlantısı ÖRNEK etiketlidir ve example.com adreslerine gider. Görseller
 // Wikimedia Commons'tan alınmış gerçek, özgür lisanslı genel fotoğraflardır (eser sahibi ve lisans).
@@ -258,7 +258,7 @@ const phrases = [
 ].map(([original, pronunciationTr, meaning, context]) => ({ original, script: null, pronunciationTr, meaning, context }));
 
 const plan = {
-  schemaVersion: 3,
+  schemaVersion: 4,
   id: 'ornek-gezi',
   title: 'ÖRNEK Gezi: İki Günde ÖRNEK Kent',
   destinations: ['ÖRNEK Kent'],
@@ -360,6 +360,75 @@ const plan = {
     verifiedAt: V,
   },
 };
+
+// ---------------- Sürüm 4: kalıcı kimlik, ipuçları, etkinlikler, keşfet ----------------
+const slugify = (x) =>
+  x
+    .toLocaleLowerCase('tr')
+    .replace(/ı/g, 'i')
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '');
+plan.days.forEach((d, di) => {
+  d.stops.forEach((st) => (st.id = slugify(st.name)));
+  const vs = [...d.breakfast, ...d.dinner, ...d.snacks, ...(d.lunch ? [d.lunch.main, ...(d.lunch.backup ? [d.lunch.backup] : [])] : [])];
+  vs.forEach((v) => (v.id = `gun${di + 1}-${v.code.toLowerCase()}`));
+  (d.eveningEvents ?? []).forEach((e) => (e.id = slugify(e.title)));
+});
+// Durak ipuçları (ÖRNEK; uydurma kent için yazılmıştır)
+const kule = plan.days[0].stops[1];
+kule.tips = [
+  {
+    title: 'Bileti nasıl alırım?',
+    text: 'ÖRNEK: kule çıkışı saatli biletle yapılır; bilet bir gün önceden ÖRNEK bilet sayfasından alınır, kapıda kalmayabilir.',
+    kind: 'ticket',
+    steps: ['ÖRNEK bilet sayfasını açın.', 'Gezi gününü ve 10:30 seansını seçin.', 'Kartla ödeyin; bilet e-postanıza gelir.', 'Girişte telefondaki kodu gösterin.'],
+    url: 'https://example.com/ornek/kule-bileti',
+    when: 'before-trip',
+  },
+  { title: 'Çantayla çıkılır mı?', text: 'ÖRNEK: merdiven dar olduğu için büyük çantalar aşağıdaki dolaba bırakılır.', kind: 'other', when: 'on-site' },
+];
+const meydan = plan.days[0].stops[0];
+meydan.tips = [{ title: 'Çeşmenin suyu içilir mi?', text: 'ÖRNEK: evet; yerliler şişelerini burada doldurur.', kind: 'food', when: 'on-site' }];
+const teras = plan.days[0].dinner[1];
+teras.tips = [{ title: 'Pencere kenarı nasıl istenir?', text: 'ÖRNEK: rezervasyonun not alanına “terasta pencere kenarı” yazın.', kind: 'food', when: 'before-trip' }];
+const konser = plan.days[0].eveningEvents[0];
+Object.assign(konser, {
+  description: 'ÖRNEK: müze avlusunda küçük bir oda orkestrası çalar. Taş duvarlar sesi yumuşatır; akşam serinliğinde, limon ağacının altında bir saat dinlenmek için iyi bir seçimdir.',
+  durationMinutes: 90,
+  recommended: true,
+  availabilityNote: 'ÖRNEK: biletler tükenmek üzere.',
+  tips: [{ title: 'Nerede oturmalı?', text: 'ÖRNEK: ağacın sağındaki sıralar sahneyi daha iyi görür.', kind: 'other', when: 'on-site' }],
+});
+Object.assign(plan.days[0].eveningEvents[1], { description: 'ÖRNEK: rehberle fenerler eşliğinde eski sokaklarda yarım saatlik bir yürüyüş.', durationMinutes: 45, recommended: false, availabilityNote: null });
+Object.assign(plan.days[1].eveningEvents[0], { description: 'ÖRNEK: kapalı pazar akşamları sokak yemeği tezgahlarıyla açılır; ayakta atıştırılır.', durationMinutes: 120, recommended: true, availabilityNote: 'ÖRNEK: kapıda, bilet gerekmez.' });
+
+// Gezi geneli ipuçları
+plan.tips = [
+  { title: 'Şehir içi bileti nasıl alırım?', text: 'ÖRNEK: hafif raylı ve otobüs için günlük bilet makinelerden kartla alınır.', kind: 'transport', steps: ['İstasyondaki makinede dili İngilizce seçin.', '“Günlük bilet”i seçin.', 'Kartla ödeyin, bileti ilk binişte doğrulatın.'], when: 'on-arrival' },
+  { title: 'Bahşiş ne kadar?', text: 'ÖRNEK: zorunlu değil; memnun kaldıysanız hesabın %5-10’u yaygın.', kind: 'money', when: 'any' },
+  { title: 'Pazartesi neler kapalı?', text: 'ÖRNEK: müzeler pazartesi kapalıdır; o gün açık hava duraklarını seçin.', kind: 'timing', when: 'before-trip' },
+  { title: 'Kiliseye girerken', text: 'ÖRNEK: omuzlar ve dizler kapalı olmalı; ince bir şal yanınızda olsun.', kind: 'etiquette', when: 'any' },
+  { title: 'Kalabalıkta cüzdan', text: 'ÖRNEK: pazar ve meydanda cüzdanı ön cepte taşıyın.', kind: 'safety', when: 'on-site' },
+  { title: 'Fotoğraf için en iyi saat', text: 'ÖRNEK: Tepe Terası’nda gün batımından yarım saat önce.', kind: 'photo', when: 'any' },
+];
+
+// Gezi boyunca süren etkinlikler (ÖRNEK)
+plan.happenings = [
+  { id: 'ornek-harita-sergisi', title: 'ÖRNEK Eski Haritalar Sergisi', kind: 'exhibition', venueName: 'ÖRNEK Kent Müzesi', address: 'ÖRNEK Müze Sokağı, ÖRNEK Kent', ...at(560, -120), coordSource: 'other', date: '2027-05-01', endDate: '2027-06-30', startTime: '10:00', endTime: '17:30', priceText: 'Müze biletine dahil', bookingUrl: null, website: 'https://example.com/ornek/sergi', note: 'Bu etkinlik örnektir; gerçek değildir.', suitsWhom: 'Haritaları sevenlere.', description: 'ÖRNEK: kentin iki dere arasında doğuşunu gösteren eski haritalar. Müze durağında yarım saat ayırın.', durationMinutes: 30, recommended: true, availabilityNote: null, sources: src('sergi'), verifiedAt: V },
+  { id: 'ornek-cicek-festivali', title: 'ÖRNEK Çiçek Festivali', kind: 'festival', venueName: 'ÖRNEK Manastır Bahçesi', address: null, ...at(1050, 320), coordSource: 'other', date: '2027-05-15', endDate: '2027-05-16', startTime: '11:00', endTime: '19:00', priceText: 'Ücretsiz', bookingUrl: null, website: null, note: 'Bu etkinlik örnektir; gerçek değildir.', suitsWhom: 'Herkese.', description: 'ÖRNEK: bahçede çiçek tezgahları ve küçük konserler.', durationMinutes: 60, recommended: false, availabilityNote: null, sources: src('festival'), verifiedAt: V },
+];
+
+// Keşfet (ÖRNEK)
+const place = (id, name, category, pos, extra) => ({ id, name: `ÖRNEK ${name}`, category, ...pos, coordSource: 'other', address: `ÖRNEK ${name}, ÖRNEK Kent`, area: 'ÖRNEK Eski Kent', visitMinutes: 30, sources: src(`kesfet-${id}`), verifiedAt: V, ...extra });
+plan.discover = [
+  place('ornek-yel-degirmeni-sokagi', 'Yel Değirmeni Sokağı', 'neighborhood', at(450, 420), { description: 'ÖRNEK: dar ve dik bir sokak. Eskiden pazarın unu buradan taşınırmış; kapı tokmaklarının her biri başka bir esnafın işaretini taşır. Yokuşun başında durup arkanıza bakın, meydan ayaklarınızın altında küçük bir avlu gibi görünür. Bu anlatım örnektir.', suggestedDate: '2027-05-14' }),
+  place('ornek-kitapci-avlusu', 'Kitapçı Avlusu', 'shop', at(620, 60), { description: 'ÖRNEK: üç küçük kitapçının paylaştığı bir avlu. Raflar dışarıya taşar, kediler kitapların üstünde uyur. Eski kartpostal kutularını karıştırın; kentin uydurma tarihinden kalan resimler bulabilirsiniz. Bu anlatım örnektir.', hours: every(['10:00', '19:00']), closedWeekdays: ['mon'], suggestedDate: '2027-05-14' }),
+  place('ornek-gol-manzarasi', 'Göl Manzarası', 'viewpoint', at(-1500, 900), { description: 'ÖRNEK: tepeye çıkan yolun yarısında, alçak bir duvarın arkasında kalan sessiz bir manzara noktası. Dereler buradan iki gümüş çizgi gibi görünür; öğleden sonra ışığı en güzel halidir. Bu anlatım örnektir.', suggestedDate: '2027-05-15' }),
+  place('ornek-kahve-kavurucusu', 'Kahve Kavurucusu', 'cafe', at(-400, -120), { description: 'ÖRNEK: köprünün hemen yanında, kahveyi kendi kavuran küçük bir dükkan. Kokusu sokağın başından duyulur. Ayakta içilen sert kahveyle günün ikinci yarısına güç toplayın. Bu anlatım örnektir.', hours: every(['07:30', '18:00']), visitMinutes: 20, suggestedDate: '2027-05-15' }),
+  place('ornek-gece-kapanan-muze', 'Saat Müzesi', 'museum', at(380, 260), { description: 'ÖRNEK: kulenin hemen arkasında, eski saat mekanizmalarının durduğu küçük bir müze. Her saat başında bütün saatler birden çalar; o anı kaçırmayın. Yalnız öğleden önce açıktır. Bu anlatım örnektir.', hours: every(['09:00', '12:00']), visitMinutes: 40, tips: [{ title: 'Bileti nasıl alırım?', text: 'ÖRNEK: kapıda nakit.', kind: 'ticket', when: 'on-site' }] }),
+];
 
 mkdirSync('src/sample', { recursive: true });
 writeFileSync('src/sample/ornek-plan.json', JSON.stringify(plan, null, 2) + '\n', 'utf8');
