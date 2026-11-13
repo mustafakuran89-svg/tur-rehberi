@@ -7,6 +7,8 @@ import { tripActive } from '../lib/today';
 import { Header, SampleBadge, useTripsVersion } from '../components/ui';
 import { getOfflineStatus, needsRefresh, type OfflineStatus } from '../lib/offlineCheck';
 import { consumeColdStart, lastTripKey } from '../lib/lastTrip';
+import { BoxCards } from '../components/BoxCards';
+import { Onboarding } from '../components/Onboarding';
 
 /** Gezi kartındaki çevrimdışı rozeti: "Çevrimdışı hazır", "Eksik var" ya da "Hazırlanmadı". */
 export function OfflineBadge({ st }: { st: OfflineStatus | null | undefined }) {
@@ -83,6 +85,8 @@ export function TripsScreen() {
         <a className="btn btn-primary btn-big btn-block" href={href(paths.import())} data-testid="import-link">
           ＋ {tr.nav.import}
         </a>
+        <BoxCards />
+        <Onboarding />
         {remind.map(({ r, days }) => (
           <section key={r.key} className="card note" data-testid="prep-reminder">
             <h2 className="card-title">{tr.offline.remindTitle}: {r.trip.title}</h2>

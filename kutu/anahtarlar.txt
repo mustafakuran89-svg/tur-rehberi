@@ -1,0 +1,4 @@
+# Plan kutusu: alıcı cihazların AÇIK anahtarları (her satır: etiket ve anahtar).
+# Açık anahtar gizli değildir; depoda durabilir. Özel anahtar cihazdan hiç çıkmaz.
+# Anahtarı uygulamada Ayarlar › Plan kutusu › Kopyala ile alın ve bir satır ekleyin, örnek:
+# iPhone tur-rehberi-anahtar:v1:BEIx...

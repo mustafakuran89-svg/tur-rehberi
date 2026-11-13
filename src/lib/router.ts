@@ -46,6 +46,12 @@ export type Route =
   | { name: 'checklist'; key: string }
   | { name: 'videos'; key: string; day: number }
   | { name: 'whatsnew' }
+  | { name: 'request' }
+  | { name: 'tips'; key: string }
+  | { name: 'events'; key: string }
+  | { name: 'discover'; key: string }
+  | { name: 'saved'; key: string }
+  | { name: 'nearby'; key: string }
   | { name: 'notFound' };
 
 export function parseRoute(path: string): Route {
@@ -54,6 +60,7 @@ export function parseRoute(path: string): Route {
   if (p[0] === 'import' && p.length === 1) return { name: 'import' };
   if (p[0] === 'settings' && p.length === 1) return { name: 'settings' };
   if (p[0] === 'whatsnew' && p.length === 1) return { name: 'whatsnew' };
+  if (p[0] === 'request' && p.length === 1) return { name: 'request' };
   if (p[0] === 'trip' && p[1]) {
     const key = p[1];
     if (p.length === 2) return { name: 'summary', key };
@@ -63,6 +70,7 @@ export function parseRoute(path: string): Route {
     if ((p[2] === 'arrival' || p[2] === 'departure') && p.length === 3) return { name: 'transfer', key, which: p[2] };
     if (p[2] === 'prepare' && p.length === 3) return { name: 'prepare', key };
     if (p[2] === 'checklist' && p.length === 3) return { name: 'checklist', key };
+    for (const n of ['tips', 'events', 'discover', 'saved', 'nearby'] as const) if (p[2] === n && p.length === 3) return { name: n, key };
     if (p[2] === 'day' && /^\d+$/.test(p[3] ?? '')) {
       const day = Number(p[3]);
       if (p.length === 4) return { name: 'day', key, day };
@@ -90,6 +98,12 @@ export const paths = {
   checklist: (key: string) => `/trip/${k(key)}/checklist`,
   videos: (key: string, d: number) => `/trip/${k(key)}/day/${d}/videos`,
   whatsnew: () => '/whatsnew',
+  request: () => '/request',
+  tips: (key: string) => `/trip/${k(key)}/tips`,
+  events: (key: string) => `/trip/${k(key)}/events`,
+  discover: (key: string) => `/trip/${k(key)}/discover`,
+  saved: (key: string) => `/trip/${k(key)}/saved`,
+  nearby: (key: string) => `/trip/${k(key)}/nearby`,
   day: (key: string, d: number) => `/trip/${k(key)}/day/${d}`,
   food: (key: string, d: number) => `/trip/${k(key)}/day/${d}/food`,
   tour: (key: string, d: number) => `/trip/${k(key)}/day/${d}/tour`,

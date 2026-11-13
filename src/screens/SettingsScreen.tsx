@@ -2,6 +2,8 @@ import { useEffect, useState, useSyncExternalStore } from 'react';
 import { tr } from '../i18n/tr';
 import { RADIUS_OPTIONS, resetSettings, setSettings, useSettings } from '../lib/settings';
 import { VoiceSettings } from '../components/VoiceSettings';
+import { BoxSettings } from '../components/BoxSettings';
+import { reopenOnboarding } from '../components/Onboarding';
 import { ChannelSettings } from '../components/ChannelSettings';
 import { clearLog, readLog, subscribeLog } from '../lib/log';
 import { deleteAll, downloadJson, ensureSample, getTrip, isPersisted, makeBackup, putTrip, requestPersist, sampleTrip, SAMPLE_KEY } from '../lib/store';
@@ -159,6 +161,22 @@ export function SettingsScreen() {
             ))}
           </div>
         </section>
+
+        <section className="settings-group">
+          <h2 className="section-title">{tr.onboarding.title}</h2>
+          <button
+            className="btn btn-small"
+            data-testid="onboarding-reopen"
+            onClick={() => {
+              reopenOnboarding();
+              showToast(tr.onboarding.reopened);
+            }}
+          >
+            {tr.onboarding.reopen}
+          </button>
+        </section>
+
+        <BoxSettings onToast={showToast} />
 
         <YoutubeKeySection onToast={showToast} />
 

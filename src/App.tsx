@@ -17,6 +17,7 @@ import { PrepareScreen } from './screens/PrepareScreen';
 import { ChecklistScreen } from './screens/ChecklistScreen';
 import { VideosScreen } from './screens/VideosScreen';
 import { WhatsNewScreen } from './screens/WhatsNewScreen';
+import { RequestScreen } from './screens/RequestScreen';
 import { Missing } from './components/ui';
 import { tr } from './i18n/tr';
 import { rememberTrip } from './lib/lastTrip';
@@ -66,6 +67,8 @@ export function App() {
       return <VideosScreen tripKey={r.key} dayIndex={r.day} />;
     case 'whatsnew':
       return <WhatsNewScreen />;
+    case 'request':
+      return <RequestScreen />;
     default:
       return <Missing text={tr.notFound} />;
   }

@@ -42,7 +42,7 @@ export default defineConfig({
       workbox: {
         globPatterns: ['**/*.{js,css,html,png,svg,json,webmanifest,pbf}'],
         // Bölge listesi ağdan okunur (yeni derleme); bölge dosyaları ayrı önbellekte durur (src/map/regions.ts).
-        globIgnores: ['haritalar/bolgeler.json', '**/*.pmtiles'],
+        globIgnores: ['haritalar/bolgeler.json', '**/*.pmtiles', 'kutu/**'],
         maximumFileSizeToCacheInBytes: 6 * 1024 * 1024,
         navigateFallback: 'index.html',
         cleanupOutdatedCaches: true,

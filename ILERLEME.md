@@ -93,3 +93,4 @@ Gerçek iPhone'da `TESLIM-3.md` bölüm 8'deki 8 madde.
 |---|---|---|
 | Başlamadan | Tamam | `v3.0` var; testler geçiyordu (117 birim, 80 uçtan uca). |
 | A — Veri katmanı | Tamam | Şema 4 tipleri (ipucu, keşfet, gezi boyunca etkinlikler, kalıcı kimlik); kimlikli kayıtta işaretler kimliğe bağlanır, eski (ada bağlı) veri kayıpsız taşınır (`migrateKeys`); 4 yeni uyarı; örnek gezi sürüm 4. Kişisel rota katmanı ve kutu şifrelemesi de bu aşamada kodlandı (testleri B ve E'de). Birim 130/130, uçtan uca 80/80 + 2. |
+| B — Plan kutusu | Tamam | Cihaz anahtarı (ECDH P-256, dışa aktarılamaz, IndexedDB `keys`), Ayarlar › Plan kutusu (kopyala, parmak izi, kutuyu denetle, açıklık notu), açılışta denetim, "Yeni gezi"/"Güncellendi" kartları, bozuk dosya reddi, `araclar/kutuya-koy.mjs` (yerleşik kitaplıklar, şema doğrulayıcı, bölge ekleme, `--kaldir`), `KUTU.md`, yeni gezi iste formu. Node ve tarayıcı aynı zarfı açıyor; WebKit'te de geçti. |
