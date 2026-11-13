@@ -2,3 +2,4 @@
 # Açık anahtar gizli değildir; depoda durabilir. Özel anahtar cihazdan hiç çıkmaz.
 # Anahtarı uygulamada Ayarlar › Plan kutusu › Kopyala ile alın ve bir satır ekleyin, örnek:
 # iPhone tur-rehberi-anahtar:v1:BEIx...
+cihaz-1 tur-rehberi-anahtar:v1:BGaLZvM8fchvaCA7h/1T8VdtUzvVp2xptSg++oomRtWXG1pFzTiwXcnI8h5ik0iAICvlJPD5/WbiKMm+MYqNcos=

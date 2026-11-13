@@ -1,6 +1,27 @@
 {
   "aciklama": "Çevrimdışı harita bölgeleri. Yayın iş akışı her bölge için Protomaps günlük derlemesinden (OpenStreetMap verisi, ODbL) bölge dosyası çıkarır ve siteyle yayımlar. Yeni şehir için bir satır ekleyin: id (küçük harf), ad, bbox [batı, güney, doğu, kuzey], maxzoom (en çok 15).",
   "bolgeler": [
-    { "id": "viyana", "ad": "Viyana", "bbox": [16.28, 48.10, 16.59, 48.23], "maxzoom": 15 }
+    {
+      "id": "viyana",
+      "ad": "Viyana",
+      "bbox": [
+        16.28,
+        48.1,
+        16.59,
+        48.23
+      ],
+      "maxzoom": 15
+    },
+    {
+      "id": "viyana-avusturya",
+      "ad": "Viyana, Avusturya",
+      "bbox": [
+        16.272,
+        47.958,
+        16.879,
+        48.229
+      ],
+      "maxzoom": 15
+    }
   ]
 }
