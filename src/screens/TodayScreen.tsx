@@ -13,6 +13,7 @@ import { eventKey, stopKey, updateUserState } from '../lib/userState';
 import { getWeather, rainy, type TripWeather } from '../lib/weather';
 import { OpenBadge, useNow } from '../components/v2';
 import { DayLegCard, ReturnHotelButton } from '../components/trip';
+import { Tonight } from '../components/Tonight';
 import { FixedBadge, Header, Loading, Missing, SampleBadge, useTrip } from '../components/ui';
 
 export function TodayScreen({ tripKey }: { tripKey: string }) {
@@ -103,6 +104,7 @@ export function TodayScreen({ tripKey }: { tripKey: string }) {
       />
       <main className="content">
         {bandEl}
+        <Tonight trip={t} us={us} date={day.date} now={now} tripKey={tripKey} lodging={t.lodging} />
         {arrival && (
           <a className="card arrival-card" href={href(paths.transfer(tripKey, 'arrival'))} data-testid="arrival-card">
             <div className="card-title">{tr.today.arrivalCard}</div>

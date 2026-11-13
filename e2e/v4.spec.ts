@@ -64,6 +64,7 @@ test('A: kimliksiz ve kimlikli planda işaretler plan güncellemesinden sonra ye
 type Tool = { seal: (t: string, r: Uint8Array[], when?: string) => Promise<Record<string, unknown>>; decodePublicKey: (t: string) => Uint8Array; fingerprint: (r: Uint8Array) => Promise<string>; entryId: (id: string) => Promise<string> };
 
 test('B: kutuya konan gezi "Yeni gezi" olarak gelir; güncellemede işaretler korunur; bozuk dosya reddedilir; özel anahtar yedekte yok', async ({ page, context }) => {
+  // @ts-expect-error -- düz JS aracı
   const tool = (await import('../araclar/kutuya-koy.mjs')) as unknown as Tool;
   await page.goto('./#/settings');
   const keyText = await page.getByTestId('box-key').inputValue();
@@ -166,4 +167,137 @@ test('B: yeni gezi isteği metni parmak izini taşır, ağ çağrısı yapmaz', 
   await page.getByTestId('req-share').click();
   await expect(page.getByText('Panoya kopyalandı.')).toBeVisible();
   expect(requests.filter((u) => !/i\.ytimg|wikimedia|openfreemap/.test(u))).toEqual([]);
+});
+
+// ---------------------------------------------------------------- Aşama C: ipuçları
+test('C: bilet ipucu "Bilet al"ın altında, adımlar kalıcı; arama durak ipuçlarını kapsar; üç "when" doğru ekranda', async ({ page, context }) => {
+  await page.goto('./#/trip/__ornek__/day/0/stop/2');
+  const ticketBtn = page.getByRole('link', { name: /Bilet al/ });
+  const ticketTip = page.getByTestId('tips-ticket').getByTestId('tip');
+  await expect(ticketTip).toContainText('Bileti nasıl alırım?');
+  const yb = (await ticketBtn.boundingBox())!.y;
+  const yt = (await ticketTip.boundingBox())!.y;
+  expect(yt).toBeGreaterThan(yb);
+  const steps = ticketTip.getByTestId('tip-step');
+  await expect(steps).toHaveCount(4);
+  await steps.nth(0).check();
+  await steps.nth(2).check();
+  await page.reload();
+  await expect(page.getByTestId('tips-ticket').getByTestId('tip-step').nth(0)).toBeChecked();
+  await expect(page.getByTestId('tips-ticket').getByTestId('tip-step').nth(1)).not.toBeChecked();
+  await expect(page.getByTestId('tips-ticket').getByTestId('tip-step').nth(2)).toBeChecked();
+  await expect(page.getByTestId('tips-ticket').getByTestId('tip-url')).toHaveAttribute('href', 'https://example.com/ornek/kule-bileti');
+  await page.getByTestId('tips-ticket').getByTestId('tip-listen').click();
+  await expect.poll(async () => (await spoken(page)).join(' ')).toContain('Bileti nasıl alırım?');
+
+  // gezi ipuçları: türe göre gruplar; arama duraklardakileri de bulur
+  await page.goto('./#/trip/__ornek__/tips');
+  await expect(page.getByTestId('tip-group')).toHaveCount(6);
+  await expect(page.getByTestId('tip-group').first()).toHaveAttribute('data-kind', 'transport');
+  await page.getByTestId('tips-search').fill('çanta');
+  await expect(page.getByTestId('tip')).toHaveCount(1);
+  await expect(page.getByTestId('tip')).toContainText('Durak: ÖRNEK Saat Kulesi');
+  await page.getByTestId('tips-search').fill('bahsis');
+  await expect(page.getByTestId('tip')).toHaveCount(1);
+  await page.getByTestId('tips-search').fill('olmayan sözcük');
+  await expect(page.getByText('Bu aramayla ipucu bulunamadı.')).toBeVisible();
+
+  // before-trip → Hazırlık listesi; on-arrival → Varış
+  await page.goto('./#/trip/__ornek__/checklist');
+  const before = page.getByTestId('tips-before').getByTestId('tip');
+  await expect(before.filter({ hasText: 'Pazartesi neler kapalı?' })).toHaveCount(1);
+  await expect(before.filter({ hasText: 'Bileti nasıl alırım?' })).toHaveCount(1);
+  await expect(before.filter({ hasText: 'Bahşiş' })).toHaveCount(0);
+  await page.goto('./#/trip/__ornek__/arrival');
+  await expect(page.getByTestId('tips-arrival').getByTestId('tip')).toContainText('Şehir içi bileti');
+
+  // on-site → tur modunda durağa varınca kart (kendiliğinden okunmaz)
+  await context.grantPermissions(['geolocation']);
+  await context.setGeolocation({ latitude: 44.4938 + 90 / 111320, longitude: 11.3426 });
+  await page.goto('./#/trip/__ornek__/day/0/tour');
+  await page.getByRole('button', { name: '↺ Turu baştan al' }).click();
+  await page.getByTestId('start-tour').click();
+  await context.setGeolocation({ latitude: 44.4938 + 10 / 111320, longitude: 11.3426 });
+  await expect(page.getByTestId('tips-onsite')).toContainText('Çeşmenin suyu içilir mi?');
+  expect((await spoken(page)).join(' ')).not.toContain('Çeşmenin suyu içilir mi?');
+});
+
+test('C: tanıtım kartları kapatılır ve Ayarlar’dan yeniden açılır', async ({ page }) => {
+  await page.goto('./');
+  await expect(page.getByTestId('onboarding-card')).toHaveCount(4);
+  await page.getByTestId('onboarding-card').first().getByRole('button').click();
+  await expect(page.getByTestId('onboarding-card')).toHaveCount(3);
+  await page.getByTestId('onboarding-close-all').click();
+  await expect(page.getByTestId('onboarding')).toHaveCount(0);
+  await page.reload();
+  await expect(page.getByTestId('onboarding')).toHaveCount(0);
+  await page.goto('./#/settings');
+  await page.getByTestId('onboarding-reopen').click();
+  await page.goto('./');
+  await expect(page.getByTestId('onboarding-card')).toHaveCount(4);
+});
+
+// ---------------------------------------------------------------- Aşama D: etkinlikler
+test('D: etkinlikler sekmesi süzgeçleri; çok günlü etkinlik doğru günde; çakışma uyarısı', async ({ page }) => {
+  await page.goto('./#/trip/__ornek__/events');
+  await expect(page.getByTestId('events-day')).toHaveCount(2);
+  await expect(page.getByTestId('events-multi').getByTestId('event')).toHaveCount(2);
+  await expect(page.getByTestId('event').filter({ hasText: 'ÖRNEK Avlu Konseri' }).getByTestId('recommended')).toBeVisible();
+  await expect(page.getByTestId('event').filter({ hasText: 'ÖRNEK Avlu Konseri' }).getByTestId('availability')).toContainText('tükenmek üzere');
+  await page.getByTestId('f-free').check();
+  await expect(page.getByTestId('event').filter({ hasText: 'ÖRNEK Avlu Konseri' })).toHaveCount(0);
+  await expect(page.getByTestId('event').filter({ hasText: 'ÖRNEK Fener Yürüyüşü' })).toHaveCount(1);
+  await page.getByTestId('f-free').uncheck();
+  await page.getByTestId('f-rec').check();
+  await expect(page.getByTestId('event').filter({ hasText: 'ÖRNEK Fener Yürüyüşü' })).toHaveCount(0);
+  await page.getByTestId('f-rec').uncheck();
+  await page.getByTestId('f-kind').selectOption('exhibition');
+  await expect(page.getByTestId('event')).toHaveCount(1);
+  await page.getByTestId('f-kind').selectOption('all');
+  // 1. gün: sergi var, festival yok; 2. gün: ikisi de
+  await page.getByTestId('f-day').selectOption('0');
+  await expect(page.getByTestId('events-multi').getByTestId('event')).toHaveCount(1);
+  await expect(page.getByTestId('events-multi')).toContainText('Eski Haritalar');
+  await page.getByTestId('f-day').selectOption('1');
+  await expect(page.getByTestId('events-multi').getByTestId('event')).toHaveCount(2);
+  await page.getByTestId('f-day').selectOption('all');
+  await page.getByTestId('f-time-day').click();
+  await expect(page.getByTestId('events-day')).toHaveCount(0);
+  await page.getByTestId('f-time-all').click();
+  // çakışma: iki akşam etkinliği seçilince
+  const konser = page.getByTestId('event').filter({ has: page.getByRole('heading', { name: 'ÖRNEK Avlu Konseri' }) });
+  const fener = page.getByTestId('event').filter({ has: page.getByRole('heading', { name: 'ÖRNEK Fener Yürüyüşü' }) });
+  await konser.getByTestId('going').click();
+  await expect(konser.getByTestId('conflict')).toHaveCount(0);
+  await fener.getByTestId('going').click();
+  await expect(konser.getByTestId('conflict')).toContainText('Seçtiğiniz etkinlik: ÖRNEK Fener Yürüyüşü');
+  await expect(konser.getByTestId('conflict')).toContainText('Plan notu');
+});
+
+test('D: "Bu akşam" kartı 16:00 sonrası, geri sayım; etkinlik bitince otele dön; geçmiş etkinlik soluk; harita katmanı', async ({ page }) => {
+  await page.clock.setFixedTime(new Date(2027, 4, 14, 15, 0));
+  await page.goto('./#/trip/__ornek__/today');
+  await expect(page.getByRole('heading', { level: 1 })).toBeVisible();
+  await expect(page.getByTestId('tonight')).toHaveCount(0);
+  await page.clock.setFixedTime(new Date(2027, 4, 14, 18, 0));
+  await page.reload();
+  await expect(page.getByTestId('tonight')).toHaveAttribute('data-mode', 'picks');
+  await expect(page.getByTestId('tonight-pick').first()).toContainText('ÖRNEK Avlu Konseri'); // rehberin seçimi başta
+  await page.goto('./#/trip/__ornek__/events');
+  await page.getByTestId('event').filter({ hasText: 'ÖRNEK Avlu Konseri' }).getByTestId('going').click();
+  await page.goto('./#/trip/__ornek__/today');
+  await expect(page.getByTestId('tonight')).toHaveAttribute('data-mode', 'chosen');
+  await expect(page.getByTestId('tonight-countdown')).toHaveText('Başlamasına 3 sa 00 dk');
+  await expect(page.getByTestId('tonight-directions')).toHaveAttribute('href', /maps\.apple\.com/);
+  await page.clock.setFixedTime(new Date(2027, 4, 14, 22, 45));
+  await page.reload();
+  await expect(page.getByTestId('after-event')).toContainText('ÖRNEK Avlu Konseri bitti');
+  await page.goto('./#/trip/__ornek__/day/0');
+  await expect(page.getByTestId('event').filter({ hasText: 'ÖRNEK Avlu Konseri' })).toHaveAttribute('data-past', 'true');
+  // harita katmanı açılıp kapanır
+  const map = page.getByTestId('map');
+  await expect(map).not.toHaveAttribute('data-renderer', 'loading');
+  const withEvents = Number(await map.getAttribute('data-points'));
+  await page.getByTestId('event-layer').uncheck();
+  await expect.poll(async () => Number(await map.getAttribute('data-points'))).toBe(withEvents - 3); // E1, E2, H1
 });

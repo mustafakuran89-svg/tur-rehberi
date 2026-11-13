@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import { tr } from '../i18n/tr';
+import { TipCards } from '../components/TipCards';
 import { stopsInOrder } from '../plan/normalize';
 import { checkPlan } from '../plan/rules';
 import { formatMinutes } from '../lib/format';
@@ -128,6 +129,8 @@ export function StopScreen({ tripKey, dayIndex, order }: { tripKey: string; dayI
             ))}
         </dl>
         <ActionButtons phone={s.phone} website={s.website} ticketUrl={s.ticketUrl} mapsUrl={appleMapsUrl(s, s.legToNext?.mode ?? 'walk')} calendar={cal} tz={tz} />
+        <TipCards tips={(s.tips ?? []).filter((t) => t.kind === 'ticket')} owner={k} tripId={tripKey} us={us} testid="tips-ticket" />
+        <TipCards tips={(s.tips ?? []).filter((t) => t.kind !== 'ticket')} owner={k} tripId={tripKey} us={us} title={tr.tips.title} testid="tips-stop" />
         {booking && <BookingMark tripId={tripKey} k={k} us={us} />}
         {!hasCoord(s) && (
           <>

@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import { tr } from '../i18n/tr';
+import { TipCards } from '../components/TipCards';
 import { checkPlan } from '../plan/rules';
 import type { Venue } from '../plan/types';
 import { formatDate, weekdayName } from '../lib/format';
@@ -77,6 +78,7 @@ function VenueCard({ v, sub, c }: { v: Venue; sub?: string; c: CardCtx }) {
           ))}
       </dl>
       <ActionButtons phone={v.phone} website={v.website} bookingUrl={v.bookingUrl} menuUrl={v.menuUrl} reservation={v.reservation} mapsUrl={appleMapsUrl(v)} calendar={cal} tz={c.tz} />
+      <TipCards tips={v.tips} owner={venueKey(v)} tripId={c.tripKey} us={c.us} testid="tips-venue" />
       {needsBooking && <BookingMark tripId={c.tripKey} k={k} us={c.us} />}
       <Rating tripId={c.tripKey} k={k} us={c.us} />
       <a className="small" href={href(paths.pin(c.tripKey, c.dayIndex, 'venue', v.code))}>

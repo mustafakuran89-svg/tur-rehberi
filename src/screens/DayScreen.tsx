@@ -1,4 +1,6 @@
-import { useEffect, useMemo } from 'react';
+import { useEffect, useMemo, useState } from 'react';
+import { eventsOnDate } from '../lib/events';
+import { RouteEditor } from '../components/RouteEditor';
 import { tr } from '../i18n/tr';
 import { checkPlan } from '../plan/rules';
 import { stopsInOrder } from '../plan/normalize';
@@ -35,7 +37,17 @@ export function DayScreen({ tripKey, dayIndex }: { tripKey: string; dayIndex: nu
   const now = useNow();
   const day = rec?.trip.days[dayIndex];
   const lodging = rec?.trip.lodging;
-  const map = useMemo(() => (day ? dayMapData(day, tripKey, dayIndex, { lodging, now }) : { points: [], legs: [] }), [day, tripKey, dayIndex, lodging, now]);
+  const [evLayer, setEvLayer] = useState(true);
+  const map = useMemo(() => {
+    if (!day || !rec) return { points: [], legs: [] };
+    const m = dayMapData(day, tripKey, dayIndex, { lodging, now, events: evLayer });
+    // Etkinlik katmanı: gezi boyunca süren etkinliklerin o güne düşenleri de (H1, H2…)
+    if (evLayer)
+      eventsOnDate(rec.trip, day.date)
+        .filter((r) => r.multi && hasCoord(r.e))
+        .forEach((r) => m.points.push({ id: `h${r.i}`, lat: r.e.lat!, lng: r.e.lng!, label: `H${r.i + 1}`, kind: 'event', title: `H${r.i + 1} ${r.e.title}`, href: `#/trip/${encodeURIComponent(tripKey)}/events` }));
+    return m;
+  }, [day, rec, tripKey, dayIndex, lodging, now, evLayer]);
   useEffect(() => {
     const code = window.location.hash.split('?')[1];
     if (rec && code) document.getElementById(code)?.scrollIntoView({ block: 'center' });
@@ -63,6 +75,11 @@ export function DayScreen({ tripKey, dayIndex }: { tripKey: string; dayIndex: nu
         <p className="lead">{day.theme}</p>
         <p className="muted">{day.area}</p>
         <TripMap points={map.points} legs={map.legs} />
+        <label className="field check small map-layer">
+          <input type="checkbox" checked={evLayer} onChange={(e) => setEvLayer(e.target.checked)} data-testid="event-layer" />
+          <span>{tr.events4.layer}</span>
+        </label>
+        <RouteEditor tripKey={tripKey} dayIndex={dayIndex} />
 
         <a className="btn btn-primary btn-big btn-block" href={href(paths.tour(tripKey, dayIndex))} data-testid="start-tour-link">
           ▶ {tr.day.startTour}
@@ -156,7 +173,7 @@ export function DayScreen({ tripKey, dayIndex }: { tripKey: string; dayIndex: nu
           <section data-testid="evening">
             <h2 className="section-title food-title food-E">{tr.events.title}</h2>
             {day.eveningEvents.map((e, i) => (
-              <EventCard key={i} e={e} i={i} tripKey={tripKey} dayIndex={dayIndex} us={us} now={now} />
+              <EventCard key={i} e={e} i={i} tripKey={tripKey} dayIndex={dayIndex} us={us} now={now} trip={rec.trip} date={day.date} />
             ))}
           </section>
         )}

@@ -3,6 +3,8 @@
 // canlı yön için Haritalar'a devredilir. Ağ olmadan da açılır (veri cihazdadır).
 import { useMemo } from 'react';
 import { tr } from '../i18n/tr';
+import { TipCards } from '../components/TipCards';
+import { allTips } from './TipsScreen';
 import type { Transfer } from '../plan/types';
 import { formatDate, formatMinutes } from '../lib/format';
 import { hasCoord } from '../lib/geo';
@@ -194,6 +196,7 @@ export function TransferScreen({ tripKey, which }: { tripKey: string; which: 'ar
             <p>{tf.note}</p>
           </section>
         )}
+        {which === 'arrival' && <TipCards tips={allTips(rec.trip).filter((x) => x.tip.when === 'on-arrival').map((x) => x.tip)} owner="trip" tripId={tripKey} us={us} title={tr.tips.onArrival} testid="tips-arrival" />}
         <SourceList sources={tf.sources} verifiedAt={tf.verifiedAt} />
         <p className="note small">{tr.checkBeforeGo}</p>
       </main>

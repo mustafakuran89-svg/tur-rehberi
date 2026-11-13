@@ -10,6 +10,7 @@ import { href, paths } from '../lib/router';
 import { useSettings } from '../lib/settings';
 import { speak, stopSpeaking, unlockSpeech } from '../lib/speech';
 import { tourSpeech, tourStartSpeech } from '../tour/guideScript';
+import { TipCards } from '../components/TipCards';
 import { releaseWakeLock, requestWakeLock } from '../lib/wakelock';
 import { addLog } from '../lib/log';
 import { setLastKnownPosition } from '../lib/links';
@@ -236,6 +237,10 @@ export function TourScreen({ tripKey, dayIndex }: { tripKey: string; dayIndex: n
           <button className="btn btn-block" data-testid="other-length" onClick={() => narrate(lastTriggered, false, spokenLength === 'short' ? 'long' : 'short')}>
             🔊 {spokenLength === 'short' ? tr.player.long : tr.player.short}: {lastTriggered.name}
           </button>
+        )}
+
+        {lastTriggered && (
+          <TipCards tips={(lastTriggered.tips ?? []).filter((x) => x.when === 'on-site')} owner={stopKey(lastTriggered)} tripId={tripKey} us={us} title={tr.tips.onSite} testid="tips-onsite" />
         )}
 
         {lastTriggered && hasVideo(lastTriggered) && (

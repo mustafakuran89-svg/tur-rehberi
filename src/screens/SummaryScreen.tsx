@@ -86,6 +86,21 @@ export function SummaryScreen({ tripKey }: { tripKey: string }) {
           <a className="btn" href={href(paths.checklist(tripKey))} data-testid="checklist-link">
             {tr.checklist.title}
           </a>
+          <a className="btn" href={href(paths.tips(tripKey))} data-testid="tips-link">
+            {tr.tips.link}
+          </a>
+          <a className="btn" href={href(paths.events(tripKey))} data-testid="events-link">
+            {tr.events4.link}
+          </a>
+          <a className="btn" href={href(paths.discover(tripKey))} data-testid="discover-link">
+            {tr.discover.link}
+          </a>
+          <a className="btn" href={href(paths.saved(tripKey))} data-testid="saved-link">
+            {tr.saved.link}
+          </a>
+          <a className="btn" href={href(paths.nearby(tripKey))} data-testid="nearby-link">
+            {tr.nearby.link}
+          </a>
         </nav>
 
         <section className="card">

@@ -1,6 +1,8 @@
 // Hazırlık listesi: plandaki rezervasyonlar, biletli duraklar ve seçilen akşam etkinlikleri tek,
 // işaretlenebilir liste. Rezervasyonu şart olanlar üstte, sonra tarihe göre.
 import { tr } from '../i18n/tr';
+import { TipCards } from '../components/TipCards';
+import { allTips } from './TipsScreen';
 import type { Trip } from '../plan/types';
 import { formatDate } from '../lib/format';
 import { paths } from '../lib/router';
@@ -61,6 +63,7 @@ export function ChecklistScreen({ tripKey }: { tripKey: string }) {
       <main className="content">
         <p className="muted">{tr.checklist.intro}</p>
         {items.length === 0 && <p>{tr.checklist.empty}</p>}
+        <TipCards tips={allTips(rec.trip).filter((x) => x.tip.when === 'before-trip').map((x) => x.tip)} owner="trip-before" tripId={tripKey} us={us} title={tr.tips.beforeTrip} testid="tips-before" />
         <ul className="plain">
           {items.map((x) => {
             const done = !!us?.booked[x.key]?.done;

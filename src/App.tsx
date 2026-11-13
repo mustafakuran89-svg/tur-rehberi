@@ -18,6 +18,8 @@ import { ChecklistScreen } from './screens/ChecklistScreen';
 import { VideosScreen } from './screens/VideosScreen';
 import { WhatsNewScreen } from './screens/WhatsNewScreen';
 import { RequestScreen } from './screens/RequestScreen';
+import { TipsScreen } from './screens/TipsScreen';
+import { EventsScreen } from './screens/EventsScreen';
 import { Missing } from './components/ui';
 import { tr } from './i18n/tr';
 import { rememberTrip } from './lib/lastTrip';
@@ -69,6 +71,10 @@ export function App() {
       return <WhatsNewScreen />;
     case 'request':
       return <RequestScreen />;
+    case 'tips':
+      return <TipsScreen tripKey={r.key} />;
+    case 'events':
+      return <EventsScreen tripKey={r.key} />;
     default:
       return <Missing text={tr.notFound} />;
   }
